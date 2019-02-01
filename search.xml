@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[想要写出来自己的东西~~]]></title>
+    <url>%2F2019%2F02%2F01%2FEvil%2F</url>
+    <content type="text"><![CDATA[在家无事，于是乎想自己开发一款工具，方便自己使用，顺便提高下能力吧~ X-Fuzz工具预期功能 对目标网站目录进行爆破 对目标网站参数进行爆破 对目标网站子域名进行爆破 每次爆破后更新字典，出现频率高的字段，排名靠前 使用技术 Python 主要使用Python Redis 用来储存字典 其他 可能用到的别的 目的 方便渗透测试 自我锻炼 用时 整个寒假 率先完成对目录爆破的部分 后续 尽量每天更新代码 每天还会有别的更新]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>Fuzz</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Navicat脱裤]]></title>
     <url>%2F2019%2F01%2F31%2F%E4%BD%BF%E7%94%A8navicat%E6%9D%A5%E8%84%B1%E8%A3%A4%E5%90%A7!%2F</url>
     <content type="text"><![CDATA[看到有使用Navicat脱裤的，做下记录 准备工作Navicat目录下的PHP文件 将PHP文件放在web目录打开后的效果 正式开始在本地打开Navicat，新建连接里选择http,输入目标地址在常规里主机名写localhost,在输入账号密码即可快乐的脱裤了]]></content>
@@ -116,19 +128,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[VulnHub-LazySysAdmin]]></title>
-    <url>%2F2018%2F10%2F05%2FVulnHub-LazySysAdmin%2F</url>
-    <content type="text"><![CDATA[主要考察信息收集 0x01 前期试探使用nmap进行扫描,发现存在如下端口 可以做出简单的分析 端口 作用 22 SSH登陆 80 Web应用 445 共享文件 3306 MySql 使用御剑扫描下Web应用存在PHPMyAdmin与WordPress，和robots.txt文件robots.txt访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，不过在wordpress处获得了一个可能的账号togie 0x02 突破点Find因为其开放了445端口，所以用enum4linux尝试进行扫描可以看到share是OK的 windows下获取共享资源1net use k: \\10.10.10.132\share$ linux下获取共享资源1mount -t cifs -o username='',password='' //10.10.10.132/share$ /mnt 对得到文件进行查看在deets.txt文件中发现一个密码 再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接没想到直接成功了,切换到root账户，完成 0x03 Web渗透0x01 WebShell这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件找到了数据库的账号和密码记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了在404界面写入反弹shell得到WebShell 0x02 提权开坑待填…… 0x04 总结总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，继续加油。]]></content>
-      <categories>
-        <category>Challenge</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>CTF</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Vulnhub JJS-CTF]]></title>
     <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
     <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
@@ -153,9 +152,22 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[finecms免费版漏洞分析]]></title>
-    <url>%2F2018%2F10%2F03%2Ffinecms%E5%85%8D%E8%B4%B9%E7%89%88%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
-    <content type="text"><![CDATA[FineCMS是一款基于PHP+MySql+CI框架开发的高效简洁的中小型内容管理系统 0x00 开始前的准备网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版 0x01 寻找漏洞在\extensions\下的function.php文件下有一个函数 其中的 1@eval("\$array = $data;"); 很明显存在漏洞，先测试下 Payload:?a=array();phpinfo() 0x02 漏洞利用回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/** * authcode函数(用于数组) */function fn_authcode($data, $operation = 'DECODE', $key = '', $expiry = 0) &#123; $ckey_length = 4; $string = $operation == 'DECODE' ? $data : array2string($data); $key = md5($key ? $key : SITE_MEMBER_COOKIE); $keya = md5(substr($key, 0, 16)); $keyb = md5(substr($key, 16, 16)); $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : ''; $cryptkey = $keya . md5($keya . $keyc); $key_length = strlen($cryptkey); $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string; $string_length = strlen($string); $result = ''; $box = range(0, 255); $rndkey = array(); for($i = 0; $i &lt;= 255; $i++) &#123; $rndkey[$i] = ord($cryptkey[$i % $key_length]); &#125; for($j = $i = 0; $i &lt; 256; $i++) &#123; $j = ($j + $box[$i] + $rndkey[$i]) % 256; $tmp = $box[$i]; $box[$i] = $box[$j]; $box[$j] = $tmp; &#125; for($a = $j = $i = 0; $i &lt; $string_length; $i++) &#123; $a = ($a + 1) % 256; $j = ($j + $box[$a]) % 256; $tmp = $box[$a]; $box[$a] = $box[$j]; $box[$j] = $tmp; $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256])); &#125; if($operation == 'DECODE') &#123; if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() &gt; 0) &amp;&amp; substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) &#123; return string2array(substr($result, 26)); &#125; else &#123; return ''; &#125; &#125; else &#123; return $keyc . str_replace('=', '', base64_encode($result)); &#125;&#125; 发现这个函数在ApiController.php文件中被调用 1$data = fn_authcode(base64_decode($this-&gt;get('file')), 'DECODE'); 这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload 尝试下 1http://localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn 0x03 总结这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。]]></content>
+    <title><![CDATA[VulnHub-LazySysAdmin]]></title>
+    <url>%2F2018%2F10%2F05%2FVulnHub-LazySysAdmin%2F</url>
+    <content type="text"><![CDATA[主要考察信息收集 0x01 前期试探使用nmap进行扫描,发现存在如下端口 可以做出简单的分析 端口 作用 22 SSH登陆 80 Web应用 445 共享文件 3306 MySql 使用御剑扫描下Web应用存在PHPMyAdmin与WordPress，和robots.txt文件robots.txt访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，不过在wordpress处获得了一个可能的账号togie 0x02 突破点Find因为其开放了445端口，所以用enum4linux尝试进行扫描可以看到share是OK的 windows下获取共享资源1net use k: \\10.10.10.132\share$ linux下获取共享资源1mount -t cifs -o username='',password='' //10.10.10.132/share$ /mnt 对得到文件进行查看在deets.txt文件中发现一个密码 再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接没想到直接成功了,切换到root账户，完成 0x03 Web渗透0x01 WebShell这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件找到了数据库的账号和密码记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了在404界面写入反弹shell得到WebShell 0x02 提权开坑待填…… 0x04 总结总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，继续加油。]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>CTF</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[BlueCMS 代码审计]]></title>
+    <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
+    <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
       <categories>
         <category>代码审计</category>
       </categories>
@@ -165,9 +177,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[BlueCMS 代码审计]]></title>
-    <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
-    <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
+    <title><![CDATA[finecms免费版漏洞分析]]></title>
+    <url>%2F2018%2F10%2F03%2Ffinecms%E5%85%8D%E8%B4%B9%E7%89%88%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[FineCMS是一款基于PHP+MySql+CI框架开发的高效简洁的中小型内容管理系统 0x00 开始前的准备网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版 0x01 寻找漏洞在\extensions\下的function.php文件下有一个函数 其中的 1@eval("\$array = $data;"); 很明显存在漏洞，先测试下 Payload:?a=array();phpinfo() 0x02 漏洞利用回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/** * authcode函数(用于数组) */function fn_authcode($data, $operation = 'DECODE', $key = '', $expiry = 0) &#123; $ckey_length = 4; $string = $operation == 'DECODE' ? $data : array2string($data); $key = md5($key ? $key : SITE_MEMBER_COOKIE); $keya = md5(substr($key, 0, 16)); $keyb = md5(substr($key, 16, 16)); $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : ''; $cryptkey = $keya . md5($keya . $keyc); $key_length = strlen($cryptkey); $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string; $string_length = strlen($string); $result = ''; $box = range(0, 255); $rndkey = array(); for($i = 0; $i &lt;= 255; $i++) &#123; $rndkey[$i] = ord($cryptkey[$i % $key_length]); &#125; for($j = $i = 0; $i &lt; 256; $i++) &#123; $j = ($j + $box[$i] + $rndkey[$i]) % 256; $tmp = $box[$i]; $box[$i] = $box[$j]; $box[$j] = $tmp; &#125; for($a = $j = $i = 0; $i &lt; $string_length; $i++) &#123; $a = ($a + 1) % 256; $j = ($j + $box[$a]) % 256; $tmp = $box[$a]; $box[$a] = $box[$j]; $box[$j] = $tmp; $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256])); &#125; if($operation == 'DECODE') &#123; if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() &gt; 0) &amp;&amp; substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) &#123; return string2array(substr($result, 26)); &#125; else &#123; return ''; &#125; &#125; else &#123; return $keyc . str_replace('=', '', base64_encode($result)); &#125;&#125; 发现这个函数在ApiController.php文件中被调用 1$data = fn_authcode(base64_decode($this-&gt;get('file')), 'DECODE'); 这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload 尝试下 1http://localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn 0x03 总结这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。]]></content>
       <categories>
         <category>代码审计</category>
       </categories>
