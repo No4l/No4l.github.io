@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Apk逆向分析工具 ---Apkatshu]]></title>
+    <url>%2F2019%2F02%2F02%2FApkatshu%2F</url>
+    <content type="text"><![CDATA[无意中发现了Apkatshu这款软件，就代码而言还是比较简单的，鉴于本人有点儿懒，就花了点儿时间深入了解了下 简介 Tool help to extract URLs, emails, up address, and juicy data from .apk files.Apkatshu : tool written in bash/python for extracting interestingdata from apk files and save them into spplited txt files .The user can choose wich decompiler to use JADX or APKTOOL Apkatshu用于提取逆向后的APK文件中的urls,emails等敏感信息 Apkatshu采用Bash与*Python编写 Apkatshu需要结合JADX或者是APKTOOL这两款APK逆向工具使用 https://github.com/0xpwny/Apkatshu JADX Command line and GUI tools for produce Java source code from Android Dex and Apk files 项目地址:https://github.com/skylot/jadx可以下载编译好的版本，也可以下载源代码，由于一直编译出错，最后我选择了编译好后的版本 使用方法:jadx 目标文件 -d 输出文件夹 APKTOOL 项目地址:https://ibotpeaches.github.io/Apktool/install/ 使用方法:APKTOOL d 目标文件 -o 输出文件夹 -p 使用由于我用的是windows,所以需要进行一些修改和配置 APKTOOL因为windows并不支持shell文件，所以需要用到Git Bash在Apkatshu.sh中通过1$(apktool d $Application -o $dist_dir -q) 调用apktool所以需要在https://ibotpeaches.github.io/Apktool/install/ 下载Linux版本，并将其放入Git Bash的/usr/bin/目录下 之后通过1./Apkatshu.sh APKTOOL 目标文件 即可 JADX在选择JADX的时候一直出错，最后先使用JADX将文件反编译，之后1python Apkatshu.py 反编译的目录 JADX 对反编译后的文件进行分析]]></content>
+      <categories>
+        <category>工具使用</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[想要写出来自己的东西~~]]></title>
     <url>%2F2019%2F02%2F01%2FEvil%2F</url>
     <content type="text"><![CDATA[在家无事，于是乎想自己开发一款工具，方便自己使用，顺便提高下能力吧~ X-Fuzz工具预期功能 对目标网站目录进行爆破 对目标网站参数进行爆破 对目标网站子域名进行爆破 每次爆破后更新字典，出现频率高的字段，排名靠前 使用技术 Python 主要使用Python Redis 用来储存字典 其他 可能用到的别的 目的 方便渗透测试 自我锻炼 用时 整个寒假 率先完成对目录爆破的部分 后续 尽量每天更新代码 每天还会有别的更新]]></content>
@@ -128,14 +140,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub JJS-CTF]]></title>
-    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
-    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
+    <title><![CDATA[VulnHub-LazySysAdmin]]></title>
+    <url>%2F2018%2F10%2F05%2FVulnHub-LazySysAdmin%2F</url>
+    <content type="text"><![CDATA[主要考察信息收集 0x01 前期试探使用nmap进行扫描,发现存在如下端口 可以做出简单的分析 端口 作用 22 SSH登陆 80 Web应用 445 共享文件 3306 MySql 使用御剑扫描下Web应用存在PHPMyAdmin与WordPress，和robots.txt文件robots.txt访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，不过在wordpress处获得了一个可能的账号togie 0x02 突破点Find因为其开放了445端口，所以用enum4linux尝试进行扫描可以看到share是OK的 windows下获取共享资源1net use k: \\10.10.10.132\share$ linux下获取共享资源1mount -t cifs -o username='',password='' //10.10.10.132/share$ /mnt 对得到文件进行查看在deets.txt文件中发现一个密码 再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接没想到直接成功了,切换到root账户，完成 0x03 Web渗透0x01 WebShell这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件找到了数据库的账号和密码记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了在404界面写入反弹shell得到WebShell 0x02 提权开坑待填…… 0x04 总结总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，继续加油。]]></content>
       <categories>
         <category>Challenge</category>
       </categories>
       <tags>
         <tag>Web</tag>
+        <tag>CTF</tag>
         <tag>Linux</tag>
       </tags>
   </entry>
@@ -152,28 +165,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[VulnHub-LazySysAdmin]]></title>
-    <url>%2F2018%2F10%2F05%2FVulnHub-LazySysAdmin%2F</url>
-    <content type="text"><![CDATA[主要考察信息收集 0x01 前期试探使用nmap进行扫描,发现存在如下端口 可以做出简单的分析 端口 作用 22 SSH登陆 80 Web应用 445 共享文件 3306 MySql 使用御剑扫描下Web应用存在PHPMyAdmin与WordPress，和robots.txt文件robots.txt访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，不过在wordpress处获得了一个可能的账号togie 0x02 突破点Find因为其开放了445端口，所以用enum4linux尝试进行扫描可以看到share是OK的 windows下获取共享资源1net use k: \\10.10.10.132\share$ linux下获取共享资源1mount -t cifs -o username='',password='' //10.10.10.132/share$ /mnt 对得到文件进行查看在deets.txt文件中发现一个密码 再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接没想到直接成功了,切换到root账户，完成 0x03 Web渗透0x01 WebShell这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件找到了数据库的账号和密码记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了在404界面写入反弹shell得到WebShell 0x02 提权开坑待填…… 0x04 总结总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，继续加油。]]></content>
+    <title><![CDATA[Vulnhub JJS-CTF]]></title>
+    <url>%2F2018%2F10%2F05%2FVulnhub-JJS-CTF%2F</url>
+    <content type="text"><![CDATA[Description: There are five flags on this machine. Try to find them. It takes 1.5 hour on average to find all flags. 这个靶机中存在五个flag,平均1.5小时就可以找到它们。 0x00 主机发现使用Nmap进行扫描 1nmap -sS 192.168.1.0/24 发现目标机，并且其开放了22，与80端口 0x01 Web发现网站存在robots.txt文件 一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问 admin_area flag 拿到第一个flag 扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。 第二个flag与账号密码就拿到手了 登陆后是一个上传界面，随便上传个一句话，居然成功了 0x02 Linux拿菜刀连接一下，连接成功 在HTML目录下有一个hint文件 得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码 使用命令 1find / -user 'technawi' 2&gt;/dev/null 找到所有属于technawi，且当前用户拥有权限的文件 众多文件中数这个credentials.txt最可疑 cat打开 第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了 前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后 1cat /var/www/html/flag.txt 完工 0x03 总结这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。]]></content>
       <categories>
         <category>Challenge</category>
       </categories>
       <tags>
         <tag>Web</tag>
-        <tag>CTF</tag>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[BlueCMS 代码审计]]></title>
-    <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
-    <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
-      <categories>
-        <category>代码审计</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -189,15 +189,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Vulnhub FristiLeaks]]></title>
-    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
-    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+    <title><![CDATA[BlueCMS 代码审计]]></title>
+    <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
+    <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
       <categories>
-        <category>Challenge</category>
+        <category>代码审计</category>
       </categories>
       <tags>
         <tag>Web</tag>
-        <tag>Linux</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -210,6 +210,18 @@
       <tags>
         <tag>Web</tag>
         <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Vulnhub FristiLeaks]]></title>
+    <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
+    <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
+      <categories>
+        <category>Challenge</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
