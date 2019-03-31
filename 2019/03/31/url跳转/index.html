@@ -108,38 +108,37 @@
 
 
 
-  <meta name="description" content="主要考察信息收集">
-<meta name="keywords" content="Web,CTF,Linux">
+  <meta name="description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
+<meta name="keywords" content="Web">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VulnHub-LazySysAdmin">
-<meta property="og:url" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/index.html">
+<meta property="og:title" content="URL跳转">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/url跳转/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="主要考察信息收集">
+<meta property="og:description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/01.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/02.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/03.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/04.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/05.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/06.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/07.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/00.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/08.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/09.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/10.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/11.png">
-<meta property="og:updated_time" content="2018-10-05T16:51:18.004Z">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/5.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/6.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/8.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/9.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/10.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/11.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/12.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/url跳转/url/7.jpg">
+<meta property="og:updated_time" content="2019-03-31T04:11:40.397Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VulnHub-LazySysAdmin">
-<meta name="twitter:description" content="主要考察信息收集">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/01.png">
+<meta name="twitter:title" content="URL跳转">
+<meta name="twitter:description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/31/url跳转/url/1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/url跳转/"/>
 
 
 
@@ -149,7 +148,7 @@
   };
 </script>
 
-  <title>VulnHub-LazySysAdmin | Noel's Blog</title>
+  <title>URL跳转 | Noel's Blog</title>
   
 
 
@@ -310,7 +309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/url跳转/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -327,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">VulnHub-LazySysAdmin
+          <h1 class="post-title" itemprop="name headline">URL跳转
               
             
           </h1>
@@ -352,24 +351,12 @@
                 
               
 
-              <time title="创建时间：2018-10-05 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-05T00:00:00+08:00">2018-10-05</time>
+              <time title="创建时间：2019-03-31 00:00:00 / 修改时间：12:11:40" itemprop="dateCreated datePublished" datetime="2019-03-31T00:00:00+08:00">2019-03-31</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-06 00:51:18" itemprop="dateModified" datetime="2018-10-06T00:51:18+08:00">2018-10-06</time>
               
             
           </span>
@@ -386,7 +373,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Challenge/" itemprop="url" rel="index"><span itemprop="name">Challenge</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/渗透测试/" itemprop="url" rel="index"><span itemprop="name">渗透测试</span></a></span>
 
                 
                 
@@ -428,44 +415,56 @@
       
 
       
-        <p>主要考察信息收集<br><a id="more"></a></p>
-<h2 id="0x01-前期试探"><a href="#0x01-前期试探" class="headerlink" title="0x01 前期试探"></a>0x01 前期试探</h2><p>使用nmap进行扫描,发现存在如下端口<br><img src="/2018/10/05/VulnHub-LazySysAdmin/01.png" alt=""></p>
-<p>可以做出简单的分析</p>
-<table>
-<thead>
-<tr>
-<th>端口</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>22</td>
-<td>SSH登陆</td>
-</tr>
-<tr>
-<td>80</td>
-<td>Web应用</td>
-</tr>
-<tr>
-<td>445</td>
-<td>共享文件</td>
-</tr>
-<tr>
-<td>3306</td>
-<td>MySql</td>
-</tr>
-</tbody>
-</table>
-<p>使用御剑扫描下Web应用<br><img src="/2018/10/05/VulnHub-LazySysAdmin/02.png" alt=""><br>存在PHPMyAdmin与WordPress，和robots.txt文件<br>robots.txt<br><img src="/2018/10/05/VulnHub-LazySysAdmin/03.png" alt=""><br>访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，<br>不过在wordpress处获得了一个可能的账号<br>togie<br><img src="/2018/10/05/VulnHub-LazySysAdmin/04.png" alt=""></p>
-<h2 id="0x02-突破点Find"><a href="#0x02-突破点Find" class="headerlink" title="0x02 突破点Find"></a>0x02 突破点Find</h2><p>因为其开放了445端口，所以用enum4linux尝试进行扫描<br><img src="/2018/10/05/VulnHub-LazySysAdmin/05.png" alt=""><br>可以看到share是OK的</p>
-<p>windows下获取共享资源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use k: \\10.10.10.132\share$</span><br></pre></td></tr></table></figure></p>
-<p>linux下获取共享资源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t cifs -o username=<span class="string">''</span>,password=<span class="string">''</span> //10.10.10.132/share$ /mnt</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2018/10/05/VulnHub-LazySysAdmin/06.png" alt=""><br>对得到文件进行查看<br>在deets.txt文件中发现一个密码<br><img src="/2018/10/05/VulnHub-LazySysAdmin/07.png" alt=""></p>
-<p>再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接<br>没想到直接成功了,切换到root账户，完成<br><img src="/2018/10/05/VulnHub-LazySysAdmin/00.png" alt=""></p>
-<h2 id="0x03-Web渗透"><a href="#0x03-Web渗透" class="headerlink" title="0x03 Web渗透"></a>0x03 Web渗透</h2><h3 id="0x01-WebShell"><a href="#0x01-WebShell" class="headerlink" title="0x01 WebShell"></a>0x01 WebShell</h3><p>这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件<br>找到了数据库的账号和密码<br><img src="/2018/10/05/VulnHub-LazySysAdmin/08.png" alt=""><br>记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃<br><img src="/2018/10/05/VulnHub-LazySysAdmin/09.png" alt=""><br>尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了<br>在404界面写入反弹shell<br><img src="/2018/10/05/VulnHub-LazySysAdmin/10.png" alt=""><br>得到WebShell<br><img src="/2018/10/05/VulnHub-LazySysAdmin/11.png" alt=""></p>
-<h3 id="0x02-提权"><a href="#0x02-提权" class="headerlink" title="0x02 提权"></a>0x02 提权</h3><p>开坑待填……</p>
-<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，<br>继续加油。</p>
+        <p>URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式<br><a id="more"></a></p>
+<h3 id="成因"><a href="#成因" class="headerlink" title="成因"></a><font color="dark">成因</font></h3><p>常见方式</p>
+<ul>
+<li>META标签的refresh</li>
+<li>Javascript</li>
+<li>header</li>
+</ul>
+<p>meta</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"refresh"</span> <span class="attr">content</span>=<span class="string">"0; url=url"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Javascript</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location.href=<span class="string">"url"</span>;</span><br></pre></td></tr></table></figure>
+<p>header</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    header(<span class="string">"Location:url"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当上述栗子中的url未限制时就产生了URL重定向/跳转漏洞</p>
+<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a><font color="dark">发现</font></h3><ul>
+<li><p>在退出处常见URL跳转</p>
+<p><img src="/2019/03/31/url跳转/url/1.jpg" alt=""></p>
+</li>
+<li><p>利用burp的search，搜索=http 同时返回包为302的内容</p>
+<p><img src="/2019/03/31/url跳转/url/3.png" alt=""></p>
+<p>发包到repeater,略作修改</p>
+<p><img src="/2019/03/31/url跳转/url/4.png" alt=""></p>
+</li>
+</ul>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a><font color="dark">绕过</font></h3><p>一般来说URL跳转发现比较容易，但是利用起来比较难，因为许多会做一些防护</p>
+<p>1.xip.io绕过</p>
+<p><img src="/2019/03/31/url跳转/url/5.jpg" alt=""></p>
+<p>这里只要不是www就会强制返回到<a href="https://xue.koubei.com/login" target="_blank" rel="noopener">https://xue.koubei.com/login</a></p>
+<p>但是利用<a href="https://xue.koubei.com.*.xip.io" target="_blank" rel="noopener">https://xue.koubei.com.*.xip.io</a></p>
+<p><img src="/2019/03/31/url跳转/url/6.jpg" alt=""></p>
+<p>2.使用@绕过</p>
+<p>这里并不能采用xip.io的方式绕过</p>
+<p><img src="/2019/03/31/url跳转/url/8.jpg" alt=""></p>
+<p>可以使用@但是如果@后的域名不在规定范围内同样不可跳转</p>
+<p><img src="/2019/03/31/url跳转/url/9.jpg" alt=""></p>
+<p>这个时候可以在@前加上/，\或者?尝试下</p>
+<p><img src="/2019/03/31/url跳转/url/10.jpg" alt=""></p>
+<p>3.http://后加反斜杠绕过</p>
+<p>有些时候@和.xip.io都不能使</p>
+<p><img src="/2019/03/31/url跳转/url/11.jpg" alt=""></p>
+<p>这个时候可以采用http://\的样式尝试绕过</p>
+<p><img src="/2019/03/31/url跳转/url/12.jpg" alt=""></p>
+<p>4.某些加密</p>
+<p><a href="http://tc.uc.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT" target="_blank" rel="noopener">http://tc.uc.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</a></p>
+<p>这个链接会跳转到<a href="http://www.xilu.com/zhuanti_176871.html" target="_blank" rel="noopener">http://www.xilu.com/zhuanti_176871.html</a></p>
+<p>将 <strong>l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</strong> base64解密</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x97\x8b\x8b\x8f\xc5\xd0\xd0\x88\x88\x88\xd1\x87\x96\x93\x8a\xd1\x9c\x90\x92\xd0\x85\x97\x8a\x9e\x91\x8b\x96\xa0\xce\xc8\xc9\xc7\xc8\xce\xd1\x97\x8b\x92\x93</span><br></pre></td></tr></table></figure>
+<p>推测与跳转的链接一一对应，推测出对应关系表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;a&apos;:&apos;9e&apos;, &apos;b&apos;:&apos;9d&apos;, &apos;c&apos;:&apos;9c&apos;, &apos;d&apos;:&apos;9b&apos;, &apos;e&apos;:&apos;9a&apos;,&apos;f&apos;:&apos;99&apos;, &apos;g&apos;:&apos;98&apos;, &apos;h&apos;:&apos;97&apos;, &apos;i&apos;:&apos;96&apos;, &apos;j&apos;:&apos;95&apos;,</span><br><span class="line"> &apos;k&apos;:&apos;94&apos;, &apos;l&apos;:&apos;93&apos;, &apos;m&apos;:&apos;92&apos;, &apos;n&apos;:&apos;91&apos;, &apos;o&apos;:&apos;90&apos;,&apos;p&apos;:&apos;8f&apos;, &apos;q&apos;:&apos;8e&apos;, &apos;r&apos;:&apos;8d&apos;, &apos;s&apos;:&apos;8c&apos;, &apos;t&apos;:&apos;8b&apos;,</span><br><span class="line"> &apos;u&apos;:&apos;8a&apos;, &apos;v&apos;:&apos;89&apos;, &apos;w&apos;:&apos;88&apos;, &apos;x&apos;:&apos;87&apos;, &apos;y&apos;:&apos;86&apos;,&apos;z&apos;:&apos;85&apos;,&apos;.&apos;:&apos;d1&apos;,&apos;/&apos;:&apos;d0&apos;,&apos;:&apos;:&apos;c5&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/03/31/url跳转/url/7.jpg" alt=""></p>
 
       
     </div>
@@ -488,10 +487,6 @@
           
             <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
           
-            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
-          
-            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-          
         </div>
       
 
@@ -503,8 +498,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/05/PHPSHE1-5漏洞分析/" rel="next" title="PHPSHE1.5漏洞分析">
-                <i class="fa fa-chevron-left"></i> PHPSHE1.5漏洞分析
+              <a href="/2019/03/30/bees/" rel="next" title="BeesCMS 代码审计">
+                <i class="fa fa-chevron-left"></i> BeesCMS 代码审计
               </a>
             
           </div>
@@ -512,10 +507,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/05/Vulnhub-JJS-CTF/" rel="prev" title="Vulnhub JJS-CTF">
-                Vulnhub JJS-CTF <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -717,7 +708,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-前期试探"><span class="nav-number">1.</span> <span class="nav-text">0x01 前期试探</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-突破点Find"><span class="nav-number">2.</span> <span class="nav-text">0x02 突破点Find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Web渗透"><span class="nav-number">3.</span> <span class="nav-text">0x03 Web渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-WebShell"><span class="nav-number">3.1.</span> <span class="nav-text">0x01 WebShell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-提权"><span class="nav-number">3.2.</span> <span class="nav-text">0x02 提权</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#成因"><span class="nav-number">1.</span> <span class="nav-text">成因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发现"><span class="nav-number">2.</span> <span class="nav-text">发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过"><span class="nav-number">3.</span> <span class="nav-text">绕过</span></a></li></ol></div>
             
 
           </div>
