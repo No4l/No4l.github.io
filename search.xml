@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Hongcms 4.0.0]]></title>
+    <url>%2F2019%2F04%2F05%2Fhongcms%2F</url>
+    <content type="text"><![CDATA[Because there is no filtering of the Host header, there are at least two SQL injections. RegisterWhen we fill out the information, click Submit and capture the package.Modify the Host value to &#39; or updatexml(1, concat(0x7e,user(),0x7e),1) or &#39;Add X-Forwarded-For and it’s value is a,then we put the package. We can also add an administrator account or an active normal account. 12Host: &apos;,1,&apos;&apos;,&apos;&apos;),(1,1,&apos;aadmin&apos;,md5(&apos;12345&apos;),&apos;&apos;,&apos;1554448599&apos;,&apos;X-Forwarded-For: a Added a active user for the below. The active user has been inserted in the database. Because register need to re-catch each time,we can use the login to get more information. LoginUse the active user to login,and catch the package.Modify the Host value to &#39;,nickname=user(),lastip =&#39;Add X-Forwarded-For and it’s value is a,then we put the package.]]></content>
+      <categories>
+        <category>代码审计</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UsualToolCMS]]></title>
     <url>%2F2019%2F04%2F03%2FUsualToolCMS%2F</url>
     <content type="text"><![CDATA[挺简单一款CMS 前台SQL注入search.php 直接看代码 1234567891011$key=UsualToolCMS::sqlcheck($_GET["key"]);$navname="search";require_once(dirname(__FILE__).'/'.'mytop.php');//搜索记录if(!empty($key)):$asql="SELECT * FROM `cms_search` WHERE keyword ='$key'";$adata=mysqli_query($mysqli,$asql);if(mysqli_num_rows($adata)&gt;0):$mysqli-&gt;query("UPDATE `cms_search` SET `hit`=hit+1 WHERE keyword ='$key' and lang='$language'");else:$mysqli-&gt;query("INSERT INTO `cms_search` (`lang`,`keyword`) VALUES ('$language','$key')"); $key被sqlcheck函数过滤了，让我们看下这个函数 12345678910function sqlchecks($StrPost)&#123;$StrPost=str_replace("'","’",$StrPost);$StrPost=str_replace('"','“',$StrPost);$StrPost=str_replace("(","（",$StrPost);$StrPost=str_replace(")","）",$StrPost);$StrPost=str_replace("@","#",$StrPost);$StrPost=str_replace("/*","",$StrPost);$StrPost=str_replace("*/","",$StrPost);return $StrPost;&#125; 如果没有Url编码的话这里应该是不存在漏洞的了，仔细看上面的代码，数据库操作中还有一个$language,我们追踪下$language吧 全局查找，直接找到其定义的地方 conn.php 1if(!empty($_COOKIE['UTCMSLanguage'])):$language=$_COOKIE['UTCMSLanguage'];else:$language=$indexlanguage;endif; $language没有经过任何过滤就从Cookie传了进来 这就简单咯]]></content>
