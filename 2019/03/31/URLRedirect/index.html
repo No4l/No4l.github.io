@@ -15,10 +15,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -135,10 +135,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/31/URLRedirect/"/>
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/URLRedirect/">
 
 
 
@@ -234,7 +236,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -242,7 +244,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -250,7 +252,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -258,7 +260,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -362,7 +364,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -390,11 +392,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -432,32 +433,32 @@
 <p>当上述栗子中的url未限制时就产生了URL重定向/跳转漏洞</p>
 <h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a><font color="dark">发现</font></h3><ul>
 <li><p>在退出处常见URL跳转</p>
-<p><img src="/2019/03/31/URLRedirect/1.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/1.jpg" alt></p>
 </li>
 <li><p>利用burp的search，搜索=http 同时返回包为302的内容</p>
-<p><img src="/2019/03/31/URLRedirect/3.png" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/3.png" alt></p>
 <p>发包到repeater,略作修改</p>
-<p><img src="/2019/03/31/URLRedirect/4.png" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/4.png" alt></p>
 </li>
 </ul>
 <h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a><font color="dark">绕过</font></h3><p>一般来说URL跳转发现比较容易，但是利用起来比较难，因为许多会做一些防护</p>
 <p>1.xip.io绕过</p>
-<p><img src="/2019/03/31/URLRedirect/5.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/5.jpg" alt></p>
 <p>这里只要不是www就会强制返回到<a href="https://xue.xx.com/login" target="_blank" rel="noopener">https://xue.xx.com/login</a></p>
 <p>但是利用<a href="https://xue.xx.com.*.xip.io" target="_blank" rel="noopener">https://xue.xx.com.*.xip.io</a></p>
-<p><img src="/2019/03/31/URLRedirect/6.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/6.jpg" alt></p>
 <p>2.使用@绕过</p>
 <p>这里并不能采用xip.io的方式绕过</p>
-<p><img src="/2019/03/31/URLRedirect/8.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/8.jpg" alt></p>
 <p>可以使用@但是如果@后的域名不在规定范围内同样不可跳转</p>
-<p><img src="/2019/03/31/URLRedirect/9.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/9.jpg" alt></p>
 <p>这个时候可以在@前加上/，\或者?尝试下</p>
-<p><img src="/2019/03/31/URLRedirect/10.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/10.jpg" alt></p>
 <p>3.http://后加反斜杠绕过</p>
 <p>有些时候@和.xip.io都不能使</p>
-<p><img src="/2019/03/31/URLRedirect/11.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/11.jpg" alt></p>
 <p>这个时候可以采用http://\的样式尝试绕过</p>
-<p><img src="/2019/03/31/URLRedirect/12.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/12.jpg" alt></p>
 <p>4.某些加密</p>
 <p><a href="http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT" target="_blank" rel="noopener">http://xx.xx.cn/?src=l4uLj8XQ0IiIiNGHlpOK0ZyQktCFl4qekYuWoM7IycfIztGXi5KT</a></p>
 <p>这个链接会跳转到<a href="http://www.xilu.com/zhuanti_176871.html" target="_blank" rel="noopener">http://www.xilu.com/zhuanti_176871.html</a></p>
@@ -465,7 +466,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x97\x8b\x8b\x8f\xc5\xd0\xd0\x88\x88\x88\xd1\x87\x96\x93\x8a\xd1\x9c\x90\x92\xd0\x85\x97\x8a\x9e\x91\x8b\x96\xa0\xce\xc8\xc9\xc7\xc8\xce\xd1\x97\x8b\x92\x93</span><br></pre></td></tr></table></figure>
 <p>推测与跳转的链接一一对应，推测出对应关系表</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;a&apos;:&apos;9e&apos;, &apos;b&apos;:&apos;9d&apos;, &apos;c&apos;:&apos;9c&apos;, &apos;d&apos;:&apos;9b&apos;, &apos;e&apos;:&apos;9a&apos;,&apos;f&apos;:&apos;99&apos;, &apos;g&apos;:&apos;98&apos;, &apos;h&apos;:&apos;97&apos;, &apos;i&apos;:&apos;96&apos;, &apos;j&apos;:&apos;95&apos;,</span><br><span class="line"> &apos;k&apos;:&apos;94&apos;, &apos;l&apos;:&apos;93&apos;, &apos;m&apos;:&apos;92&apos;, &apos;n&apos;:&apos;91&apos;, &apos;o&apos;:&apos;90&apos;,&apos;p&apos;:&apos;8f&apos;, &apos;q&apos;:&apos;8e&apos;, &apos;r&apos;:&apos;8d&apos;, &apos;s&apos;:&apos;8c&apos;, &apos;t&apos;:&apos;8b&apos;,</span><br><span class="line"> &apos;u&apos;:&apos;8a&apos;, &apos;v&apos;:&apos;89&apos;, &apos;w&apos;:&apos;88&apos;, &apos;x&apos;:&apos;87&apos;, &apos;y&apos;:&apos;86&apos;,&apos;z&apos;:&apos;85&apos;,&apos;.&apos;:&apos;d1&apos;,&apos;/&apos;:&apos;d0&apos;,&apos;:&apos;:&apos;c5&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/03/31/URLRedirect/7.jpg" alt=""></p>
+<p><img src="/2019/03/31/URLRedirect/7.jpg" alt></p>
 <blockquote>
 <p>我寻了半生的春天，你一笑便是了。</p>
 </blockquote>
@@ -502,8 +503,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/30/bees/" rel="next" title="BeesCMS 代码审计">
-                <i class="fa fa-chevron-left"></i> BeesCMS 代码审计
+              <a href="/2019/03/31/xssworm/" rel="next" title="XSSWORM">
+                <i class="fa fa-chevron-left"></i> XSSWORM
               </a>
             
           </div>
@@ -512,8 +513,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/31/xssworm/" rel="prev" title="XSSWORM">
-                XSSWORM <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/01/CNVD/" rel="prev" title="CNVD漏洞检测">
+                CNVD漏洞检测 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -584,7 +585,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -623,7 +624,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -666,7 +671,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -674,6 +681,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -745,7 +759,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -761,7 +775,7 @@
 
   <div class="powered-by"><!--
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
-  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -773,7 +787,7 @@
 
 
 
-
+</div>
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -942,5 +956,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>

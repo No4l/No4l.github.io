@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/noel.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="对渗透测试时的要点进行记录，目前仅为命令行形式，后续将采用HTML形式">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渗透信息记录">
+<meta property="og:url" content="http://yoursite.com/2019/05/09/usefulMessage/index.html">
+<meta property="og:site_name" content="Noel&#39;s Blog">
+<meta property="og:description" content="对渗透测试时的要点进行记录，目前仅为命令行形式，后续将采用HTML形式">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-09T10:35:09.548Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="渗透信息记录">
+<meta name="twitter:description" content="对渗透测试时的要点进行记录，目前仅为命令行形式，后续将采用HTML形式">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/09/usefulMessage/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>渗透信息记录 | Noel's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Noel's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/09/usefulMessage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Noel">
+      <meta itemprop="description" content="I love u">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Noel's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">渗透信息记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-09 00:00:00 / 修改时间：18:35:09" itemprop="dateCreated datePublished" datetime="2019-05-09T00:00:00+08:00">2019-05-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/开发/" itemprop="url" rel="index"><span itemprop="name">开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><font color="green">对渗透测试时的要点进行记录，目前仅为命令行形式，后续将采用HTML形式</font><br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><font color="dark">前言</font></h3><p>在渗透测试时总是懒的记录下来一些信息，导致后续查找非常困难，所以想使用Python结合Mysql作出一个方便记录的小程序，如果采用Web应用展示的话会更加直观，所以后续会采用Flask，目前只有命令行的形式</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a><font color="dark">介绍</font></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Usage:</span></span><br><span class="line"><span class="function">    <span class="title">sdomain</span> <span class="title">baidu.com</span>,<span class="title">GET</span> <span class="title">INFO</span> <span class="title">ABOUT</span> <span class="title">DOMAIN</span></span></span><br><span class="line"><span class="function">    <span class="title">adomain</span> <span class="title">baidu.com</span>,<span class="title">ADD</span> <span class="title">DOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">udomain</span> <span class="title">baidu.com</span>,<span class="title">UPDATE</span> <span class="title">DOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">ssdomain</span> <span class="title">www.baidu.com</span>,<span class="title">GET</span> <span class="title">INFO</span> <span class="title">ABOUT</span> <span class="title">SUBDOMAIN</span></span></span><br><span class="line"><span class="function">    <span class="title">asdomain</span> <span class="title">test.baidu.com</span>,<span class="title">ADD</span> <span class="title">SUBDOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">usdomain</span> <span class="title">test.baidu.com</span>,<span class="title">UPDATE</span> <span class="title">SUBDOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">use</span> <span class="title">baidu.com</span>,<span class="title">CHOOSE</span>,<span class="title">ONE</span> <span class="title">DOMAIN</span> <span class="title">FOR</span> <span class="title">LATER</span> <span class="title">OPERATE</span></span></span><br><span class="line"><span class="function">    <span class="title">show</span> <span class="title">domain</span>/<span class="title">subdomain</span>,<span class="title">SHOW</span> <span class="title">ALL</span> <span class="title">DOMAINS</span> <span class="title">OR</span> <span class="title">ALL</span> <span class="title">SUBDOMAIN</span> <span class="title">ABOUT</span> <span class="title">THE</span> <span class="title">SELECTED</span> <span class="title">DOMAIN</span></span></span><br><span class="line"><span class="function">    <span class="title">help</span>,<span class="title">SEE</span> <span class="title">THE</span> <span class="title">MESSAGE</span></span></span><br><span class="line"><span class="function">    <span class="title">exit</span>,<span class="title">EXIT</span></span></span><br></pre></td></tr></table></figure>
+<p>使用cmd模块，所以使用<strong>python main.py</strong>进入主程序后采用上述usage进行使用</p>
+<p>采用MySql进行数据存储，所以首先要进行数据库配置<br>在<strong>sqlhandle.py</strong>文件中可进行如下配置<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HOST = <span class="string">'localhost'</span></span><br><span class="line">USER = <span class="string">'root'</span></span><br><span class="line">PWD  = <span class="string">''</span></span><br><span class="line">DBS  = <span class="string">'attackinfo'</span></span><br></pre></td></tr></table></figure></p>
+<p>将上述信息修改为自身信息即可</p>
+<p>使用时记得开启MySql</p>
+<p>操作演示<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">python main.py</span><br><span class="line"><span class="function">Usage:</span></span><br><span class="line"><span class="function">    <span class="title">sdomain</span> <span class="title">baidu.com</span>,<span class="title">GET</span> <span class="title">INFO</span> <span class="title">ABOUT</span> <span class="title">DOMAIN</span></span></span><br><span class="line"><span class="function">    <span class="title">adomain</span> <span class="title">baidu.com</span>,<span class="title">ADD</span> <span class="title">DOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">udomain</span> <span class="title">baidu.com</span>,<span class="title">UPDATE</span> <span class="title">DOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">ssdomain</span> <span class="title">www.baidu.com</span>,<span class="title">GET</span> <span class="title">INFO</span> <span class="title">ABOUT</span> <span class="title">SUBDOMAIN</span></span></span><br><span class="line"><span class="function">    <span class="title">asdomain</span> <span class="title">test.baidu.com</span>,<span class="title">ADD</span> <span class="title">SUBDOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">usdomain</span> <span class="title">test.baidu.com</span>,<span class="title">UPDATE</span> <span class="title">SUBDOMAIN</span> <span class="title">INFO</span></span></span><br><span class="line"><span class="function">    <span class="title">use</span> <span class="title">baidu.com</span>,<span class="title">CHOOSE</span>,<span class="title">ONE</span> <span class="title">DOMAIN</span> <span class="title">FOR</span> <span class="title">LATER</span> <span class="title">OPERATE</span></span></span><br><span class="line"><span class="function">    <span class="title">show</span> <span class="title">domain</span>/<span class="title">subdomain</span>,<span class="title">SHOW</span> <span class="title">ALL</span> <span class="title">DOMAINS</span> <span class="title">OR</span> <span class="title">ALL</span> <span class="title">SUBDOMAIN</span> <span class="title">ABOUT</span> <span class="title">THE</span> <span class="title">SELECTED</span> <span class="title">DOMAIN</span></span></span><br><span class="line"><span class="function">    <span class="title">help</span>,<span class="title">SEE</span> <span class="title">THE</span> <span class="title">MESSAGE</span></span></span><br><span class="line"><span class="function">    <span class="title">exit</span>,<span class="title">EXIT</span></span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">sdomain</span> <span class="title">baidu.com</span> # 查询域名 <span class="title">baidu.com</span> 数据库中需要存在 <span class="title">baidu.com</span>的信息，不存在会提示先进行插入操作</span></span><br><span class="line"><span class="function">[-]<span class="title">No</span> <span class="title">Such</span> <span class="title">Domain</span>,<span class="title">Insert</span> <span class="title">First</span>!</span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">adomain</span> <span class="title">baidu.com</span> # 插入域名</span></span><br><span class="line"><span class="function">输入子域名，用逗号隔开: <span class="title">www.baidu.com</span>,<span class="title">test.baidu.com</span></span></span><br><span class="line"><span class="function">输入邮箱，用逗号隔开: <span class="title">laa</span>@<span class="title">qq.com</span>,<span class="title">lala</span>@<span class="title">baidu.com</span></span></span><br><span class="line"><span class="function">输入手机号，用逗号隔开: 13333333333,13888888888</span></span><br><span class="line"><span class="function">输入用户名，用逗号隔开: <span class="title">admin</span>,<span class="title">baidu</span></span></span><br><span class="line"><span class="function">[+]<span class="title">Insert</span> <span class="title">Success</span>!</span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">sdomain</span> <span class="title">baidu.com</span> # 插入成功后再次进行查询</span></span><br><span class="line"><span class="function"><span class="title">Domain</span>:</span></span><br><span class="line"><span class="function">        <span class="title">bai.com</span></span></span><br><span class="line"><span class="function"><span class="title">SubDomains</span>:</span></span><br><span class="line"><span class="function">        <span class="title">www.baidu.com</span></span></span><br><span class="line"><span class="function">        <span class="title">test.baidu.com</span></span></span><br><span class="line"><span class="function"><span class="title">Emails</span>:</span></span><br><span class="line"><span class="function">        <span class="title">laa</span>@<span class="title">qq.com</span></span></span><br><span class="line"><span class="function">        <span class="title">lala</span>@<span class="title">baidu.com</span></span></span><br><span class="line"><span class="function"><span class="title">Phone</span>:</span></span><br><span class="line"><span class="function">        13333333333</span></span><br><span class="line"><span class="function">        13888888888</span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">ssdomain</span> <span class="title">test.baidu.com</span> # 查询子域名信息</span></span><br><span class="line"><span class="function"><span class="title">Domain</span>:</span></span><br><span class="line"><span class="function">        <span class="title">test.baidu.com</span></span></span><br><span class="line"><span class="function"><span class="title">Title</span>:</span></span><br><span class="line"><span class="function">        <span class="title">None</span></span></span><br><span class="line"><span class="function"><span class="title">Infos</span>:</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Warn</span>:</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Vulnerability</span>:</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">show</span> <span class="title">domains</span> # 显示所有域名</span></span><br><span class="line"><span class="function">[+]<span class="title">Result</span>:</span></span><br><span class="line"><span class="function">        <span class="title">baidu.com</span></span></span><br><span class="line"><span class="function">        <span class="title">baishi.com</span></span></span><br><span class="line"><span class="function">        <span class="title">bai.com</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">use</span> <span class="title">baishi.com</span> # 选择域名，进行子域名操作</span></span><br><span class="line"><span class="function">[+]<span class="title">Useful</span> <span class="title">domain</span> <span class="title">baishi.com</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">show</span> <span class="title">subdomains</span> # 显示当前域名下所有子域名</span></span><br><span class="line"><span class="function">[+]<span class="title">Result</span>:</span></span><br><span class="line"><span class="function">        <span class="title">www.baishi.com</span></span></span><br><span class="line"><span class="function">        <span class="title">a.baishi.com</span></span></span><br><span class="line"><span class="function">        <span class="title">ccc.baishi.com</span></span></span><br><span class="line"><span class="function">        <span class="title">q.baishi.com</span></span></span><br><span class="line"><span class="function">        <span class="title">test.baishi.com</span></span></span><br><span class="line"><span class="function">        <span class="title">t.baishi.com</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">MYINFO</span>&gt;<span class="title">asdomain</span> <span class="title">lala.baishi.com</span> # 插入子域名信息</span></span><br><span class="line"><span class="function">输入网站标题: <span class="title">Web</span>测试</span></span><br><span class="line"><span class="function">输入泄漏的信息，例如<span class="title">robot.txt</span>，用&lt;<span class="title">x</span>&gt;隔开: <span class="title">robots.txt</span>&lt;<span class="title">x</span>&gt;1</span></span><br><span class="line"><span class="function">输入可能存在的漏洞信息，用&lt;<span class="title">x</span>&gt;隔开: 哈哈哈&lt;<span class="title">x</span>&gt;<span class="title">SQL</span>注入</span></span><br><span class="line"><span class="function">输入确认存在的漏洞信息，用&lt;<span class="title">x</span>&gt;隔开: /<span class="title">down</span>?<span class="title">q</span>=<span class="title">filename</span> <span class="title">q</span>任意文件下载&lt;<span class="title">x</span>&gt;/<span class="title">d</span>?<span class="title">a</span>=1 <span class="title">aSQL</span>注入</span></span><br><span class="line"><span class="function">[+]<span class="title">Insert</span> <span class="title">Success</span>!</span></span><br></pre></td></tr></table></figure></p>
+<p>GITHUB地址:<br><a href="https://github.com/No4l/MyTools/tree/master/usefulMessage" target="_blank" rel="noopener">https://github.com/No4l/MyTools/tree/master/usefulMessage</a></p>
+<blockquote>
+<p>我转头，看见你走来，在阳光里，于是笑容从我心里溢出。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/08/Python数据库操作/" rel="next" title="Python数据库操作">
+                <i class="fa fa-chevron-left"></i> Python数据库操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/03/2019-06-03-Mysql-注入的一些tips/" rel="prev" title="Mysql 注入的一些tips">
+                Mysql 注入的一些tips <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Noel</p>
+              <p class="site-description motion-element" itemprop="description">I love u</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://norw1nd.github.io/" title="Norw1nd" target="_blank">Norw1nd</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://Xvgeng.github.io/" title="Xvgeng" target="_blank">Xvgeng</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://patrilic.top/" title="Patrilic" target="_blank">Patrilic</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">2.</span> <span class="nav-text">介绍</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Noel</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by"><!--
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.2</div>-->
+
+
+
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

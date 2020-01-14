@@ -15,10 +15,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -134,10 +134,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Noel's Blog" type="application/atom+xml">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/"/>
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/02/Vulnhub-FristiLeaks/">
 
 
 
@@ -233,7 +235,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -241,7 +243,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -249,7 +251,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -257,7 +259,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -373,7 +375,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -401,11 +403,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -430,29 +431,29 @@
 <h2 id="0x01-开始前的准备"><a href="#0x01-开始前的准备" class="headerlink" title="0x01 开始前的准备"></a>0x01 开始前的准备</h2><h3 id="环境下载"><a href="#环境下载" class="headerlink" title="环境下载"></a>环境下载</h3><p><a href="https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrent" target="_blank" rel="noopener">https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova.torrent</a><br><a href="https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova" target="_blank" rel="noopener">https://download.vulnhub.com/fristileaks/FristiLeaks_1.3.ova</a></p>
 <h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><p>VMware users will need to manually edit the VM’s MAC address to: 08:00:27:A5:A6:76<br>也就是把VMware的MAC地址调为08:00:27:A5:A6:76，之后开启虚拟机即可</p>
 <h2 id="0x02-扫描"><a href="#0x02-扫描" class="headerlink" title="0x02 扫描"></a>0x02 扫描</h2><p>首先使用Nmap进行扫描</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/nmap.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/nmap.png" alt></p>
 <p>只有80端口开启，nmap扫描下80端口</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/80.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/80.png" alt></p>
 <p>可以看到robots文件存在，并有三个目录存在</p>
 <p>访问192.168.1.5，除了一张图片，基本上没有什么了</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/calm.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/calm.png" alt></p>
 <p>robots.txt里的三个页面打开后是同一张图片，看来是毫无用处了，用御剑扫了下目录发现images文件夹,基本没用</p>
 <h2 id="0x03-获得Shell"><a href="#0x03-获得Shell" class="headerlink" title="0x03 获得Shell"></a>0x03 获得Shell</h2><p>最后回到主页的图片上来，fristi，题目好像也有这个，于是试了下fristi</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/login.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/login.png" alt></p>
 <p>弱口令失败，看下源代码想找找有没有什么东西</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/tip1.png" alt=""></p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/tip2.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/tip1.png" alt></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/tip2.png" alt></p>
 <p>Great</p>
 <p>先将base64解码，出现PNG字样，用base64转图片</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/pwd1.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/pwd1.png" alt></p>
 <p>得到一串字符，尝试登陆：</p>
 <p>正好第一处tip中有个名字，尝试登陆</p>
 <p>进入上传页面</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/upload.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/upload.png" alt></p>
 <p>在namp扫描时发现服务器为Apache Linux所以尝试下多重后缀名</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/upshell.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/upshell.png" alt></p>
 <p>上传成功，用菜刀连接</p>
-<p><img src="/2018/10/02/Vulnhub-FristiLeaks/shell.png" alt=""></p>
+<p><img src="/2018/10/02/Vulnhub-FristiLeaks/shell.png" alt></p>
 <h2 id="0x04-提升权限"><a href="#0x04-提升权限" class="headerlink" title="0x04 提升权限"></a>0x04 提升权限</h2><p>正在骑马赶来的路上……</p>
 
       
@@ -489,8 +490,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/02/墨者学院-redis未授权访问/" rel="next" title="redis未授权访问">
-                <i class="fa fa-chevron-left"></i> redis未授权访问
+              <a href="/2018/10/01/sqlmap-tamper脚本编写/" rel="next" title="sqlmap --tamper脚本编写">
+                <i class="fa fa-chevron-left"></i> sqlmap --tamper脚本编写
               </a>
             
           </div>
@@ -499,8 +500,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/03/finecms免费版漏洞分析/" rel="prev" title="finecms免费版漏洞分析">
-                finecms免费版漏洞分析 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/02/墨者学院-redis未授权访问/" rel="prev" title="redis未授权访问">
+                redis未授权访问 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -571,7 +572,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -610,7 +611,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -653,7 +658,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -661,6 +668,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -732,7 +746,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -748,7 +762,7 @@
 
   <div class="powered-by"><!--
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
-  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -760,7 +774,7 @@
 
 
 
-
+</div>
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -929,5 +943,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
